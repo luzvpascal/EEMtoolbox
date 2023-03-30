@@ -1,0 +1,1 @@
+uniform_sampler <- function(args){runif(args$num_params, args$lower,args$upper)} #uniform distribution
