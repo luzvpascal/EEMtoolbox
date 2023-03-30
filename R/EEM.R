@@ -1,18 +1,19 @@
-#' generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
+#' @title Generation of model ensembles
+#' @description
+#' Generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
-#' @param species_labels vector of characters names of the species
-#' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates
+#' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5)
 #' @param n_ensemble Number of desired ensemble members. Default to 10
-#' @param model model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
-#' @param algorithm algorithm used for sampling, default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"
-#' @param n_particles number of particles in the sample, default 10000
-#' @param mcmc_trials number of MCMC steps to try before selecting appropriate number, default 10
+#' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
+#' @param algorithm algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"
 #' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure). Default discrepancy_continuous_sum
 #' @param sampler sampling function that generates random vectors from the joint prior distribution. Default EEMtoolbox::sampler function (uniform)
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling. Default EEMtoolbox::uniform_transform
 #' @param trans_finv inverse of trans_f function. Default EEMtoolbox::uniform_transform_inverse
 #' @param pdf joint probability density function. Default EEMtoolbox::uniform_pdf_transformed
+#' @param n_particles number of particles in the sample. Default 10000
+#' @param mcmc_trials number of MCMC steps to try before selecting appropriate number. Default 10
 #' @param dist_final target discrepancy threshold. Default 0. If zero, p_acc_min is used to determine stopping criteria.
 #' @param a tuning parameter for adaptive selection of discrepancy threshold sequence. Defalut 0.6
 #' @param c tuning parameter for choosing the number of MCMC iterations in move step. Default 0.01
@@ -20,22 +21,22 @@
 #' @param output_prior logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE
 #' @param output_args logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem
 #' @examples
-#' EEM(A_sign, species_labels)
-#' add(10, 1)
-#' @return list: part_vals: ensemble of parameters, marginal ppdistributions
+#' library(EEMtoolbox)
+#'
+#' EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
+#' @return list: part_vals: ensemble of parameters, marginal distributions
 #' @export
 EEM <- function(interaction_matrix,
-                species_labels,
                 bounds_growth_rate=c(-5,5),
                 n_ensemble=10,
                 model="GLV",
                 algorithm="SMC-ABC",
-                summ_func=summarise_ecosystem_features_GLV,
-                disc_func=discrepancy_continuous_sum,
-                sampler=uniform_sampler,
-                trans_f=uniform_transform,
-                trans_finv=uniform_transform_inverse,
-                pdf=uniform_pdf_transformed,
+                summ_func=EEMtoolbox::summarise_ecosystem_features_GLV,
+                disc_func=EEMtoolbox::discrepancy_continuous_sum,
+                sampler=EEMtoolbox::uniform_sampler,
+                trans_f=EEMtoolbox::uniform_transform,
+                trans_finv=EEMtoolbox::uniform_transform_inverse,
+                pdf=EEMtoolbox::uniform_pdf_transformed,
                 n_particles=10000,
                 mcmc_trials=10,
                 dist_final=0,
@@ -102,22 +103,22 @@ EEM <- function(interaction_matrix,
 
   # SETTING values to parameters ####
   if (model == "Baker"){
-    summ_func=summarise_ecosystem_features_Baker
+    summ_func <- EEMtoolbox::summarise_ecosystem_features_Baker
   } else if (model == "Adams"){
-    summ_func=summarise_ecosystem_features_Adams
+    summ_func <- EEMtoolbox::summarise_ecosystem_features_Adams
     bounds_growth_rate <- c(1.1,1.3)
     print("r values bounded between 1 and 2?")
   }
 
   # Defining special arguments ####
-  args <- args_function(interaction_matrix,
+  args <- EEMtoolbox::args_function(interaction_matrix,
                         bounds_growth_rate,
                         model=model)
 
   ## RUNNING search algorithms####
   if (algorithm == "SMC-ABC"){
     print('Begin SMC-ABC search method')
-    outputs <- EEM_SMC_method(summ_func,
+    outputs <- EEMtoolbox::EEM_SMC_method(summ_func,
                               args,
                               disc_func,
                               sampler,
@@ -132,7 +133,7 @@ EEM <- function(interaction_matrix,
                               mcmc_trials)
   } else if ((algorithm=="standard EEM")){
     print('Begin standard search method')
-    outputs <- EEM_standard_method(summ_func,
+    outputs <- EEMtoolbox::EEM_standard_method(summ_func,
                                    args,
                                    disc_func,
                                    sampler,

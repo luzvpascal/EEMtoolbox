@@ -1,4 +1,4 @@
-#' Add together two numbers
+#' Extract arguments necessary to run EEM from interaction matrix
 #'
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
 #' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates

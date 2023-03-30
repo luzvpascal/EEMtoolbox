@@ -2,7 +2,7 @@
 % Please edit documentation in R/args_function.R
 \name{args_function}
 \alias{args_function}
-\title{Add together two numbers}
+\title{Extract arguments necessary to run EEM from interaction matrix}
 \usage{
 args_function(
   interaction_matrix,
@@ -24,5 +24,5 @@ args_function(
 A list of arguments defining the problem.
 }
 \description{
-Add together two numbers
+Extract arguments necessary to run EEM from interaction matrix
 }

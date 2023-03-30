@@ -2,21 +2,20 @@
 % Please edit documentation in R/EEM.R
 \name{EEM}
 \alias{EEM}
-\title{generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)}
+\title{Generation of model ensembles}
 \usage{
 EEM(
   interaction_matrix,
-  species_labels,
   bounds_growth_rate = c(-5, 5),
   n_ensemble = 10,
   model = "GLV",
   algorithm = "SMC-ABC",
-  summ_func = summarise_ecosystem_features_GLV,
-  disc_func = discrepancy_continuous_sum,
-  sampler = uniform_sampler,
-  trans_f = uniform_transform,
-  trans_finv = uniform_transform_inverse,
-  pdf = uniform_pdf_transformed,
+  summ_func = EEMtoolbox::summarise_ecosystem_features_GLV,
+  disc_func = EEMtoolbox::discrepancy_continuous_sum,
+  sampler = EEMtoolbox::uniform_sampler,
+  trans_f = EEMtoolbox::uniform_transform,
+  trans_finv = EEMtoolbox::uniform_transform_inverse,
+  pdf = EEMtoolbox::uniform_pdf_transformed,
   n_particles = 10000,
   mcmc_trials = 10,
   dist_final = 0,
@@ -30,15 +29,13 @@ EEM(
 \arguments{
 \item{interaction_matrix}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
 
-\item{species_labels}{vector of characters names of the species}
-
-\item{bounds_growth_rate}{vector of 2 elements containing lower and upper bounds for growth rates}
+\item{bounds_growth_rate}{vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5)}
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 10}
 
-\item{model}{model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
 
-\item{algorithm}{algorithm used for sampling, default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"}
+\item{algorithm}{algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"}
 
 \item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.}
 
@@ -52,9 +49,9 @@ EEM(
 
 \item{pdf}{joint probability density function. Default EEMtoolbox::uniform_pdf_transformed}
 
-\item{n_particles}{number of particles in the sample, default 10000}
+\item{n_particles}{number of particles in the sample. Default 10000}
 
-\item{mcmc_trials}{number of MCMC steps to try before selecting appropriate number, default 10}
+\item{mcmc_trials}{number of MCMC steps to try before selecting appropriate number. Default 10}
 
 \item{dist_final}{target discrepancy threshold. Default 0. If zero, p_acc_min is used to determine stopping criteria.}
 
@@ -69,12 +66,13 @@ EEM(
 \item{output_args}{logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem}
 }
 \value{
-list: part_vals: ensemble of parameters, marginal ppdistributions
+list: part_vals: ensemble of parameters, marginal distributions
 }
 \description{
-generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
+Generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
 }
 \examples{
-EEM(A_sign, species_labels)
-add(10, 1)
+library(EEMtoolbox)
+
+EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
 }

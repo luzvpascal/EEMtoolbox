@@ -1,29 +1,36 @@
+#' @title Summary of ecosystem features for GLV model
+#' @description
+#' A short description...
+#'
+#' @param parameters a vector of sampled parameters
+#' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}
+#' @return vector of values: first half are the steady states (indicating feasibility) and second half the eigen values of Jacobian (indicating stability)
+#' @export
+
+
 summarise_ecosystem_features_GLV <- function(parameters,sim_args){
   ## to simulate this ecosystem, we simply calculate the equilibrium
   # abundances and the stability. for the Generalized Lokta Volterra model
-  
+
   ##extract information
   n_species <- sim_args$n_species
-  r <- parameters[seq(n_species)]
-  
-  #To optimize
-  #reconstruct A matrix from array of parameters
-  A_nonzero_values <- parameters[seq(n_species+1, length(parameters))]
-  A_values <- rep(0, n_species^2)
-  A_values[as.logical(1-sim_args$skip_parameters)] <- A_nonzero_values
-  A <- matrix(A_values,ncol=n_species,nrow=n_species)
-  
+
+  #reconstruct interaction matrix and vector of growth rates from array of parameters
+  reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates(parameters,sim_args)
+  r <- reconstruct$growthrates
+  A <- reconstruct$interaction_matrix
+
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
-  equilibrium_points <- solve(A,-r)
-  
+  equilibrium_points <- sapply(A,-r)
+
   # STABILITY CHECK
   #calculate Jacobian for stability ###CHECK THIS PROCESS
   jacobian <- A*matrix(equilibrium_points, ncol=n_species, nrow=n_species)
   diag(jacobian) <- diag(jacobian) + A%*%(equilibrium_points) + r
   #check stability
   stability_eigenvalues <- Re(eigen(jacobian)$values)
-  
+
   #return features
   summarised_features <- c(equilibrium_points,
                               stability_eigenvalues)
