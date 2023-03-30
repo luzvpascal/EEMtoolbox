@@ -1,12 +1,11 @@
 #' @title Summary of ecosystem features for GLV model
 #' @description
-#' A short description...
+#' Tests the feasibility and stability of a vector of sampled parameters for the Generalized Lokta Volterra model
 #'
 #' @param parameters a vector of sampled parameters
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}
 #' @return vector of values: first half are the steady states (indicating feasibility) and second half the eigen values of Jacobian (indicating stability)
 #' @export
-
 
 summarise_ecosystem_features_GLV <- function(parameters,sim_args){
   ## to simulate this ecosystem, we simply calculate the equilibrium

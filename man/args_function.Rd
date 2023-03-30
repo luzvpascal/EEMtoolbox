@@ -2,7 +2,7 @@
 % Please edit documentation in R/args_function.R
 \name{args_function}
 \alias{args_function}
-\title{Extract arguments necessary to run EEM from interaction matrix}
+\title{Arguments for EEM}
 \usage{
 args_function(
   interaction_matrix,

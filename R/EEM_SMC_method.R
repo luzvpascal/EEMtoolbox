@@ -107,8 +107,18 @@ EEM_SMC_method <- function(sim_args,
     print("mcmc1")
     mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
                      .packages =c('EEMtoolbox')) %dopar% {
-      EEMtoolbox::MCMC(i, mcmc_trials, part_vals, part_s, part_sim,
-           cov_matrix, trans_finv, pdf, summ_func, disc_func, num_keep, dist_next, sim_args)
+      EEMtoolbox::MCMC(i,
+                       sim_args,
+                       mcmc_trials,
+                       dist_next,
+                       part_vals,
+                       part_s,
+                       part_sim,
+                       cov_matrix,
+                       summ_func,
+                       disc_func,
+                       trans_finv,
+                       pdf)
     }
     #stop cluster
     parallel::stopCluster(cl)
@@ -140,9 +150,18 @@ EEM_SMC_method <- function(sim_args,
     print("mcmc2")
     mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
                   .packages =c('EEMtoolbox')) %dopar% {
-                    #, 'uniform_transform_inverse','uniform_pdf_transformed', 'summ_func','disc_func'
-      EEMtoolbox::MCMC(i, (mcmc_iters-mcmc_trials), part_vals, part_s, part_sim,
-           cov_matrix, trans_finv, pdf, summ_func, disc_func, num_keep, dist_next, sim_args)
+      EEMtoolbox::MCMC(i,
+                       sim_args,
+                       (mcmc_iters-mcmc_trials),
+                       dist_next,
+                       part_vals,
+                       part_s,
+                       part_sim,
+                       cov_matrix,
+                       summ_func,
+                       disc_func,
+                       trans_finv,
+                       pdf)
     }
     #stop cluster
     parallel::stopCluster(cl)

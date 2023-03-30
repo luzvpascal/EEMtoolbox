@@ -1,13 +1,13 @@
-#' @title Summary of ecosystem features for Baker model
+#' @title Summary of ecosystem features for Gompertz model
 #' @description
-#' Tests the feasibility and stability of a vector of sampled parameters for the Baker model
+#' Tests the feasibility and stability of a vector of sampled parameters for the Gompertz model
 #'
 #' @param parameters a vector of sampled parameters
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}
 #' @return vector of values: first half are the steady states (indicating feasibility) and second half the eigen values of Jacobian (indicating stability)
 #' @export
 
-summarise_ecosystem_features_Baker <- function(parameters,sim_args){
+summarise_ecosystem_features_Gompertz <- function(parameters,sim_args){
 
   ##extract information
   n_species <- sim_args$n_species
@@ -15,16 +15,20 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   #reconstruct interaction matrix and vector of growth rates from array of parameters
   reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates(parameters,sim_args)
   r <- reconstruct$growthrates
-  A <- reconstruct$interaction_matrix
+  B <- reconstruct$interaction_matrix
+  #Ai = ln(ri)
+  A <- log(r)
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
-  equilibrium_points <- sapply(A,-r)
+  equilibrium_points_X <- solve(diag(n_species)-B,A)
+  equilibrium_points <- exp(equilibrium_points_X)
 
   # STABILITY CHECK
-  #calculate Jacobian for stability ###CHECK THIS PROCESS
-  jacobian <- A*matrix(equilibrium_points, ncol=n_species, nrow=n_species)
-  diag(jacobian) <- diag(jacobian) + A%*%(equilibrium_points) + r
+  #calculate Jacobian for stability
+  Ni_matrix <- matrix(equilibrium_points, nrow = n_species, ncol=n_species)
+  Nj_matrix <- t(Ni_matrix)
+  jacobian <- B*Ni_matrix/Nj_matrix - diag(n_species)
   #check stability
   stability_eigenvalues <- Re(eigen(jacobian)$values)
 

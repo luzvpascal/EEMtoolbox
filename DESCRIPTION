@@ -17,4 +17,5 @@ Imports:
     doParallel,
     foreach,
     MASS,
-    parallel
+    parallel,
+    stats

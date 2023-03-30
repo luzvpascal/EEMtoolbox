@@ -1,3 +1,5 @@
+#' @title Arguments for EEM
+#' @description
 #' Extract arguments necessary to run EEM from interaction matrix
 #'
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
@@ -18,7 +20,7 @@ args_function <- function(interaction_matrix,
     args$n_species <- ncol(interaction_matrix[[1]]) #number of species in ecosystem network
   }
 
-  non_zero_params <- get_nonzero_parameters(interaction_matrix)
+  non_zero_params <- EEMtoolbox::get_nonzero_parameters(interaction_matrix)
   #define global arguments
   args$skip_parameters <- non_zero_params$skip_parameters
 
