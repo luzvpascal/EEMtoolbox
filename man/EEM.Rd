@@ -23,7 +23,8 @@ EEM(
   c = 0.01,
   p_acc_min = 1e-04,
   output_prior = FALSE,
-  output_args = FALSE
+  output_args = FALSE,
+  output_matrix = FALSE
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ EEM(
 \item{output_prior}{logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE}
 
 \item{output_args}{logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem}
+
+\item{output_matrix}{logical. If set to TRUE, algorithm returns interaction matrix and growthrates}
 }
 \value{
 list: part_vals: ensemble of parameters, marginal distributions

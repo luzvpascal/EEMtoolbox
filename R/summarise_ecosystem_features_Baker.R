@@ -19,7 +19,7 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
-  equilibrium_points <- sapply(A,-r)
+  equilibrium_points <- solve(A,-r)
 
   # STABILITY CHECK
   #calculate Jacobian for stability ###CHECK THIS PROCESS
