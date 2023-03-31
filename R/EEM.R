@@ -20,6 +20,7 @@
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit. Default 0.0001
 #' @param output_prior logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE
 #' @param output_args logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem
+#' @param output_matrix logical. If set to TRUE, algorithm returns interaction matrix and growthrates
 #' @examples
 #' library(EEMtoolbox)
 #'
@@ -44,7 +45,8 @@ EEM <- function(interaction_matrix,
                 c=0.01,
                 p_acc_min=0.0001,
                 output_prior=FALSE,
-                output_args=FALSE
+                output_args=FALSE,
+                output_matrix=FALSE
                 ){
   # TESTS if inputs are correct ###########
   #interaction_matrix tests
@@ -111,43 +113,46 @@ EEM <- function(interaction_matrix,
   }
 
   # Defining special arguments ####
-  args <- EEMtoolbox::args_function(interaction_matrix,
+  sim_args <- EEMtoolbox::args_function(interaction_matrix,
                         bounds_growth_rate,
                         model=model)
 
   ## RUNNING search algorithms####
   if (algorithm == "SMC-ABC"){
     print('Begin SMC-ABC search method')
-    outputs <- EEMtoolbox::EEM_SMC_method(summ_func,
-                              args,
-                              disc_func,
-                              sampler,
-                              trans_f,
-                              trans_finv,
-                              pdf,
-                              n_particles,
-                              dist_final,
-                              a,
-                              c,
-                              p_acc_min,
-                              mcmc_trials)
+    outputs <- EEMtoolbox::EEM_SMC_method(sim_args,
+                                          summ_func,
+                                          disc_func,
+                                          sampler,
+                                          trans_f,
+                                          trans_finv,
+                                          pdf,
+                                          n_particles,
+                                          mcmc_trials,
+                                          dist_final,
+                                          a,
+                                          c,
+                                          p_acc_min)
   } else if ((algorithm=="standard EEM")){
     print('Begin standard search method')
-    outputs <- EEMtoolbox::EEM_standard_method(summ_func,
-                                   args,
-                                   disc_func,
-                                   sampler,
-                                   n_particles,
-                                   n_ensemble)
+    outputs <- EEMtoolbox::EEM_standard_method(sim_args,
+                                               summ_func,
+                                               disc_func,
+                                               sampler,
+                                               n_particles)
   }
-  output_function <- list()
-  output_function$part_vals <- outputs$part_vals
-  if (output_prior){
-    output_function$prior_sample <- outputs$prior_sample
-  }
-  if (output_args){
-    output_function$args <- args
+  if (output_matrix){
+    output_function <- apply(outputs$part_vals, 1, EEMtoolbox::reconstruct_matrix_growthrates)
+    return(output_function)
+  } else {
+    output_function$part_vals <- outputs$part_vals
+    if (output_prior){
+      output_function$prior_sample <- outputs$prior_sample
+    }
+    if (output_args){
+      output_function$args <- args
+    }
+    return(output_function)
   }
 
-  return(output_function)
 }
