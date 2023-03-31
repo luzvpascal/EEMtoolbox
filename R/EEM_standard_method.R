@@ -5,6 +5,7 @@
 #' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features.
 #' @param disc_func summary statistic (discrepancy measure).
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
+#' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
 #' @examples
 #' library(EEMtoolbox)
@@ -22,6 +23,7 @@ EEM_standard_method <- function(sim_args,
                                 summ_func,
                                 disc_func,
                                 sampler,
+                                trans_f,
                                 n_particles){
   # initial prior rejection algorithm
   # sample prior

@@ -145,6 +145,7 @@ EEM <- function(interaction_matrix,
     output_function <- apply(outputs$part_vals, 1, EEMtoolbox::reconstruct_matrix_growthrates)
     return(output_function)
   } else {
+    output_function <- list()
     output_function$part_vals <- outputs$part_vals
     if (output_prior){
       output_function$prior_sample <- outputs$prior_sample
