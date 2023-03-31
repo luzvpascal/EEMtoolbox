@@ -23,7 +23,6 @@
 #' @param output_matrix logical. If set to TRUE, algorithm returns interaction matrix and growthrates
 #' @examples
 #' library(EEMtoolbox)
-#'
 #' EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
 #' @return list: part_vals: ensemble of parameters, marginal distributions
 #' @export
