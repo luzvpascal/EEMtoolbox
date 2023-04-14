@@ -38,6 +38,7 @@ EEM_standard_method <- function(sim_args,
   }
   #stop cluster
   parallel::stopCluster(cl)
+  rm(cl)
   part_sim <- matrix(unlist(part_sim), nrow=n_particles, byrow = TRUE)
   #simulation
   # evaluate the discrepancy metric
