@@ -16,19 +16,17 @@ summarise_ecosystem_features_Gompertz <- function(parameters,sim_args){
   reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates(parameters,sim_args)
   r <- reconstruct$growthrates
   B <- reconstruct$interaction_matrix
-  #Ai = ln(ri)
-  A <- log(r)
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
-  equilibrium_points_X <- solve(diag(n_species)-B,A)
+  equilibrium_points_X <- solve(-B,r)
   equilibrium_points <- exp(equilibrium_points_X)
 
   # STABILITY CHECK
   #calculate Jacobian for stability
   Ni_matrix <- matrix(equilibrium_points, nrow = n_species, ncol=n_species)
   Nj_matrix <- t(Ni_matrix)
-  jacobian <- B*Ni_matrix/Nj_matrix - diag(n_species)
+  jacobian <- B*Ni_matrix/Nj_matrix
   #check stability
   stability_eigenvalues <- Re(eigen(jacobian)$values)
 
