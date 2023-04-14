@@ -34,11 +34,11 @@ EEM(
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 10}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
 
 \item{algorithm}{algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"}
 
-\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.}
+\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
 
 \item{disc_func}{summary statistic (discrepancy measure). Default discrepancy_continuous_sum}
 
@@ -76,6 +76,5 @@ Generation of model ensembles based on generalized Lotka Volterra, and the other
 }
 \examples{
 library(EEMtoolbox)
-
 EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
 }

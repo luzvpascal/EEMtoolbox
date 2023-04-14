@@ -4,7 +4,14 @@
 \alias{EEM_standard_method}
 \title{Generation of model ensembles using standard EEM sampling method}
 \usage{
-EEM_standard_method(sim_args, summ_func, disc_func, sampler, n_particles)
+EEM_standard_method(
+  sim_args,
+  summ_func,
+  disc_func,
+  sampler,
+  trans_f,
+  n_particles
+)
 }
 \arguments{
 \item{sim_args}{a list of arguments as returned by \link[EEMtoolbox]{args_function}}
@@ -14,6 +21,8 @@ EEM_standard_method(sim_args, summ_func, disc_func, sampler, n_particles)
 \item{disc_func}{summary statistic (discrepancy measure).}
 
 \item{sampler}{sampling function that generates random vectors from the joint prior distribution.}
+
+\item{trans_f}{transform of prior parameter space to ensure unbounded support for MCMC sampling.}
 
 \item{n_particles}{number of particles in the sample.}
 }

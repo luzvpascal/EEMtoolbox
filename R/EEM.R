@@ -4,9 +4,9 @@
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
 #' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5)
 #' @param n_ensemble Number of desired ensemble members. Default to 10
-#' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
+#' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
 #' @param algorithm algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"
-#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.
+#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure). Default discrepancy_continuous_sum
 #' @param sampler sampling function that generates random vectors from the joint prior distribution. Default EEMtoolbox::sampler function (uniform)
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling. Default EEMtoolbox::uniform_transform
@@ -64,7 +64,7 @@ EEM <- function(interaction_matrix,
   stopifnot(is.numeric(n_ensemble),
             (n_ensemble)>0)
   #model tests
-  stopifnot(((model=="GLV")|(model=="Baker")|(model=="Adams")|(model=="customized")))
+  stopifnot(((model=="GLV")|(model=="Baker")|(model=="Gompertz")|(model=="customized")))
   #algorithm
   stopifnot(((algorithm=="SMC-ABC")|(algorithm=="standard EEM")))
   #summ_func
@@ -105,8 +105,8 @@ EEM <- function(interaction_matrix,
   # SETTING values to parameters ####
   if (model == "Baker"){
     summ_func <- EEMtoolbox::summarise_ecosystem_features_Baker
-  } else if (model == "Adams"){
-    summ_func <- EEMtoolbox::summarise_ecosystem_features_Adams
+  } else if (model == "Gompertz"){
+    summ_func <- EEMtoolbox::summarise_ecosystem_features_Gompertz
     bounds_growth_rate <- c(1.1,1.3)
     print("r values bounded between 1 and 2?")
   }
