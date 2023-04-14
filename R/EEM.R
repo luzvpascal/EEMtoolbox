@@ -138,6 +138,7 @@ EEM <- function(interaction_matrix,
                                                summ_func,
                                                disc_func,
                                                sampler,
+                                               trans_f,
                                                n_particles)
   }
   if (output_matrix){
