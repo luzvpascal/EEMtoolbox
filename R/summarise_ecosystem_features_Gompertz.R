@@ -24,9 +24,9 @@ summarise_ecosystem_features_Gompertz <- function(parameters,sim_args){
 
   # STABILITY CHECK
   #calculate Jacobian for stability
-  Ni_matrix <- matrix(equilibrium_points, nrow = n_species, ncol=n_species)
-  Nj_matrix <- t(Ni_matrix)
-  jacobian <- B*Ni_matrix/Nj_matrix
+  # Ni_matrix <- matrix(equilibrium_points, nrow = n_species, ncol=n_species)
+  # Nj_matrix <- t(Ni_matrix)
+  jacobian <- B #*Ni_matrix/Nj_matrix
   #check stability
   stability_eigenvalues <- Re(eigen(jacobian)$values)
 

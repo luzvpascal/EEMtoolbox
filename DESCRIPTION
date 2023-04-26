@@ -20,6 +20,7 @@ Imports:
     foreach,
     ggplot2,
     MASS,
+    nleqslv,
     parallel,
     stats
 Suggests: 
