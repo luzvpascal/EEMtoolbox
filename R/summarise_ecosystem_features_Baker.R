@@ -13,15 +13,26 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   n_species <- sim_args$n_species
 
   #reconstruct interaction matrix and vector of growth rates from array of parameters
-  reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates(parameters,sim_args)
+  reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates_Baker(parameters,sim_args)
   r <- reconstruct$growthrates
-  A <- reconstruct$interaction_matrix
+  A <- reconstruct$alphas_matrix
+  B <- reconstruct$interaction_matrix
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
+  R <- r
+  P <- diag(A)
+  M <- A-P
+
+  fn <- function(N) {
+    output <- r*(1-exp(-M%*%N-P))-B%*%N
+    return(output)
+  }
+
+  sol <- nleqslv(rep(0,n_species), fn)
   equilibrium_points <- solve(A,-r)
 
-  # STABILITY CHECK
+  # STABILITY CHECK  TODO
   #calculate Jacobian for stability ###CHECK THIS PROCESS
   jacobian <- A*matrix(equilibrium_points, ncol=n_species, nrow=n_species)
   diag(jacobian) <- diag(jacobian) + A%*%(equilibrium_points) + r

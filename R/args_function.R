@@ -35,5 +35,9 @@ args_function <- function(interaction_matrix,
   args$upper <- c(rep(1,args$n_species)*bounds_growth_rate[2],
                   non_zero_params$upper_interaction_bound*upper_interaction_strength) #upper lim
 
+  if (model=="Baker"){
+
+  }
+
   return(args)
 }
