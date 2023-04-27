@@ -18,8 +18,8 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   r <- reconstruct$growthrates
   mat <- reconstruct$interaction_matrix
 
-  A <- pmax(0, mat)
-  B <- pmin(0, mat)
+  A <- matrix(pmax(0, mat), ncol=ncol(mat))
+  B <- matrix(pmin(0, mat), ncol=ncol(mat))
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
@@ -34,14 +34,17 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
 
   sol <- nleqslv::nleqslv(rep(0,n_species), fn)
 
+  equilibrium_points <- sol$x
   # STABILITY CHECK  TODO
   #calculate Jacobian for stability ###CHECK THIS PROCESS
-  diag_elements <- -diag(B)*N_sol
+  diag_elements <- -diag(B)*equilibrium_points
 
   R_matrix <- matrix(R, ncol = length(R), nrow = length(R))
-  N_matrix <- matrix(N_sol, ncol = length(N_sol), nrow = length(N_sol))
+  N_matrix <- matrix(equilibrium_points,
+                     ncol = length(equilibrium_points),
+                     nrow = length(equilibrium_points))
 
-  jabobian <- R_matrix*N_matrix*A*exp(-M%*%N_sol-P)-B*N_matrix*t(N_matrix)
+  jabobian <- R_matrix*N_matrix*A*exp(-M%*%equilibrium_points-P)-B*N_matrix*t(N_matrix)
 
   diag(jabobian) <- diag_elements
   #check stability
