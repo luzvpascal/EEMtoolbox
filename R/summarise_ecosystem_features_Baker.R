@@ -6,6 +6,7 @@
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}
 #' @return vector of values: first half are the steady states (indicating feasibility) and second half the eigen values of Jacobian (indicating stability)
 #' @export
+#' @import nleqslv
 
 summarise_ecosystem_features_Baker <- function(parameters,sim_args){
 
@@ -32,10 +33,10 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
     return(output)
   }
 
-  sol <- nleqslv::nleqslv(rep(100,n_species), fn)
+  sol <- nleqslv::nleqslv(rep(100,n_species), fn) #we give a large positive warmstart
 
   equilibrium_points <- sol$x
-  # STABILITY CHECK  TODO
+  # STABILITY CHECK
   #calculate Jacobian for stability ###CHECK THIS PROCESS
   diag_elements <- diag(B)*equilibrium_points#change to positive
 

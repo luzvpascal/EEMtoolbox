@@ -157,7 +157,7 @@ EEM <- function(interaction_matrix,
       output_function$part_s <- outputs$part_s
     }
     if (output_args){
-      output_function$args <- args
+      output_function$sim_args <- sim_args
     }
     return(output_function)
   }
