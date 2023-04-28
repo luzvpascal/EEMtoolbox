@@ -123,6 +123,8 @@ EEM_SMC_method <- function(sim_args,
     }
     #stop cluster
     parallel::stopCluster(cl)
+    rm(cl)
+
     part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
                              nrow=length(mcmc_outcome), byrow = TRUE)
     part_s[seq(num_keep+1,n_particles)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))
@@ -166,6 +168,8 @@ EEM_SMC_method <- function(sim_args,
     }
     #stop cluster
     parallel::stopCluster(cl)
+    rm(cl)
+
     part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
                                                       nrow=length(mcmc_outcome), byrow = TRUE)
     part_s[seq(num_keep+1,n_particles)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))

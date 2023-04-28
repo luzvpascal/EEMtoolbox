@@ -52,8 +52,6 @@ EEM_standard_method <- function(sim_args,
   prior_sample <- part_vals
   #track the number of simulations
   sims <- n_particles
-  # transform the parameters
-  part_vals <- trans_f(part_vals,sim_args)        #part vals is transformed
 
   # sort the particles
   ix <- order(part_s)
