@@ -32,7 +32,7 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
     return(output)
   }
 
-  sol <- nleqslv::nleqslv(rep(0,n_species), fn)
+  sol <- nleqslv::nleqslv(rep(100,n_species), fn)
 
   equilibrium_points <- sol$x
   # STABILITY CHECK  TODO
