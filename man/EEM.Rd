@@ -24,6 +24,7 @@ EEM(
   p_acc_min = 1e-04,
   output_prior = FALSE,
   output_args = FALSE,
+  output_discrepancy = FALSE,
   output_matrix = FALSE
 )
 }
@@ -65,6 +66,8 @@ EEM(
 \item{output_prior}{logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE}
 
 \item{output_args}{logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem}
+
+\item{output_discrepancy}{logical. If set to TRUE, algorithm returns discrepancy values}
 
 \item{output_matrix}{logical. If set to TRUE, algorithm returns interaction matrix and growthrates}
 }

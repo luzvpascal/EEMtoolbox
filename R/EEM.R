@@ -20,6 +20,7 @@
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit. Default 0.0001
 #' @param output_prior logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE
 #' @param output_args logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem
+#' @param output_discrepancy logical. If set to TRUE, algorithm returns discrepancy values
 #' @param output_matrix logical. If set to TRUE, algorithm returns interaction matrix and growthrates
 #' @examples
 #' library(EEMtoolbox)
@@ -45,6 +46,7 @@ EEM <- function(interaction_matrix,
                 p_acc_min=0.0001,
                 output_prior=FALSE,
                 output_args=FALSE,
+                output_discrepancy=FALSE,
                 output_matrix=FALSE
                 ){
   # TESTS if inputs are correct ###########
@@ -150,6 +152,9 @@ EEM <- function(interaction_matrix,
     output_function$part_vals <- outputs$part_vals
     if (output_prior){
       output_function$prior_sample <- outputs$prior_sample
+    }
+    if (output_discrepancy){
+      output_function$part_s <- outputs$part_s
     }
     if (output_args){
       output_function$args <- args
