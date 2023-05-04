@@ -1,7 +1,8 @@
 #' @title Solve ODE
 #' @description
 #' Solves ODEs
-#' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
+#' @param interaction_matrix parametrized interaction matrix
+#' @param growth_rate parametrized growth rate vector
 #' @param t_window time window to solve ODE
 #' @param initial_condition vector of initial species abundances
 #' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
@@ -11,7 +12,7 @@
 #' @return list: part_vals: ensemble of parameters, marginal distributions
 #' @export
 
-ode_solve <- function(interaction_matrix, t_window, initial_condition, model = "GLV"){
+ode_solve <- function(interaction_matrix, growth_rate, t_window, initial_condition, model = "GLV"){
   time_steps <- seq(from = t_window[1],to = t_window[2],by = 0.01)#vector of time steps
   y <-  matrix(0,length(t),length(initial_condition)) #matrix of abudnances
 
