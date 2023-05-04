@@ -2,16 +2,16 @@
 % Please edit documentation in R/ode_solve.R
 \name{ode_solve}
 \alias{ode_solve}
-\title{Derivatives of models}
+\title{Solve ODE}
 \usage{
-ode_solve(parameters, t_window, IC)
+ode_solve(interaction_matrix, t_window, initial_condition, model = "GLV")
 }
 \arguments{
 \item{interaction_matrix}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
 
-\item{bounds_growth_rate}{vector of growth rates}
+\item{t_window}{time window to solve ODE}
 
-\item{current_abundance}{vector of current species abundance}
+\item{initial_condition}{vector of initial species abundances}
 
 \item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
 }
@@ -19,7 +19,7 @@ ode_solve(parameters, t_window, IC)
 list: part_vals: ensemble of parameters, marginal distributions
 }
 \description{
-Derivatives functions to solve ODE systems
+Solves ODEs
 }
 \examples{
 library(EEMtoolbox)

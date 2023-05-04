@@ -23,7 +23,7 @@ derivative_func <- function(interaction_matrix,
     B <- matrix(pmin(0, interaction_matrix), ncol=ncol(interaction_matrix))
 
     P <- diag(A)
-    M <- A-P
+    M <- A-diag(P)
     return(current_abundance*growth_rate*(1-exp(-M%*%current_abundance-P))
            +(B%*%current_abundance)*current_abundance)
   }
