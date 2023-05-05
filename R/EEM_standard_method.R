@@ -25,7 +25,6 @@ EEM_standard_method <- function(sim_args,
                                 sampler,
                                 trans_f,
                                 n_particles){
-  # initial prior rejection algorithm
   # sample prior
   part_vals <- t(sapply(seq(n_particles),
                         function(x, sim_args) sampler(sim_args), sim_args=sim_args))
@@ -61,7 +60,8 @@ EEM_standard_method <- function(sim_args,
 
   return(list(sims=sims,
               part_vals=part_vals,
-              part_s = part_s,
+              part_sim=part_sim,
+              part_s=part_s,
               prior_sample=prior_sample))
 
 }

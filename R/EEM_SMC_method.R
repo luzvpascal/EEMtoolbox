@@ -37,52 +37,37 @@ EEM_SMC_method <- function(sim_args,
                            c,
                            p_acc_min){
 
+  # initial prior rejection algorithm: EEM_standard_method
+  outputs <- EEMtoolbox::EEM_standard_method(sim_args,
+                                             summ_func,
+                                             disc_func,
+                                             sampler,
+                                             trans_f,
+                                             n_particles)
+
+  part_vals <- outputs$part_vals # sample prior
+  part_sim <- outputs$part_sim # simulate model
+  part_s <- outputs$part_s # evaluate the discrepancy metric
+  prior_sample <- outputs$prior_sample #prior
+
+  print(paste('Estimated acceptance rate <-',sum(part_s==0)/n_particles))
+
   # values for adaptive steps
   num_drop <- floor(n_particles*a) #Number of particles dropped each iteration
   num_keep <- n_particles-num_drop #Number of particles kept each iteration
 
-  # initial prior rejection algorithm
-  # sample prior
-  part_vals <- t(sapply(seq(n_particles),
-                        function(x, sim_args) sampler(sim_args), sim_args=sim_args))
-  # simulate model
-  cores <- parallel::detectCores()
-  cl <- parallel::makeCluster(cores[1]-2) #not to overload your computer
-  doParallel::registerDoParallel(cl)
-  part_sim <- foreach::foreach(i = 1:n_particles) %dopar% {
-    summ_func(part_vals[i,], sim_args)
-  }
-  #stop cluster
-  parallel::stopCluster(cl)
-  rm(cl)
-  part_sim <- matrix(unlist(part_sim), nrow=n_particles, byrow = TRUE)
-  #simulation
-  # evaluate the discrepancy metric
-  part_s <- sapply(seq(n_particles),
-                   function(x, part_sim) disc_func(part_sim[x,]),
-                   part_sim = part_sim) #summary
-
-  print(paste('Estimated acceptance rate <-',sum(part_s==0)/n_particles))
-
-  #save prior sample
-  prior_sample <- part_vals
-  #track the number of simulations
-  sims <- n_particles
-  # transform the parameters
-  part_vals <- trans_f(part_vals,sim_args)        #part vals is transformed
-
-  # sort the particles
-  ix <- order(part_s)
-  part_s <- part_s[ix]
-  part_vals <- part_vals[ix,]
-  part_sim <- part_sim[ix,]
 
   # determine next disprepacy threshold
   dist_max <- part_s[n_particles]
   dist_next <- part_s[num_keep]
   print(paste('Current maximum discrepancy',dist_max,'now trying for ', dist_next, 'want to get to ',dist_final))
 
-  # interate toward target discrepancy
+  # iterate toward target discrepancy
+  #track the number of simulations
+  sims <- n_particles
+  # transform the parameters
+  part_vals <- trans_f(part_vals,sim_args) #part vals is transformed
+
   while (dist_max > dist_final){
     # compute the covariance matrix (of particles that remain) required
     # for the Independent MH move step
