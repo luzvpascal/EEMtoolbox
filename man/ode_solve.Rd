@@ -4,10 +4,18 @@
 \alias{ode_solve}
 \title{Solve ODE}
 \usage{
-ode_solve(interaction_matrix, t_window, initial_condition, model = "GLV")
+ode_solve(
+  interaction_matrix,
+  growth_rate,
+  t_window,
+  initial_condition,
+  model = "GLV"
+)
 }
 \arguments{
-\item{interaction_matrix}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
+\item{interaction_matrix}{parametrized interaction matrix}
+
+\item{growth_rate}{parametrized growth rate vector}
 
 \item{t_window}{time window to solve ODE}
 

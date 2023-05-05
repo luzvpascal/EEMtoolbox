@@ -14,7 +14,7 @@
 
 ode_solve <- function(interaction_matrix, growth_rate, t_window, initial_condition, model = "GLV"){
   time_steps <- seq(from = t_window[1],to = t_window[2],by = 0.01)#vector of time steps
-  y <-  matrix(0,nrow=length(time_steps),ncol=length(initial_condition)) #matrix of abudnances
+  y <-  matrix(0,ncol=length(time_steps),nrow=length(initial_condition)) #matrix of abudnances
 
   y[1,] = initial_condition #setting initial condition
 
