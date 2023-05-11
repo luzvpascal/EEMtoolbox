@@ -48,6 +48,8 @@ EEM_SMC_method <- function(sim_args,
                                              n_particles)
 
   if (sum(outputs$part_s==0)>=n_ensemble){
+    print("Exiting SMC ABC search as number of desired ensemble members attained")
+    print("modify n_ensemble if necessary")
     return(outputs)
   }
   part_vals <- outputs$part_vals # sample prior
