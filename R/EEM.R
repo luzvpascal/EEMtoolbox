@@ -32,7 +32,7 @@ EEM <- function(interaction_matrix,
                 n_ensemble=10,
                 model="GLV",
                 algorithm="SMC-ABC",
-                summ_func=EEMtoolbox::summarise_ecosystem_features_GLV,
+                summ_func=EEMtoolbox::summarise_ecosystem_features,
                 disc_func=EEMtoolbox::discrepancy_continuous_sum,
                 sampler=EEMtoolbox::uniform_sampler,
                 trans_f=EEMtoolbox::uniform_transform,
@@ -47,7 +47,7 @@ EEM <- function(interaction_matrix,
                 output_prior=FALSE,
                 output_args=FALSE,
                 output_discrepancy=FALSE,
-                output_matrix=FALSE
+                output_matrix=TRUE
                 ){
   # TESTS if inputs are correct ###########
   #interaction_matrix tests
@@ -104,14 +104,6 @@ EEM <- function(interaction_matrix,
   #output_args
   stopifnot(class(output_args)=="logical")
 
-  # SETTING values to parameters ####
-  if (model == "Baker"){
-    summ_func <- EEMtoolbox::summarise_ecosystem_features_Baker
-  } else if (model == "Gompertz"){
-    summ_func <- EEMtoolbox::summarise_ecosystem_features_Gompertz
-    bounds_growth_rate <- c(1.1,1.3)
-    print("r values bounded between 1 and 2?")
-  }
 
   # Defining special arguments ####
   sim_args <- EEMtoolbox::args_function(interaction_matrix,
@@ -133,7 +125,8 @@ EEM <- function(interaction_matrix,
                                           dist_final,
                                           a,
                                           c,
-                                          p_acc_min)
+                                          p_acc_min,
+                                          n_ensemble)
   } else if ((algorithm=="standard EEM")){
     print('Begin standard search method')
     outputs <- EEMtoolbox::EEM_standard_method(sim_args,

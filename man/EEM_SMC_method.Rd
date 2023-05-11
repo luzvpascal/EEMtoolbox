@@ -17,7 +17,8 @@ EEM_SMC_method(
   dist_final,
   a,
   c,
-  p_acc_min
+  p_acc_min,
+  n_ensemble = 10
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ EEM_SMC_method(
 \item{c}{tuning parameter for choosing the number of MCMC iterations in move step.}
 
 \item{p_acc_min}{minimum acceptable acceptance rate in the MCMC interations before exit.}
+
+\item{n_ensemble}{Number of desired ensemble members. Default to 10}
 }
 \value{
 list: sims=number of simulations

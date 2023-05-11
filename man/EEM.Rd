@@ -25,7 +25,7 @@ EEM(
   output_prior = FALSE,
   output_args = FALSE,
   output_discrepancy = FALSE,
-  output_matrix = FALSE
+  output_matrix = TRUE
 )
 }
 \arguments{

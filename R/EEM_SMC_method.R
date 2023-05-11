@@ -14,6 +14,7 @@
 #' @param a tuning parameter for adaptive selection of discrepancy threshold sequence.
 #' @param c tuning parameter for choosing the number of MCMC iterations in move step.
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit.
+#' @param n_ensemble Number of desired ensemble members. Default to 10
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
@@ -35,7 +36,8 @@ EEM_SMC_method <- function(sim_args,
                            dist_final,
                            a,
                            c,
-                           p_acc_min){
+                           p_acc_min,
+                           n_ensemble=10){
 
   # initial prior rejection algorithm: EEM_standard_method
   outputs <- EEMtoolbox::EEM_standard_method(sim_args,
@@ -45,12 +47,13 @@ EEM_SMC_method <- function(sim_args,
                                              trans_f,
                                              n_particles)
 
+  if (sum(outputs$part_s==0)>=n_ensemble){
+    return(outputs)
+  }
   part_vals <- outputs$part_vals # sample prior
   part_sim <- outputs$part_sim # simulate model
   part_s <- outputs$part_s # evaluate the discrepancy metric
   prior_sample <- outputs$prior_sample #prior
-
-  print(paste('Estimated acceptance rate <-',sum(part_s==0)/n_particles))
 
   # values for adaptive steps
   num_drop <- floor(n_particles*a) #Number of particles dropped each iteration

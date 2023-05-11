@@ -14,6 +14,8 @@ args_function <- function(interaction_matrix,
                           model="GLV"){
   args <- list()
 
+  args$model <- model
+
   if (class(interaction_matrix)[1]=="matrix"){
     args$n_species <- ncol(interaction_matrix) #number of species in ecosystem network
   } else {#
