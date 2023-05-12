@@ -5,9 +5,9 @@
 # EEMtoolbox
 EEMtoolbox is an R-package that efficiently generates an ensemble of plausible quantitative models that describe an ecosystem from a species interaction network. 
 
-Our package is built to support three different models that could represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following the requirements from (Baker et al., 2017), the generated models verify ecosytem coexistence (feasibility: steady states positive) and stability (eigen values of Jacobian negative). 
+EEMtoolbox supports three different models that represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following the requirements from (Baker et al., 2017), the generated models verify ecosytem coexistence (feasibility: steady states positive) and stability (eigen values of Jacobian negative). Customized models can also be provided by the user [(click here)](#customizing-input-model)
 
-Our package includes the implementation of recent work from our project team (Vollert et al. in preparation), which has demonstrated that Approximate Bayesian Computation methods (Drovandi and Pettitt 2011) can speed up EEM so that it is now practical for use in larger systems. 
+Our package includes the implementation of recent work from our project team (Vollert et al. in preparation), which has demonstrated that Approximate Bayesian Computation methods (Drovandi and Pettitt 2011) can speed up the generation
 
 ## Installation
 To install EEMtoolbox, run the following line
@@ -31,3 +31,9 @@ EEM(dingo_matrix) #dingo_matrix is included in the package
 `model`: model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
 
 `algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"
+
+## Predicting species abundances 
+
+## Customizing input model 
+
+## Customizing search algorithm
