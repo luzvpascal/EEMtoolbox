@@ -1,29 +1,24 @@
+#' @title Arguments for EEM
+#' @description
+#' Extract arguments necessary to run EEM from interaction matrix
+#'
+#' @param prior_sample interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
+#' @param posterior_sample vector of 2 elements containing lower and upper bounds for growth rates
+#' @param sim_args vector of 2 elements containing lower and upper bounds for growth rates
+#' @param param_names model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
+#' @return A list of arguments defining the problem.
 #' @export
-Plots_PosteriorDensity <- function(prior_sample, posterior_sample, prior_args,param_names){
+plots_posterior_density <- function(prior_sample, posterior_sample, sim_args,param_names){
   #figure layout settings
   n_params <- ncol(posterior_sample)
 
   #locally extract prior bounds
-  prior_lowers <- prior_args$lower
-  prior_uppers <- prior_args$upper
-
-  #check if we have zero-parameters included in sample
-  # if (n_params != length(prior_args$lower)){#we have zero parameters
-  #   interaction_sample_nonzero <- matrix(0,nrow(posterior_sample),length(prior_args$lower))
-  #   count =0
-  #   for (i in seq(length(prior_args$skip_parameters))){
-  #     if (prior_args$skip_parameters[i]==0){#if values are non-zero
-  #       count <- count+1
-  #       interaction_sample_nonzero[,count] <- posterior_sample[,prior_args$n_species+i]
-  #     }
-  #   }
-  #   posterior_sample <- c(posterior_sample[,seq(prior_args$n_species)], interaction_sample_nonzero)
-  #   n_params <- ncol(posterior_sample)
-  # }
+  prior_lowers <- sim_args$lower
+  prior_uppers <- sim_args$upper
 
   #for each parameter
   data_densities <- data.frame(xx=numeric(),
-                               xx=numeric(),
+                               yy=numeric(),
                                step=character(),
                                param=character())
   for (i in seq(n_params)){

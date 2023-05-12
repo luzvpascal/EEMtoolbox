@@ -1,4 +1,3 @@
-
 #' @title Monte Carlo Markov Chain
 #' @description
 #' Runs MCMC

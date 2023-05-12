@@ -1,8 +1,8 @@
 Package: EEMtoolbox
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Ensemble ecosystem modelling toolbox
+Version: 0.0.1.0000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Luz", "Pascal", , "luzvalerie.pascal@hdr.qut.edu.au", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a

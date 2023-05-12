@@ -10,7 +10,7 @@ EEM(
   n_ensemble = 10,
   model = "GLV",
   algorithm = "SMC-ABC",
-  summ_func = EEMtoolbox::summarise_ecosystem_features_GLV,
+  summ_func = EEMtoolbox::summarise_ecosystem_features,
   disc_func = EEMtoolbox::discrepancy_continuous_sum,
   sampler = EEMtoolbox::uniform_sampler,
   trans_f = EEMtoolbox::uniform_transform,
