@@ -16,7 +16,7 @@ devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com
 ```
 
 ## Running EEM
-The main function of EEMtoolbox is `EEM`. This function generates ensemble members
+The main function of EEMtoolbox is `EEM`. This function inputs an `interaction_matrix` and outputs ensemble members (for the Generalized Lokta Voltera model by default).
 ```r
 library(EEMtoolbox)
 EEM(dingo_matrix) #dingo_matrix is included in the package
