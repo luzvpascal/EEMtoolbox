@@ -3,19 +3,23 @@
   <!-- badges: end -->
 
 # EEMtoolbox
-EEMtoolbox is an R-package that efficiently integrates species interaction networks in order to propose an ensemble of plausible quantitative models that describe an ecosystem.
+EEMtoolbox is an R-package that efficiently generates an ensemble of plausible quantitative models that describe an ecosystem from a species interaction network. 
+
+Our package is built to support three different models that could represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following the requirements from (Baker et al., 2017), the generated models verify ecosytem coexistence (feasibility: steady states positive) and stability (eigen values of Jacobian negative). 
+
+Our package includes the implementation of recent work from our project team (Vollert et al. in preparation), which has demonstrated that Approximate Bayesian Computation methods (Drovandi and Pettitt 2011) can speed up EEM so that it is now practical for use in larger systems. 
 
 ## Installation
-To install EEMtoolbox, we recommend running the following line
+To install EEMtoolbox, run the following line
 ``` r
 devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com")
-library(EEMtoolbox)
 ```
 
 ## Running EEM
-The main function of EEMtoolbox is `EEM`.
+The main function of EEMtoolbox is `EEM`. This function generates ensemble members
 ```r
-EEM(dingo_matrix)
+library(EEMtoolbox)
+EEM(dingo_matrix) #dingo_matrix is included in the package
 ```
 
 `interaction_matrix`: interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
