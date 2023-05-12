@@ -16,12 +16,12 @@ devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com
 ```
 
 ## Running EEM
-The main function of EEMtoolbox is `EEM`. This function inputs an `interaction_matrix` and outputs ensemble members (for the Generalized Lokta Voltera model by default). The matrix `dingo_matrix` is included in the EEMtoolbox package.
+The main function of EEMtoolbox is `EEM`. This function inputs an `interaction_matrix` and outputs ensemble members (for the Generalized Lokta Voltera model by default).
 ```r
 library(EEMtoolbox)
 outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
 ```
-**Other arguments**
+**Other arguments of `EEM` function**
 
 `interaction_matrix`: interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
 
@@ -34,6 +34,44 @@ outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
 `algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM".
 
 ## Predicting species abundances 
+```r
+library(tidyverse)
+
+index <- 1
+initcond <- summarise_ecosystem_features(parameters = outputs$part_vals[index,],
+                                         sim_args = outputs$sim_args)
+discrepancy_continuous_sum(initcond)
+initcond <- initcond[seq(8)]
+test_values <- EEMtoolbox::reconstruct_matrix_growthrates(outputs$part_vals[index,],sim_args = outputs$sim_args)
+
+output_pred <- EEMtoolbox::ode_solve(interaction_matrix=test_values$interaction_matrix,
+                                     growth_rate=test_values$growthrates,
+                                     t_window = c(0,10),
+                                     model = model_test,
+                                     initial_condition =initcond-runif(8,min=-0.5,max=0.5)*initcond
+                                    )
+```
+
+## Ploting predictions 
+```r
+abundance <- as.data.frame(output_pred$y)
+names(abundance) <- species_list
+abundance$time <- seq(nrow(abundance))
+
+abundance <- abundance %>%
+  pivot_longer(!time, names_to = "species", values_to = "pop")
+
+p <- ggplot(abundance, aes(x=time, y=pop, color=species, fill = species)) +
+  stat_summary(geom = "line", fun = mean) +
+  guides(fill = guide_legend(title = "Species Group"), color = guide_legend(title="Species Group")) +
+  theme_bw() +
+  xlab("Years") +
+  ylab("Abundance") +
+  scale_x_continuous(breaks = seq(1,nrow(output_pred$y), length.out=11)-1,
+                     labels = (seq(1,nrow(output_pred$y), length.out=11)-1)/100)
+p
+```
+
 
 ## Customizing input model 
 
