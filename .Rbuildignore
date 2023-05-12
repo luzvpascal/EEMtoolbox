@@ -1,3 +1,5 @@
 ^\.travis\.yml$
 ^EEMtoolbox\.Rproj$
 ^\.Rproj\.user$
+^codecov\.yml$
+^\.github$
