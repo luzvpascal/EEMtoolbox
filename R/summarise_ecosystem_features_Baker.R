@@ -47,7 +47,7 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   exp_matrix <- matrix(exp(-M%*%equilibrium_points-P),
                        ncol = length(R), nrow = length(R))
 
-  jacobian <- R_matrix*N_matrix*A*exp_matrix + B*N_matrix*t(N_matrix)#change to positive
+  jacobian <- R_matrix*N_matrix*A*exp_matrix + B*N_matrix#change to positive
 
   diag(jacobian) <- diag_elements
   #check stability
