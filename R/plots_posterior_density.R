@@ -37,12 +37,12 @@ plots_posterior_density <- function(prior_sample, posterior_sample, sim_args,par
   }
 
   write.csv(data_densities, "data_densities.csv", row.names = FALSE)
-  g <- ggplot2::ggplot(data_densities, aes(x=xx,
+  g <- ggplot2::ggplot(data_densities, ggplot2::aes(x=xx,
                              y=yy,
                              group = interaction(step),
                              col = step))+
     ggplot2::geom_line()+
     ggplot2::facet_wrap(~param,scales = "free")+
-    ggplot2::theme(text = element_text(size = 5))
+    ggplot2::theme(text = ggplot2::element_text(size = 5))
   return(g)
 }
