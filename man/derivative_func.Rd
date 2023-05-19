@@ -5,20 +5,20 @@
 \title{Derivatives of models}
 \usage{
 derivative_func(
-  interaction_matrix,
+  interaction_matrix_value,
   growth_rate,
   current_abundance,
   model = "GLV"
 )
 }
 \arguments{
-\item{interaction_matrix}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
+\item{interaction_matrix_value}{interaction matrix parametrized}
+
+\item{growth_rate}{vector of growth rates}
 
 \item{current_abundance}{vector of current species abundance}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
-
-\item{bounds_growth_rate}{vector of growth rates}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized"}
 }
 \value{
 list: part_vals: ensemble of parameters, marginal distributions
@@ -28,5 +28,9 @@ Derivatives functions to solve ODE systems
 }
 \examples{
 library(EEMtoolbox)
-EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
+output <- EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
+interaction_matrix_value <- output[[1]]$interaction_matrix
+growth_rate <- output[[1]]$growthrates
+current_abundance <- rep(10, 8) # 8 species, initial abundance is 10 for all
+derivative_func(interaction_matrix_value, growth_rate, current_abundance)
 }

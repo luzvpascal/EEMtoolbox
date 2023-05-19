@@ -26,11 +26,13 @@ MCMC(
 
 \item{mcmc_trials}{number of MCMC steps to try before selecting appropriate number.}
 
+\item{dist_next}{next objective distance}
+
 \item{part_vals}{matrix of current values of parameters of each particle (each particle represented by a row)}
 
-\item{part_s}{vector of discrepancy measures of each particle}
+\item{part_s}{vector of discrepancy measures of each particle (each particle represented by a row)}
 
-\item{part_sim}{(each particle represented by a row)}
+\item{part_sim}{matrix of current simulation values: equilibriums and eigenvalues of jacobian (each particle represented by a row)}
 
 \item{cov_matrix}{covariance matrix}
 
@@ -46,9 +48,9 @@ MCMC(
 list
 part_vals: updated value of parameter values for particle i
 part_s: discrepancy measure for particle i
-part_sim
-i_acc
-sims_mcmc
+part_sim: summary of ecosystem features for particle i
+i_acc: number of times particle movement accepted
+sims_mcmc: number of successful walks
 }
 \description{
 Runs MCMC

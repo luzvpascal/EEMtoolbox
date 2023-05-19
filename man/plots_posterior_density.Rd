@@ -4,20 +4,30 @@
 \alias{plots_posterior_density}
 \title{Arguments for EEM}
 \usage{
-plots_posterior_density(prior_sample, posterior_sample, sim_args, param_names)
+plots_posterior_density(prior_sample, posterior_sample, param_names)
 }
 \arguments{
-\item{prior_sample}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
+\item{prior_sample}{matrix of prior sample of parameters.}
 
-\item{posterior_sample}{vector of 2 elements containing lower and upper bounds for growth rates}
+\item{posterior_sample}{matrix of posterior sample of parameters.}
 
-\item{sim_args}{vector of 2 elements containing lower and upper bounds for growth rates}
-
-\item{param_names}{model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
+\item{param_names}{vector of names for each parameter.}
 }
 \value{
-A list of arguments defining the problem.
+ggplot2 figure
 }
 \description{
 Extract arguments necessary to run EEM from interaction matrix
+}
+\examples{
+library(EEMtoolbox)
+output <- EEM(dingo_matrix,  #automatically loads an example of interaction matrix as dingo_matrix
+              output_prior=TRUE,
+              output_discrepancy=TRUE,
+              output_matrix=FALSE)
+ix <- which(output$part_s==0) #indexes of interest
+prior_sample <- output$prior_sample
+posterior_sample <- output$part_vals[ix,]
+param_names <- seq(ncol(prior_sample))
+plots_posterior_density(prior_sample,posterior_sample,param_names)
 }

@@ -7,7 +7,7 @@
 discrepancy_continuous_sum(data)
 }
 \arguments{
-\item{data}{vector of the equilibrium points followed by the real eigenvalues of the jacobian matrix, as returned by \link[EEMtoolbox]{summarise_ecosystem_features_GLV}}
+\item{data}{vector of the equilibrium points followed by the real eigenvalues of the jacobian matrix, as returned by \link[EEMtoolbox]{summarise_ecosystem_features}}
 }
 \value{
 summary statistic (discrepancy measure).

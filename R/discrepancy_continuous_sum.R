@@ -1,7 +1,7 @@
 #' @title Discrepancy function
 #' @description
 #' Discrepancy measure: summarises how infeasible or instable this system is
-#' @param data vector of the equilibrium points followed by the real eigenvalues of the jacobian matrix, as returned by \link[EEMtoolbox]{summarise_ecosystem_features_GLV}
+#' @param data vector of the equilibrium points followed by the real eigenvalues of the jacobian matrix, as returned by \link[EEMtoolbox]{summarise_ecosystem_features}
 #' @return summary statistic (discrepancy measure).
 #' @export
 

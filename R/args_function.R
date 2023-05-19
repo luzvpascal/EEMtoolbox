@@ -4,9 +4,19 @@
 #'
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
 #' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates
-#' @param upper_interaction_strength vector of 2 elements containing lower and upper bounds for growth rates
+#' @param upper_interaction_strength coefficient representing interaction strength. Default:1
 #' @param model model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
 #' @return A list of arguments defining the problem.
+#' @examples
+#' library(EEMtoolbox)
+#' args_function(dingo_matrix, c(-5,5)) #automatically loads an example of interaction matrix as dingo_matrix
+#' @return list:
+#' model: considered model
+#' n_species: number of species
+#' skip_parameters: vector of 0-1 indicating which parameters to skip
+#' num_params: number of non-zero parameters
+#' lower: vector of length num_params representing lower bound of each parameter
+#' upper: vector of length num_params representing upper bound of each parameter
 #' @export
 args_function <- function(interaction_matrix,
                           bounds_growth_rate,

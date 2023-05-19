@@ -137,7 +137,7 @@ EEM <- function(interaction_matrix,
                                                n_particles)
   }
   if (output_matrix){
-    output_function <- apply(outputs$part_vals, 1, EEMtoolbox::reconstruct_matrix_growthrates,
+    output_function <- apply(outputs$part_vals[seq(n_ensemble),], 1, EEMtoolbox::reconstruct_matrix_growthrates,
                              sim_args=sim_args)
     return(output_function)
   } else {

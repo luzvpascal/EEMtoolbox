@@ -4,9 +4,10 @@
 #' @param i line number of particle to be moved
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}
 #' @param mcmc_trials number of MCMC steps to try before selecting appropriate number.
+#' @param dist_next next objective distance
 #' @param part_vals matrix of current values of parameters of each particle (each particle represented by a row)
-#' @param part_s vector of discrepancy measures of each particle
-#' @param part_sim (each particle represented by a row)
+#' @param part_s vector of discrepancy measures of each particle (each particle represented by a row)
+#' @param part_sim matrix of current simulation values: equilibriums and eigenvalues of jacobian (each particle represented by a row)
 #' @param cov_matrix covariance matrix
 #' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure).
@@ -15,9 +16,9 @@
 #' @return list
 #' part_vals: updated value of parameter values for particle i
 #' part_s: discrepancy measure for particle i
-#' part_sim
-#' i_acc
-#' sims_mcmc
+#' part_sim: summary of ecosystem features for particle i
+#' i_acc: number of times particle movement accepted
+#' sims_mcmc: number of successful walks
 #' @export
 #' @import MASS
 

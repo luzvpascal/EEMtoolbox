@@ -16,13 +16,25 @@ args_function(
 
 \item{bounds_growth_rate}{vector of 2 elements containing lower and upper bounds for growth rates}
 
-\item{upper_interaction_strength}{vector of 2 elements containing lower and upper bounds for growth rates}
+\item{upper_interaction_strength}{coefficient representing interaction strength. Default:1}
 
 \item{model}{model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
 }
 \value{
 A list of arguments defining the problem.
+
+list:
+model: considered model
+n_species: number of species
+skip_parameters: vector of 0-1 indicating which parameters to skip
+num_params: number of non-zero parameters
+lower: vector of length num_params representing lower bound of each parameter
+upper: vector of length num_params representing upper bound of each parameter
 }
 \description{
 Extract arguments necessary to run EEM from interaction matrix
+}
+\examples{
+library(EEMtoolbox)
+args_function(dingo_matrix, c(-5,5)) #automatically loads an example of interaction matrix as dingo_matrix
 }

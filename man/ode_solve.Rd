@@ -5,31 +5,42 @@
 \title{Solve ODE}
 \usage{
 ode_solve(
-  interaction_matrix,
+  initial_condition,
+  interaction_matrix_value,
   growth_rate,
   t_window,
-  initial_condition,
-  model = "GLV"
+  time_step_len = 0.01,
+  model = "GLV",
+  derivative = EEMtoolbox::derivative_func
 )
 }
 \arguments{
-\item{interaction_matrix}{parametrized interaction matrix}
+\item{initial_condition}{vector of initial species abundances}
+
+\item{interaction_matrix_value}{interaction matrix parametrized}
 
 \item{growth_rate}{parametrized growth rate vector}
 
 \item{t_window}{time window to solve ODE}
 
-\item{initial_condition}{vector of initial species abundances}
+\item{time_step_len}{length of each time step, default = 0.01}
 
 \item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
+
+\item{derivative}{derivative function. Default \link[EEMtoolbox]{derivative_func}}
 }
 \value{
-list: part_vals: ensemble of parameters, marginal distributions
+list: time_steps: vector of time steps of the simulation
+abundances: matrix of abundances, each row corresponds to the values of abundances at a given time step
 }
 \description{
 Solves ODEs
 }
 \examples{
 library(EEMtoolbox)
-EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
+output <- EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
+interaction_matrix_value <- output[[1]]$interaction_matrix
+growth_rate <- output[[1]]$growthrates
+initial_condition <- rep(10, 8) # 8 species, initial abundance is 10 for all
+ode_solve(initial_condition, interaction_matrix_value, growth_rate, t_window=c(0,1))
 }
