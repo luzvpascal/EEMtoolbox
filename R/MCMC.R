@@ -48,8 +48,8 @@ MCMC <- function(i,
     prior_prop <- pdf(matrix(part_vals_prop, nrow=1))
 
     # early rejection (assumes symmetric proposals)
-    if(!((is.nan(prior_prop/prior_curr))| (runif(1) > prior_prop/prior_curr))){
-      break
+    if(((is.nan(prior_prop/prior_curr))| (runif(1) > prior_prop/prior_curr))){
+      next
     }
 
     #find proposal discrepancy
