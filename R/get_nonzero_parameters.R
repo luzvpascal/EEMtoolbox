@@ -1,52 +1,68 @@
 #' @title List of non-zero parameters
 #' @description
 #' Array of indicating if a parameter in the interaction matrix is skipped (yes=1) or not (no=0), as well as the interaction sign (upper and lower bounds)
-#' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
+#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
+#' @param model model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
 #' @return A list
-#' skip_parameters : parameter skipped (yes=1) or not (no=0)
+#' keep_parameters : parameter kept (yes=1) or not (no=0)
 #' lower_interaction_bound: lower bounds of each parameter sign
 #' upper_interaction_bound: upper bounds of each parameter sign
+#' num_params: total number of unknown parameters
+#'
+#' Baker model only: keep_parameters_alphas : parameter kept (yes=1) or not (no=0)
+#' Baker model only: keep_parameters_betas : parameter kept (yes=1) or not (no=0)
+
+#' Baker model only: num_params_alphas: total number of unknown alpha parameters
+#' Baker model only: num_params_betas: total number of unknown beta parameters
+
+#' Baker model only: lower_interaction_bound_alphas: lower bounds of each alpha parameter sign
+#' Baker model only: upper_interaction_bound_alphas: upper bounds of each alpha parameter sign
+
+#' Baker model only: lower_interaction_bound_betas: lower bounds of each beta parameter sign
+#' Baker model only: upper_interaction_bound_betas: upper bounds of each beta parameter sign
+
 #' @export
-get_nonzero_parameters <- function(interaction_matrix){
+get_nonzero_parameters <- function(interaction_matrix,n_species,model="GLV"){
   # This function returns an array of whether a parameter in the interaction
   # matrix is skipped (yes=1) or not (no=0), as well as the interaction sign
   # where a term is not skipped (interaction_terms_nonzero).
 
-  if (class(interaction_matrix)[1]=="matrix"){
-    #determine which interaction terms are 0
-    n_species <- ncol(interaction_matrix)
+  if (model=="GLV"|model=="Gompertz"){
+    list_nonzero_parameters <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix)
+    return(list(keep_parameters=as.numeric(list_nonzero_parameters$keep_parameters),
+                lower_interaction_bound=list_nonzero_parameters$lower_interaction_bound,
+                upper_interaction_bound=list_nonzero_parameters$upper_interaction_bound,
+                num_params= n_species+ sum(as.numeric(list_nonzero_parameters$keep_parameters))
+                )
+           )
+  } else if (model=="Baker"){
+    list_nonzero_alphas <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix[[1]])
+    list_nonzero_betas <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix[[2]])
 
-    #get all of the interaction terms as an array
-    interaction_terms <- matrix(c(interaction_matrix),nrow=1,ncol=n_species^2)#check dimensions
+    return(list(
+      keep_parameters_alphas=as.numeric(list_nonzero_alphas$keep_parameters),
+      keep_parameters_betas=as.numeric(list_nonzero_betas$keep_parameters),
 
-    skip_parameters <- c(interaction_terms==0)
+      lower_interaction_bound_alphas=list_nonzero_alphas$lower_interaction_bound,
+      upper_interaction_bound_alphas=list_nonzero_alphas$upper_interaction_bound,
 
-    #extract the non-zero terms
-    interaction_terms_nonzero <- interaction_terms[which(!(skip_parameters))]
-    # define uniform bounds on interaction terms
-    lower_interaction_bound <- pmin(interaction_terms_nonzero, 0)
-    upper_interaction_bound <- pmax(interaction_terms_nonzero, 0)
+      lower_interaction_bound_betas=list_nonzero_betas$lower_interaction_bound,
+      upper_interaction_bound_betas=list_nonzero_betas$upper_interaction_bound,
 
+      lower_interaction_bound=c(list_nonzero_alphas$lower_interaction_bound,
+                                list_nonzero_betas$lower_interaction_bound),
 
-  } else {#list of upper and lower bound
-    n_species <- ncol(interaction_matrix[[1]])
+      upper_interaction_bound=c(list_nonzero_alphas$upper_interaction_bound,
+                                list_nonzero_betas$upper_interaction_bound),
 
-    #get all of the interaction terms as an array
-    lower_interaction_terms <- c(interaction_matrix[[1]])
-    lower_skip_parameters <- c(lower_interaction_terms==0)
+      num_params= n_species+
+        sum(as.numeric(list_nonzero_alphas$keep_parameters)) +
+        sum(as.numeric(list_nonzero_betas$keep_parameters)),
 
-    upper_interaction_terms <- c(interaction_matrix[[2]])
-    upper_skip_parameters <- c(upper_interaction_terms==0)
-
-    #extract the non-zero terms
-    skip_parameters <- lower_skip_parameters*upper_skip_parameters
-
-    # define uniform bounds on interaction terms
-    lower_interaction_bound <- lower_interaction_terms[!as.logical(skip_parameters)]
-    upper_interaction_bound <- upper_interaction_terms[!as.logical(skip_parameters)]
+      num_params_alphas = sum(as.numeric(list_nonzero_alphas$keep_parameters)),
+      num_params_betas = sum(as.numeric(list_nonzero_betas$keep_parameters))
+    )
+    )
   }
-  return(list(skip_parameters=as.numeric(skip_parameters),
-              lower_interaction_bound=lower_interaction_bound,
-              upper_interaction_bound=upper_interaction_bound))
 
 }

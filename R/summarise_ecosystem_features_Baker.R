@@ -17,10 +17,8 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   # reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates_Baker(parameters,sim_args)
   reconstruct <- EEMtoolbox::reconstruct_matrix_growthrates(parameters,sim_args)
   r <- reconstruct$growthrates
-  mat <- reconstruct$interaction_matrix
-
-  A <- matrix(pmax(0, mat), ncol=ncol(mat))
-  B <- matrix(pmin(0, mat), ncol=ncol(mat))
+  A <- reconstruct$interaction_matrix_alphas
+  B <- reconstruct$interaction_matrix_betas
 
   # FEASIBILITY CHECK
   #find equilibrium abundances for feasibility
