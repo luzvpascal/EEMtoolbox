@@ -12,7 +12,12 @@ reconstruct_matrix_growthrates(parameters, sim_args)
 \item{sim_args}{a list of arguments as returned by \link[EEMtoolbox]{args_function}}
 }
 \value{
-A list of 2 elements growthrates: a vector of arguments defining the problem. interaction_matrix: reconstructed interaction matrix
+A list of 2 elements
+growthrates: a vector of arguments defining the problem,
+interaction_matrix: reconstructed interaction matrix.
+If model is Baker,
+interaction_matrix_alphas: reconstructed interaction matrix of alphas
+interaction_matrix_betas: reconstructed interaction matrix of betas
 }
 \description{
 Reconstruct interaction matrix and growth rates vector from set of parameters
