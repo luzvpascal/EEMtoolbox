@@ -5,20 +5,55 @@
 # EEMtoolbox
 EEMtoolbox is an R-package that efficiently generates an ensemble of plausible quantitative models that describe an ecosystem from a species interaction network. 
 
-EEMtoolbox supports three different models that represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following the requirements from (Baker et al., 2017), the generated models verify ecosytem coexistence (feasibility: steady states positive) and stability (eigen values of Jacobian negative). Customized models can also be provided by the user ([click here](#customizing-input-model)).
+EEMtoolbox supports three different models that represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following Baker et al., (2017), the generated models must be feasible (coexistence: positive equilibrium abundances) and stable (negative eigenvalues of Jacobian). Customized models can also be provided by the user ([click here](#customizing-input-model)).
 
-Our package generates ensemble members in two possible ways: standard EEM (Baker et al., 2017) and EEM-SMC (Vollert et al. in preparation). The standard EEM method uniformly samples the parameter space until the desired number of ensemble members is generated, which has proven to be efficient for small networks. The EEM-SMC method takes advantage of Approximate Bayesian Computation methods (Drovandi and Pettitt 2011), which can speed up the generation of ensemble members specially for large networks.
+Our package generates ensemble members in two possible ways: standard EEM (Baker et al., 2017) and EEM-SMC (Vollert et al. in preparation). Both methods can generate representative and equivalent ensembles.The standard EEM method samples the parameter space until the desired number of ensemble members is generated, which has proven to be efficient for small networks. The EEM-SMC method takes advantage of Approximate Bayesian Computation methods (Drovandi and Pettitt 2011), which can speed up the generation of ensemble members specially for large networks.
 
 # Three ecosystem interactions models
-Ecosystem dynamics can be modelled using ordinary differential equations (ODE), which seek to predict species abundances over time. Here we present the three types of models represented as ODEs that are supported by our package.
+Ecosystem dynamics can be modelled using ordinary differential equations (ODE), which seek to predict species abundances over time. Here we present the three types of models represented as ODEs that are supported by our package. For each model, we provide the feasibility and stability requirements.
 
 ## Generalized Lokta Voltera model
+The Generalized Lokta Voltera equations are
+
 $$
 \frac{dn_i}{dt} = \left[ r_i + \sum_{i=1}^N \alpha_{i,j} n_j(t) \right] n_i(t)
 $$
+
+where:
+- $n_i(t)$ is the abundance of the ith ecosystem node at time $t$
+- $r_i$ is the intrinsic growth rate of the i-th species
+- $N$ is the total number of species
+- $\alpha_{i,j}$ is the per-capita interaction strength representing the effect of the j-th species the i-th.
+
+These can be rewritten as matrices
+
+$$
+\frac{d\mathbf{n}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}\right]\circ \mathbf{n}
+$$
+
+where:
+- $\mathbf{n}$ is the vector of abundances
+- $\mathbf{r}$ is the vector of intrinsic growth rates
+- $\mathbf{A}$ is the $N \times N$ interaction matrix of per-capita interaction strengths, where $A_{i,j}=\alpha_{i,j}$.
+- $\circ$ is the Hadamard (element wise) product.
+
 ### Feasibility
+The solution to:
+
+$$
+\frac{d\mathbf{n}^{\*}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}^{\*}\right]\circ \mathbf{n}^{\*} = 0
+$$
+
+is 
+
+$$
+\mathbf{n}^{\*} = - \mathbf{A}^{-1} \mathbf{r}.
+$$
+
+The feasibility condition is verified if $\mathbf{n}^{\*} > 0$.
 
 ### Stability
+
 ## Baker model
 
 ### Feasibility
