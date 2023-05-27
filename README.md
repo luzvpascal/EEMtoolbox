@@ -54,6 +54,7 @@ J_{i,j} = \left(\frac{\partial f_i}{\partial n_j}\right)(n=n^{\*}), \quad \text{
 $$
 
 The Jacobian is thus defined as:
+
 $$ 
 J_{i,j} = \alpha_{i,j} n_i^{\*}(t), \quad \forall i \neq j
 $$
@@ -91,7 +92,18 @@ $$
 \mathbf{n}^{\*} = e^{- \mathbf{A}^{-1} \mathbf{r}}.
 $$
 
+This solution $\mathbf{n}^{\*}$ is always positive, therefore the ecosystem is always feasible in the Gompertz model.
+
 ### Stability
+
+The Jacobian matrix is given by:
+
+$$
+J_{i,j} = \alpha_{i,j} \frac{n_i^{\*}}{n_j^{\*}}.
+$$
+
+The system is considered stable if the real part of each eigenvalue ($\lambda_i$) is negative, i.e. $Re(\lambda_i) \leq 0 $.
+
 ## Installation
 To install EEMtoolbox, run the following line
 ``` r
