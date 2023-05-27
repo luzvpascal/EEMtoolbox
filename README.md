@@ -9,6 +9,27 @@ EEMtoolbox supports three different models that represent species interactions: 
 
 Our package generates ensemble members in two possible ways: standard EEM (Baker et al., 2017) and EEM-SMC (Vollert et al. in preparation). The standard EEM method uniformly samples the parameter space until the desired number of ensemble members is generated, which has proven to be efficient for small networks. The EEM-SMC method takes advantage of Approximate Bayesian Computation methods (Drovandi and Pettitt 2011), which can speed up the generation of ensemble members specially for large networks.
 
+# Three ecosystem interactions models
+Ecosystem dynamics can be modelled using ordinary differential equations (ODE), which seek to predict species abundances over time. Here we present the three types of models represented as ODEs that are supported by our package.
+
+## Generalized Lokta Voltera model
+$$
+\frac{dn_i}{dt} = \left[ r_i + \sum_{i=1}^N \alpha_{i,j} n_j(t) \right] n_i(t)
+$$
+### Feasibility
+
+### Stability
+## Baker model
+
+### Feasibility
+
+### Stability
+
+## Gompertz model
+
+### Feasibility
+
+### Stability
 ## Installation
 To install EEMtoolbox, run the following line
 ``` r
