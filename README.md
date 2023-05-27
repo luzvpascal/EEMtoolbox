@@ -104,7 +104,7 @@ $$
 
 The system is considered stable if the real part of each eigenvalue ($\lambda_i$) is negative, i.e. $Re(\lambda_i) \leq 0 $.
 
-## Installation
+# Installation
 To install EEMtoolbox, run the following line
 ``` r
 devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com")
@@ -131,15 +131,8 @@ outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
 ## Predicting species abundances 
 ```r
 library(tidyverse)
-
-index <- 1
-initcond <- summarise_ecosystem_features(parameters = outputs$part_vals[index,],
-                                         sim_args = outputs$sim_args)
-discrepancy_continuous_sum(initcond)
-initcond <- initcond[seq(8)]
-test_values <- EEMtoolbox::reconstruct_matrix_growthrates(outputs$part_vals[index,],sim_args = outputs$sim_args)
-
-output_pred <- EEMtoolbox::ode_solve(interaction_matrix=test_values$interaction_matrix,
+system <- outputs[[1]] #select first ensemble returned by EEM.
+output_pred <- EEMtoolbox::ode_solve(interaction_matrix=system$interaction_matrix,
                                      growth_rate=test_values$growthrates,
                                      t_window = c(0,10),
                                      model = model_test,
@@ -166,7 +159,6 @@ p <- ggplot(abundance, aes(x=time, y=pop, color=species, fill = species)) +
                      labels = (seq(1,nrow(output_pred$y), length.out=11)-1)/100)
 p
 ```
-
 
 ## Customizing input model 
 
