@@ -25,7 +25,7 @@ where:
 - $N$ is the total number of species
 - $\alpha_{i,j}$ is the per-capita interaction strength representing the effect of the j-th species the i-th.
 
-These can be rewritten as matrices
+These equations can be rewritten as:
 
 $$
 \frac{d\mathbf{n}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}\right]\circ \mathbf{n}
@@ -38,13 +38,7 @@ where:
 - $\circ$ is the Hadamard (element wise) product.
 
 ### Feasibility
-The solution to:
-
-$$
-\frac{d\mathbf{n}^{\*}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}^{\*}\right]\circ \mathbf{n}^{\*} = 0
-$$
-
-is 
+The solution to $\frac{d\mathbf{n}^{\*}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}^{\*}\right]\circ \mathbf{n}^{\*} = 0$ is 
 
 $$
 \mathbf{n}^{\*} = - \mathbf{A}^{-1} \mathbf{r}.
@@ -53,6 +47,22 @@ $$
 The feasibility condition is verified if $\mathbf{n}^{\*} > 0$.
 
 ### Stability
+To verify the (Lyapunov) stability of the solution $\mathbf{n}^{\*}$, we need to calculate the eigen values of the Jacobian matrix $J$ at equilibrium $\mathbf{n}^{\*}$. The Jacobian matrix $J$ is defined as:
+
+$$
+J_{i,j} = \left(\frac{\partial f_i}{\partial n_j}\right)(n=n^{\*}), \quad \text{where  }f_i(n_i) = \left[ r_i + \sum_{i=1}^N \alpha_{i,j} n_j(t) \right] n_i(t)
+$$
+
+The Jacobian is thus defined as:
+$$ 
+J_{i,j} = \alpha_{i,j} n_i^{\*}(t), \quad \forall i \neq j
+$$
+
+$$
+J_{i,i} = r_i + \sum_{i=1}^N \alpha_{i,j} n_j^{\*}(t) + \alpha_{i,i} n_i^{\*}(t)
+$$
+
+The system is considered stable if the real part of each eigenvalue ($\lambda_i$) is negative, i.e. $Re(\lambda_i) \leq 0 $.
 
 ## Baker model
 
@@ -61,8 +71,25 @@ The feasibility condition is verified if $\mathbf{n}^{\*} > 0$.
 ### Stability
 
 ## Gompertz model
+The ODEs of the Gompertz model are
+
+$$
+\frac{dn_i}{dt} = \left[ r_i + \sum_{i=1}^N \alpha_{i,j} log(n_j(t)) \right] n_i(t)
+$$
+
+where:
+- $n_i(t)$ is the abundance of the ith ecosystem node at time $t$
+- $r_i$ is the intrinsic growth rate of the i-th species
+- $N$ is the total number of species
+- $\alpha_{i,j}$ is the per-capita interaction strength representing the effect of the j-th species the i-th.
 
 ### Feasibility
+
+The solution of the Gompertz model ODEs is:
+
+$$
+\mathbf{n}^{\*} = e^{- \mathbf{A}^{-1} \mathbf{r}}.
+$$
 
 ### Stability
 ## Installation
