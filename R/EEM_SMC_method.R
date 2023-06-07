@@ -61,7 +61,6 @@ EEM_SMC_method <- function(sim_args,
   num_drop <- floor(n_particles*a) #Number of particles dropped each iteration
   num_keep <- n_particles-num_drop #Number of particles kept each iteration
 
-
   # determine next disprepacy threshold
   dist_max <- part_s[n_particles]
   dist_next <- part_s[num_keep]
