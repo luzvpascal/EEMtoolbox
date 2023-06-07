@@ -10,10 +10,10 @@ test_that("Input interaction matrix or as list works", {
 
   args_sim_mat <- EEMtoolbox::args_function(dingo_matrix,
                             c(-5,5),upper_interaction_strength = 1,
-                            model="Baker")
+                            model="GLV")
   args_sim_list <- EEMtoolbox::args_function(mat_list,
                             c(-5,5),upper_interaction_strength = 1,
-                            model="Baker")
+                            model="GLV")
 
   testthat::expect_equal(args_sim_mat$model,
                          args_sim_list$model)
