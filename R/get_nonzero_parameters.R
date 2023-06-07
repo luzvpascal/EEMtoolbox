@@ -29,6 +29,7 @@ get_nonzero_parameters <- function(interaction_matrix,n_species,model="GLV"){
 
   if (model=="GLV"|model=="Gompertz"){
     list_nonzero_parameters <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix)
+
     return(list(keep_parameters=as.numeric(list_nonzero_parameters$keep_parameters),
                 lower_interaction_bound=list_nonzero_parameters$lower_interaction_bound,
                 upper_interaction_bound=list_nonzero_parameters$upper_interaction_bound,
