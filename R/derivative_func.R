@@ -1,7 +1,7 @@
 #' @title Derivatives of models
 #' @description
 #' Derivatives functions to solve ODE systems
-#' @param interaction_matrix_value interaction matrix parametrized
+#' @param interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas.
 #' @param growth_rate vector of growth rates
 #' @param current_abundance vector of current species abundance
 #' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized"
@@ -23,8 +23,8 @@ derivative_func <- function(interaction_matrix_value,
     return(current_abundance*growth_rate + (interaction_matrix_value%*%current_abundance)*current_abundance)
   }
   if (model=="Baker"){
-    A <- matrix(pmax(0, interaction_matrix_value), ncol=ncol(interaction_matrix_value))
-    B <- matrix(pmin(0, interaction_matrix_value), ncol=ncol(interaction_matrix_value))
+    A <- interaction_matrix_value[[1]]
+    B <- interaction_matrix_value[[2]]
 
     P <- diag(A)
     M <- A-diag(P)

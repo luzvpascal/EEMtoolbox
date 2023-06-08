@@ -2,8 +2,8 @@
 #' @description
 #' Solves ODEs
 #' @param initial_condition vector of initial species abundances
-#' @param interaction_matrix_value interaction matrix parametrized
-#' @param growth_rate parametrized growth rate vector
+#' @param interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas.
+#' @param growth_rate parametrized growth rate vector.
 #' @param t_window time window to solve ODE
 #' @param time_step_len length of each time step, default = 0.01
 #' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
