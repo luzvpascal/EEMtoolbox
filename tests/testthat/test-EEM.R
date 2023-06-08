@@ -1,3 +1,61 @@
 test_that("EEM tests", {
-  expect_equal(2 * 2, 4)
+  interaction_matrix <- matrix(c(-1,1,1,-1),ncol = 2)
+
+  ## GLV
+  model_test <- "GLV"
+  #return parameter values SMC ABC
+  outputs <- EEMtoolbox::EEM(interaction_matrix,
+                             model = model_test,
+                             algorithm = "SMC-ABC",
+                             n_ensemble=1000,
+                             output_matrix = FALSE,
+                             output_args = TRUE,
+                             output_discrepancy = TRUE,
+                             output_prior = TRUE)
+
+  expect_true(class(outputs$part_vals)[1]=="matrix")
+  expect_true(class(outputs$prior_sample)[1]=="matrix")
+  expect_true(class(outputs$part_s)[1]=="numeric")
+  expect_true(class(outputs$sim_args)[1]=="list")
+
+  #return parameter values standard EEM
+  outputs <- EEMtoolbox::EEM(interaction_matrix,
+                             model = model_test,
+                             algorithm = "standard EEM",
+                             n_ensemble=10,
+                             output_matrix = FALSE,
+                             output_args = TRUE,
+                             output_discrepancy = TRUE,
+                             output_prior = TRUE)
+
+  expect_true(class(outputs$part_vals)[1]=="matrix")
+  expect_true(class(outputs$prior_sample)[1]=="matrix")
+  expect_true(class(outputs$part_s)[1]=="numeric")
+  expect_true(class(outputs$sim_args)[1]=="list")
+
+
+  ## return matrix SMC ABC
+  outputs <- EEMtoolbox::EEM(interaction_matrix,
+                             model = model_test,
+                             algorithm = "SMC-ABC",
+                             n_ensemble=1000,
+                             output_matrix = TRUE)
+
+  expect_true(class(outputs)[1]=="list")
+  expect_true(class(outputs[[1]])[1]=="list")
+  expect_true(class(outputs[[1]]$interaction_matrix)[1]=="matrix")
+  expect_true(class(outputs[[1]]$growthrates)[1]=="numeric")
+
+  ## return matrix standard EEM
+  outputs <- EEMtoolbox::EEM(interaction_matrix,
+                             model = model_test,
+                             algorithm = "standard EEM",
+                             n_ensemble=10,
+                             output_matrix = TRUE)
+
+  expect_true(class(outputs)[1]=="list")
+  expect_true(class(outputs[[1]])[1]=="list")
+  expect_true(class(outputs[[1]]$interaction_matrix)[1]=="matrix")
+  expect_true(class(outputs[[1]]$growthrates)[1]=="numeric")
+
 })

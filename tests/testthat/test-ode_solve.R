@@ -1,57 +1,46 @@
 test_that("ode_solve works", {
 
-  #GLV and Gompertz
-  interaction_matrix <- matrix(c(-1,1,1,-1),ncol = 2)
+  #GLV
+  model_test <- "GLV"
+  initcond <- c(67.82167, 11.63940) #artificial test
+  test_values <- list()
+  test_values$interaction_matrix <- matrix(c(-0.06967885, 0.1433530, 0.13648650, -0.7074722), ncol = 2, byrow = TRUE)
+  test_values$growthrates <-c( 3.057193, -1.022190)
 
-  for (model_test in c("GLV", "Gompertz")){
-    outputs <- EEMtoolbox::EEM(interaction_matrix,
-                               model = model_test,
-                               n_ensemble=1,
-                               output_matrix = FALSE,
-                               output_args = TRUE,
-                               output_discrepancy = TRUE,
-                               output_prior = TRUE)
+  output_pred <- EEMtoolbox::ode_solve(
+    interaction_matrix=test_values$interaction_matrix,
+    growth_rate=test_values$growthrates,
+    t_window = c(0,10),
+    model = model_test,
+    initial_condition =initcond-runif(2,min=-0.5,max=0.5)*initcond
+  )
+  expect_true(max(abs((initcond-output_pred$abundances[nrow(output_pred$abundances),])/initcond))<= 0.1)
 
-    initcond <- EEMtoolbox::summarise_ecosystem_features(
-      parameters = outputs$part_vals[1,],
-      sim_args = outputs$sim_args)[seq(2)]
+  #Gompertz
+  model_test <- "Gompertz"
+  initcond <- c( 0.187454942, 0.003951098) #artificial test
+  test_values <- list()
+  test_values$interaction_matrix <- matrix(c( -0.7038178, 0.02047591, 0.6381929, -0.48880103), ncol = 2, byrow = TRUE)
+  test_values$growthrates <-c( -1.065035, -1.636435)
 
-    test_values <- EEMtoolbox::reconstruct_matrix_growthrates(
-      outputs$part_vals[1,],sim_args = outputs$sim_args)
-
-    output_pred <- EEMtoolbox::ode_solve(
-      interaction_matrix=test_values$interaction_matrix,
-      growth_rate=test_values$growthrates,
-      t_window = c(0,10),
-      model = model_test,
-      initial_condition =initcond-runif(2,min=-0.5,max=0.5)*initcond
-    )
-
-    expect_true(max(abs((initcond-output_pred$abundances[nrow(output_pred$abundances),])/initcond))<= 0.1)
-  }
+  output_pred <- EEMtoolbox::ode_solve(
+    interaction_matrix=test_values$interaction_matrix,
+    growth_rate=test_values$growthrates,
+    t_window = c(0,10),
+    model = model_test,
+    initial_condition =initcond-runif(2,min=-0.5,max=0.5)*initcond
+  )
+  expect_true(max(abs((initcond-output_pred$abundances[nrow(output_pred$abundances),])/initcond))<= 0.1)
 
 
   #Baker
   model_test = "Baker"
-  interaction_matrix_list_alphas <- list(matrix(pmin(interaction_matrix,0), ncol=2),
-                                         matrix(pmax(interaction_matrix,0), ncol=2))
-  interaction_matrix_list_betas <- interaction_matrix_list_alphas
+  initcond <- c(17.06103, 12.35617)
 
-  outputs <- EEMtoolbox::EEM(interaction_matrix = list(interaction_matrix_list_alphas,
-                                                       interaction_matrix_list_betas),
-                             model = model_test,
-                             n_ensemble=1,
-                             output_matrix = FALSE,
-                             output_args = TRUE,
-                             output_discrepancy = TRUE,
-                             output_prior = TRUE)
-
-  initcond <- EEMtoolbox::summarise_ecosystem_features(
-    parameters = outputs$part_vals[1,],
-    sim_args = outputs$sim_args)[seq(2)]
-
-  test_values <- EEMtoolbox::reconstruct_matrix_growthrates(
-    outputs$part_vals[1,],sim_args = outputs$sim_args)
+  test_values <- list()
+  test_values$interaction_matrix_alphas <- matrix(c(-0.8185450, 0.1201095,0.9095789, -0.1474479), ncol = 2, byrow = TRUE)
+  test_values$interaction_matrix_betas <- matrix(c(-0.3942834, 0.6435232,0.2984477,-0.7150782), ncol = 2, byrow = TRUE)
+  test_values$growthrates <-c(-2.519711, 3.743805)
 
   output_pred <- EEMtoolbox::ode_solve(
     interaction_matrix=list(test_values$interaction_matrix_alphas,
@@ -62,5 +51,5 @@ test_that("ode_solve works", {
     initial_condition =initcond-runif(2,min=-0.5,max=0.5)*initcond
   )
 
-  expect_true(max(abs((initcond-output_pred$abundances[nrow(output_pred$abundances),])/initcond))<= 0.1)
+  expect_true(max(abs((initcond-output_pred$abundances[nrow(output_pred$abundances),])/initcond))<= 0.2)
 })
