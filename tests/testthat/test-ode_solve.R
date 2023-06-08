@@ -4,7 +4,6 @@ test_that("ode_solve works", {
   matrix_test <- matrix(c(-1,1,1,-1),ncol = 2)
 
   for (model_test in c("GLV", "Gompertz")){
-    model_test <-  "GLV"
     outputs <- EEMtoolbox::EEM(matrix_test,
                    n_ensemble=1,
                    output_matrix = FALSE,

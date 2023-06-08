@@ -19,7 +19,13 @@
 #' abundances: matrix of abundances, each row corresponds to the values of abundances at a given time step
 #' @export
 
-ode_solve <- function(initial_condition, interaction_matrix_value, growth_rate, t_window, time_step_len=0.01, model = "GLV", derivative=EEMtoolbox::derivative_func){
+ode_solve <- function(initial_condition,
+                      interaction_matrix_value,
+                      growth_rate,
+                      t_window,
+                      time_step_len=0.01,
+                      model = "GLV",
+                      derivative=EEMtoolbox::derivative_func){
   time_steps <- seq(from = t_window[1],to = t_window[2],by = time_step_len)#vector of time steps
   y <-  matrix(0,nrow=length(time_steps),ncol=length(initial_condition)) #matrix of abudnances
 
