@@ -1,5 +1,9 @@
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/EEMtoolbox/branch/main/graph/badge.svg)](https://app.codecov.io/gh/EEMtoolbox?branch=main)
+<!-- badges: end -->
+
 # EEMtoolbox
-EEMtoolbox is an R-package that efficiently generates an ensemble of plausible quantitative models that describe an ecosystem from a species interaction network. 
+EEMtoolbox is an R-package that efficiently generates an ensemble of plausible quantitative models that describe an ecosystem from a species interaction network.
 
 EEMtoolbox supports three different models that represent species interactions: Generalized Lokta Voltera, Baker model and Gompertz model. Following Baker et al., (2017), the generated models must be feasible (coexistence: positive equilibrium abundances) and stable (negative eigenvalues of Jacobian). Customized models can also be provided by the user ([click here](#customizing-input-model)).
 
@@ -34,7 +38,7 @@ where:
 - $\circ$ is the Hadamard (element wise) product.
 
 ### Feasibility
-The solution to $\frac{d\mathbf{n}^{\*}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}^{\*}\right]\circ \mathbf{n}^{\*} = 0$ is 
+The solution to $\frac{d\mathbf{n}^{\*}}{dt} = \left[\mathbf{r} + \mathbf{A} \mathbf{n}^{\*}\right]\circ \mathbf{n}^{\*} = 0$ is
 
 $$
 \mathbf{n}^{\*} = - \mathbf{A}^{-1} \mathbf{r}.
@@ -51,7 +55,7 @@ $$
 
 The Jacobian is thus defined as:
 
-$$ 
+$$
 J_{i,j} = \alpha_{i,j} n_i^{\*}(t), \quad \forall i \neq j
 $$
 
@@ -124,7 +128,7 @@ outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
 
 `algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM".
 
-## Predicting species abundances 
+## Predicting species abundances
 ```r
 library(tidyverse)
 system <- outputs[[1]] #select first ensemble returned by EEM.
@@ -136,7 +140,7 @@ output_pred <- EEMtoolbox::ode_solve(interaction_matrix=system$interaction_matri
                                     )
 ```
 
-## Ploting predictions 
+## Ploting predictions
 ```r
 abundance <- as.data.frame(output_pred$y)
 names(abundance) <- species_list
@@ -156,6 +160,6 @@ p <- ggplot(abundance, aes(x=time, y=pop, color=species, fill = species)) +
 p
 ```
 
-## Customizing input model 
+## Customizing input model
 
 ## Customizing search algorithm
