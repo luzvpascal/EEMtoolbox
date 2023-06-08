@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/EEMtoolbox/branch/main/graph/badge.svg)](https://app.codecov.io/gh/EEMtoolbox?branch=main)
+[![codecov](https://codecov.io/gh/luzvpascal/EEMtoolbox/branch/main/graph/badge.svg?token=MH9JLF9HEQ)](https://codecov.io/gh/luzvpascal/EEMtoolbox)
 <!-- badges: end -->
 
 # EEMtoolbox
