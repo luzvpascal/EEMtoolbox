@@ -2,7 +2,7 @@ test_that("MCMC works", {
   # sample prior
   n_particles <- 10
   num_keep <- 5
-  mcmc_trials <- 10
+  mcmc_trials <- 100
 
   model <- "GLV"
   interaction_matrix <- matrix(c(-1, -1, -1, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0,
