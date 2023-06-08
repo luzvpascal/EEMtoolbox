@@ -12,7 +12,7 @@ derivative_func(
 )
 }
 \arguments{
-\item{interaction_matrix_value}{interaction matrix parametrized}
+\item{interaction_matrix_value}{interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas.}
 
 \item{growth_rate}{vector of growth rates}
 

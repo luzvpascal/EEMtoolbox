@@ -20,11 +20,12 @@ test_that("derivative_func works", {
 
   ## Baker
   diag(interaction_matrix) <- 0
-  baker_deriv <- EEMtoolbox::derivative_func(interaction_matrix,
+  baker_deriv <- EEMtoolbox::derivative_func(list(interaction_matrix,
+                                                  interaction_matrix),
                                              c(0,0),
                                              current_abundance,
                                              model="Baker")
-  expect_equal(c(baker_deriv), c(0,0))
+  expect_equal(c(baker_deriv), c(1,1))
 
   ## customized
   customized_deriv <- EEMtoolbox::derivative_func(interaction_matrix,
