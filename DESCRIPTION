@@ -22,7 +22,6 @@ Imports:
     MASS,
     nleqslv,
     parallel,
-    Rmpi,
     stats
 Suggests: 
     covr,
