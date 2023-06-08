@@ -13,5 +13,14 @@ coverage:
         threshold: 1%
         informational: true
 
+language: R
+
+sudo: false
+
+cache: packages
+
+after_success:
+- Rscript -e 'covr::codecov()'
+
 codecov: 
  token: f407dd93-3e34-4b64-a06d-f398de4aee7f
