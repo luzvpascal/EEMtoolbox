@@ -207,6 +207,12 @@ EEM_SMC_method <- function(sim_args,
         print('Getting out as MCMC acceptance rate is below acceptable threshold')
         break
     }
+
+    print(paste("n ensemble found", sum(part_s==0)))
+    if (sum(part_s==0) >= n_ensemble){
+      print('Number of desired ensemble members found')
+      break
+    }
   }
 
   #transform back
