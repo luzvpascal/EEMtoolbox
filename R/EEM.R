@@ -142,12 +142,12 @@ EEM <- function(interaction_matrix,
     return(output_function)
   } else {
     output_function <- list()
-    output_function$part_vals <- outputs$part_vals
+    output_function$part_vals <- outputs$part_vals[seq(n_ensemble),]
     if (output_prior){
       output_function$prior_sample <- outputs$prior_sample
     }
     if (output_discrepancy){
-      output_function$part_s <- outputs$part_s
+      output_function$part_s <- outputs$part_s[seq(n_ensemble)]
     }
     if (output_args){
       output_function$sim_args <- sim_args
