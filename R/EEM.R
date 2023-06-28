@@ -143,6 +143,7 @@ EEM <- function(interaction_matrix,
   } else {
     output_function <- list()
     output_function$part_vals <- outputs$part_vals[seq(n_ensemble),]
+    output_function$sims <- outputs$sims
     if (output_prior){
       output_function$prior_sample <- outputs$prior_sample
     }
