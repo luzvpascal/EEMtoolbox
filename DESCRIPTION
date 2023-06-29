@@ -13,18 +13,6 @@ RoxygenNote: 7.2.3
 Depends:
     R (>= 2.10)
 LazyData: true
-Imports:
-    Rmpi,
-    doMPI,
-    doParallel,
-    doSNOW,
-    foreach,
-    ggplot2,
-    MASS,
-    nleqslv,
-    parallel,
-    stats
-Suggests:
-    covr,
-    testthat (>= 3.0.0)
+Imports: Rmpi, doMPI, doParallel, doSNOW, foreach, ggplot2, MASS, nleqslv, parallel, stats
+Suggests: covr, testthat (>= 3.0.0)
 Config/testthat/edition: 3
