@@ -1,5 +1,6 @@
 <!-- badges: start -->
 [![codecov](https://codecov.io/gh/luzvpascal/EEMtoolbox/branch/main/graph/badge.svg?token=MH9JLF9HEQ)](https://codecov.io/gh/luzvpascal/EEMtoolbox)
+[![Build Status](https://app.travis-ci.com/luzvpascal/EEMtoolbox.svg?branch=main)](https://app.travis-ci.com/luzvpascal/EEMtoolbox)
 <!-- badges: end -->
 
 # EEMtoolbox
