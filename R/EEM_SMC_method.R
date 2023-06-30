@@ -96,7 +96,7 @@ EEM_SMC_method <- function(sim_args,
     doParallel::registerDoParallel(cl)
     print("mcmc1")
     mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
-                     .packages =c('EEMtoolbox')) foreach::`%dopar%` {
+                     .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
                        sim_args,
                        mcmc_trials,
@@ -141,7 +141,7 @@ EEM_SMC_method <- function(sim_args,
     doParallel::registerDoParallel(cl)
     print("mcmc2")
     mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
-                  .packages =c('EEMtoolbox')) foreach::`%dopar%` {
+                  .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
                        sim_args,
                        (mcmc_iters-mcmc_trials),
