@@ -30,7 +30,11 @@ EEM_standard_method <- function(sim_args,
                         function(x, sim_args) sampler(sim_args), sim_args=sim_args))
   # simulate model
   cores <- parallel::detectCores()
-  cl <- parallel::makeCluster(cores[1]-2) #not to overload your computer
+  if (cores[1] >= 2){
+    cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
+  } else {
+    cl <- parallel::makeCluster(1) #not to overload your computer
+  }
   doParallel::registerDoParallel(cl)
   part_sim <- foreach::foreach(i = 1:n_particles) %dopar% {
     summ_func(part_vals[i,], sim_args)

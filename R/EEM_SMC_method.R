@@ -92,7 +92,11 @@ EEM_SMC_method <- function(sim_args,
     ############
     #setup parallel backend to use many processors
     cores=parallel::detectCores()
-    cl <- parallel::makeCluster(cores[1]-2) #not to overload your computer
+    if (cores[1] >= 2){
+      cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
+    } else {
+      cl <- parallel::makeCluster(1) #not to overload your computer
+    }
     doParallel::registerDoParallel(cl)
     print("mcmc1")
     mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
@@ -137,7 +141,11 @@ EEM_SMC_method <- function(sim_args,
     ############
     #setup parallel backend to use many processors
     cores=parallel::detectCores()
-    cl <- parallel::makeCluster(cores[1]-2) #not to overload your computer
+    if (cores[1] >= 2){
+      cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
+    } else {
+      cl <- parallel::makeCluster(1) #not to overload your computer
+    }
     doParallel::registerDoParallel(cl)
     print("mcmc2")
     mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
