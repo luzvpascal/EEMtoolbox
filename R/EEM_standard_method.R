@@ -32,7 +32,7 @@ EEM_standard_method <- function(sim_args,
   cores <- parallel::detectCores()
   cl <- parallel::makeCluster(cores[1]-2) #not to overload your computer
   doParallel::registerDoParallel(cl)
-  part_sim <- foreach::foreach(i = 1:n_particles) %dopar% {
+  part_sim <- foreach::foreach(i = 1:n_particles) foreach::`%dopar%` {
     summ_func(part_vals[i,], sim_args)
   }
   #stop cluster
