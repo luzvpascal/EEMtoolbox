@@ -1,21 +1,8 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
+r_binary_packages:
+  - rmpi
+  - dompi
+
 cache: packages
-
-addons:
-  apt:
-    packages:
-      - openmpi-bin
-      - libopenmpi-dev
-
-before_install:
-  - wget https://cran.r-project.org/src/contrib/Rmpi_0.7-1.tar.gz
-  - R CMD INSTALL Rmpi_0.7-1.tar.gz
-  - R -e 'install.packages("doMPI", repos = "https://cloud.r-project.org")'
-
-before_script:
-  - echo "library(Rmpi); library(doMPI); cl <- startMPIcluster(); registerDoMPI(cl); mpi.barrier(); print('MPI setup complete')" > test_script.R
-
-script:
-  - mpirun -np 4 Rscript test_script.R
