@@ -26,12 +26,13 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   P <- diag(A)
   M <- A-diag(P)
 
+  initial_guess <- solve(B,-r)
   fn <- function(N) {
     output <- R*(1-exp(-M%*%N-P))+B%*%N #change to positive
     return(output)
   }
 
-  sol <- nleqslv::nleqslv(rep(100,n_species), fn) #we give a large positive warmstart
+  sol <- nleqslv::nleqslv(initial_guess, fn) #we give a large positive warmstart
 
   equilibrium_points <- sol$x
   # STABILITY CHECK
