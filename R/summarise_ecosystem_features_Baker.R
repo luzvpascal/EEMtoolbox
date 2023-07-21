@@ -31,7 +31,7 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
     return(output)
   }
 
-  sol <- pracma::fsolve(f=fn, x0=rep(100,n_species)) #we give a large positive warmstart
+  sol <- nleqslv::nleqslv(rep(100,n_species), fn) #we give a large positive warmstart
 
   equilibrium_points <- sol$x
   # STABILITY CHECK
