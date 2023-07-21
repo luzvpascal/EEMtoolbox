@@ -24,7 +24,7 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   #find equilibrium abundances for feasibility
   R <- r
   P <- diag(A)
-  M <- A
+  M <- A-diag(P)
 
   fn <- function(N) {
     output <- R*(1-exp(-M%*%N-P))+B%*%N #change to positive
