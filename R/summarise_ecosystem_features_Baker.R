@@ -24,14 +24,14 @@ summarise_ecosystem_features_Baker <- function(parameters,sim_args){
   #find equilibrium abundances for feasibility
   R <- r
   P <- diag(A)
-  M <- A-diag(P)
+  M <- A
 
   fn <- function(N) {
     output <- R*(1-exp(-M%*%N-P))+B%*%N #change to positive
     return(output)
   }
 
-  sol <- nleqslv::nleqslv(rep(100,n_species), fn) #we give a large positive warmstart
+  sol <- pracma::fsolve(f=fn, x0=rep(100,n_species)) #we give a large positive warmstart
 
   equilibrium_points <- sol$x
   # STABILITY CHECK
