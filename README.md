@@ -13,7 +13,7 @@ Our package generates ensemble members in two possible ways: standard EEM (Baker
 # Three ecosystem interactions models
 Ecosystem dynamics can be modelled using ordinary differential equations (ODE), which seek to predict species abundances over time. Here we present the three types of models represented as ODEs that are supported by our package. For each model, we provide the feasibility and stability requirements.
 
-## Generalized Lokta Voltera model
+## Generalized Lotka Volterra model
 The Generalized Lokta Voltera equations are
 
 $$
