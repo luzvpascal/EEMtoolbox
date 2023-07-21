@@ -4,21 +4,14 @@
 \alias{derivative_func}
 \title{Derivatives of models}
 \usage{
-derivative_func(
-  interaction_matrix_value,
-  growth_rate,
-  current_abundance,
-  model = "GLV"
-)
+derivative_func(Time, State, Pars)
 }
 \arguments{
-\item{interaction_matrix_value}{interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas.}
+\item{Time}{a float of current studied time}
 
-\item{growth_rate}{vector of growth rates}
+\item{State}{vector of current species abundance}
 
-\item{current_abundance}{vector of current species abundance}
-
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized"}
+\item{Pars}{a list like object containing: model: string of model representing species interactions. Options include "GLV" (Generalized Lotka Volterra), "Baker", "Gompertz" and "customized" interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas., model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz". growth_rate: vector of growth rates}
 }
 \value{
 list: part_vals: ensemble of parameters, marginal distributions
