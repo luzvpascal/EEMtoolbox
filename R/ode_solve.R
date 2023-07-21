@@ -33,9 +33,9 @@ ode_solve <- function(initial_condition,
 
   for (i in 2:length(time_steps)){
     y[i,] = pmax(y[i-1,] + time_step_len*derivative(interaction_matrix_value,
-                                                                   growth_rate,
-                                                                   y[i-1,],
-                                                                   model),
+                                                    growth_rate,
+                                                    y[i-1,],
+                                                    model),
                  0)
   }
   return(list(time_steps=time_steps,
