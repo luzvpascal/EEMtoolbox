@@ -9,7 +9,7 @@ get_nonzero_parameters(interaction_matrix, n_species, model = "GLV")
 \arguments{
 \item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
 
-\item{model}{model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"}
 }
 \value{
 A list

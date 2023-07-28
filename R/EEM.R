@@ -4,8 +4,8 @@
 #' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
 #' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5)
 #' @param n_ensemble Number of desired ensemble members. Default to 10
-#' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
-#' @param algorithm algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"
+#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker", "Gompertz" and "customized"
+#' @param algorithm algorithm used for sampling. Default "standard EEM" (Baker et al, 2017), options include "SMC-ABC" (Vollert et al., 2023)
 #' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure). Default discrepancy_continuous_sum
 #' @param sampler sampling function that generates random vectors from the joint prior distribution. Default EEMtoolbox::sampler function (uniform)
@@ -31,7 +31,7 @@ EEM <- function(interaction_matrix,
                 bounds_growth_rate=c(-5,5),
                 n_ensemble=10,
                 model="GLV",
-                algorithm="SMC-ABC",
+                algorithm="standard EEM",
                 summ_func=EEMtoolbox::summarise_ecosystem_features,
                 disc_func=EEMtoolbox::discrepancy_continuous_sum,
                 sampler=EEMtoolbox::uniform_sampler,

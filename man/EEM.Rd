@@ -9,7 +9,7 @@ EEM(
   bounds_growth_rate = c(-5, 5),
   n_ensemble = 10,
   model = "GLV",
-  algorithm = "SMC-ABC",
+  algorithm = "standard EEM",
   summ_func = EEMtoolbox::summarise_ecosystem_features,
   disc_func = EEMtoolbox::discrepancy_continuous_sum,
   sampler = EEMtoolbox::uniform_sampler,
@@ -35,9 +35,9 @@ EEM(
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 10}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker", "Gompertz" and "customized"}
 
-\item{algorithm}{algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM"}
+\item{algorithm}{algorithm used for sampling. Default "standard EEM" (Baker et al, 2017), options include "SMC-ABC" (Vollert et al., 2023)}
 
 \item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
 

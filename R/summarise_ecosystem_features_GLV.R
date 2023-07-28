@@ -1,6 +1,6 @@
 #' @title Summary of ecosystem features for GLV model
 #' @description
-#' Tests the feasibility and stability of a vector of sampled parameters for the Generalized Lokta Volterra model
+#' Tests the feasibility and stability of a vector of sampled parameters for the Generalized Lotka Volterra model
 #'
 #' @param parameters a vector of sampled parameters
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}

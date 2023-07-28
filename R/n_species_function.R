@@ -2,7 +2,7 @@
 #' @description
 #' Extract number of species from interaction matrix
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
-#' @param model model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"
+#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"
 #' @return A list of arguments defining the problem.
 #' @examples
 #' n_species_function(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix

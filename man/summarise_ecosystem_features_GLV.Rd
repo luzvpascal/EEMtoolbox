@@ -15,5 +15,5 @@ summarise_ecosystem_features_GLV(parameters, sim_args)
 vector of values: first half are the steady states (indicating feasibility) and second half the eigen values of Jacobian (indicating stability)
 }
 \description{
-Tests the feasibility and stability of a vector of sampled parameters for the Generalized Lokta Volterra model
+Tests the feasibility and stability of a vector of sampled parameters for the Generalized Lotka Volterra model
 }

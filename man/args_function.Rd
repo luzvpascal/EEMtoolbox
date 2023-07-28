@@ -18,7 +18,7 @@ args_function(
 
 \item{upper_interaction_strength}{coefficient representing interaction strength. Default:1}
 
-\item{model}{model representing species interactions, default "GLV" (Generalized Lokta Voltera). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"}
 }
 \value{
 A list of arguments defining the problem.
