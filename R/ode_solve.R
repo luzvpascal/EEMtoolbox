@@ -6,7 +6,7 @@
 #' @param growth_rate parametrized growth rate vector.
 #' @param t_window time window to solve ODE
 #' @param time_step_len length of each time step, default = 0.01
-#' @param model model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"
+#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".
 #' @param derivative derivative function. Default \link[EEMtoolbox]{derivative_func}
 #' @examples
 #' library(EEMtoolbox)
@@ -15,8 +15,7 @@
 #' growth_rate <- output[[1]]$growthrates
 #' initial_condition <- rep(10, 8) # 8 species, initial abundance is 10 for all
 #' ode_solve(initial_condition, interaction_matrix_value, growth_rate, t_window=c(0,1))
-#' @return list: time_steps: vector of time steps of the simulation
-#' abundances: matrix of abundances, each row corresponds to the values of abundances at a given time step
+#' @return matrix: first column (time) vector of time steps of the simulation, the following columns correspond to the values of abundances at a given time step
 #' @export
 
 ode_solve <- function(initial_condition,
@@ -26,18 +25,16 @@ ode_solve <- function(initial_condition,
                       time_step_len=0.01,
                       model = "GLV",
                       derivative=EEMtoolbox::derivative_func){
+
   time_steps <- seq(from = t_window[1],to = t_window[2],by = time_step_len)#vector of time steps
-  y <-  matrix(0,nrow=length(time_steps),ncol=length(initial_condition)) #matrix of abudnances
+  pars  <- list(interaction_matrix_value = interaction_matrix_value,
+                growth_rate  = growth_rate,
+                model=model)
 
-  y[1,] = initial_condition #setting initial condition
+  out <- deSolve::ode(y=initial_condition,
+                      times=time_steps,
+                      func=derivative_func,
+                      parms=pars)
 
-  for (i in 2:length(time_steps)){
-    y[i,] = pmax(y[i-1,] + time_step_len*derivative(interaction_matrix_value,
-                                                                   growth_rate,
-                                                                   y[i-1,],
-                                                                   model),
-                 0)
-  }
-  return(list(time_steps=time_steps,
-              abundances=y))
+  return(out)
 }

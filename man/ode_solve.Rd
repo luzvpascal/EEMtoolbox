@@ -25,13 +25,12 @@ ode_solve(
 
 \item{time_step_len}{length of each time step, default = 0.01}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lokta Voltera). options include "Baker", "Gompertz" and "customized"}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".}
 
 \item{derivative}{derivative function. Default \link[EEMtoolbox]{derivative_func}}
 }
 \value{
-list: time_steps: vector of time steps of the simulation
-abundances: matrix of abundances, each row corresponds to the values of abundances at a given time step
+matrix: first column (time) vector of time steps of the simulation, the following columns correspond to the values of abundances at a given time step
 }
 \description{
 Solves ODEs
