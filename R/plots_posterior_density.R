@@ -49,6 +49,7 @@ plots_posterior_density <- function(prior_sample,
                              col = step))+
     ggplot2::geom_line()+
     ggplot2::facet_wrap(~param,scales = "free")+
-    ggplot2::theme(text = ggplot2::element_text(size = 5))
+    ggplot2::theme(text = ggplot2::element_text(size = 10))+
+    ggplot2::labs(x="Value",y="Density")
   return(g)
 }
