@@ -29,7 +29,7 @@
 #' @export
 EEM <- function(interaction_matrix,
                 bounds_growth_rate=c(-5,5),
-                n_ensemble=10,
+                n_ensemble=10000,
                 model="GLV",
                 algorithm="standard EEM",
                 summ_func=EEMtoolbox::summarise_ecosystem_features,
