@@ -51,8 +51,14 @@ EEM_standard_method <- function(sim_args,
     estimated_iterations <- n_ensemble/(acceptance_rate*n_particles)
 
     print(paste('Estimated acceptance rate:', acceptance_rate))
-    print(paste('Estimated time:', estimated_iterations*time.taken, units_time))
+    print(paste('Estimated time to generate ', n_ensemble,
+                ' ensembles :', estimated_iterations*time.taken, units_time, sep=""))
 
+    sims <- outputs$sim
+    part_vals <- outputs$part_vals
+    part_sim <- outputs$part_sim
+    part_s <- outputs$part_s
+    prior_sample <- prior_sample
     return(list(sims=sims,
                 part_vals=part_vals,
                 part_sim=part_sim,
