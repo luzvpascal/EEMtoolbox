@@ -54,11 +54,29 @@ EEM_standard_method <- function(sim_args,
     print(paste('Estimated time to generate ', n_ensemble,
                 ' ensembles :', estimated_iterations*time.taken, units_time, sep=""))
 
+    idx <- which(outputs$part_s==0)
     sims <- outputs$sim
-    part_vals <- outputs$part_vals
-    part_sim <- outputs$part_sim
-    part_s <- outputs$part_s
-    prior_sample <- prior_sample
+    part_s <- outputs$part_s[idx]
+    part_vals <- outputs$part_vals[idx,]
+    part_sim <- outputs$part_sim[idx,]
+    prior_sample <- outputs$prior_sample
+
+    while(nrow(part_vals)<=n_ensemble){
+      #run standard iteration until generating at least n_ensemble ensembles
+      outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
+                                                           summ_func,
+                                                           disc_func,
+                                                           sampler,
+                                                           trans_f,
+                                                           n_particles)
+
+      idx <- which(outputs$part_s==0)
+      sims <- sims+outputs$sim
+      part_s <- c(part_s, outputs$part_s[idx])
+      part_vals <- rbind(part_vals,outputs$part_vals[idx,])
+      part_sim <- rbind(part_sim,outputs$part_sim[idx,])
+      prior_sample <- rbind(prior_sample,outputs$prior_sample)
+    }
     return(list(sims=sims,
                 part_vals=part_vals,
                 part_sim=part_sim,
