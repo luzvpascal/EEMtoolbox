@@ -27,13 +27,13 @@ projections <- function(parameters,
                            time_step_len,
                            model,
                            derivative){
-    return(EEMtoolbox::ode_solve(interaction_matrix_value = pars$interaction_matrix,
+    return(as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value = pars$interaction_matrix,
                                  growth_rate=pars$growthrates,
                                  initial_condition,
                                  t_window,
                                  time_step_len,
                                  model,
-                                 derivative))
+                                 derivative)))
   }
 
   abundance <- lapply(outputs,ode_solve_it, model=model,
