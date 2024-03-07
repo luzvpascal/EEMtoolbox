@@ -7,6 +7,7 @@
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
+#' @param n_ensemble Number of desired ensemble members. Default to 5000
 #' @examples
 #' library(EEMtoolbox)
 #'
@@ -24,48 +25,41 @@ EEM_standard_method <- function(sim_args,
                                 disc_func,
                                 sampler,
                                 trans_f,
-                                n_particles){
-  # sample prior
-  part_vals <- t(sapply(seq(n_particles),
-                        function(x, sim_args) sampler(sim_args), sim_args=sim_args))
-  # simulate model
-  cores <- parallel::detectCores()
-  if (cores[1] >= 2){
-    cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
+                                n_particles,
+                                n_ensemble=5000){
+  # initial prior rejection algorithm: EEM_standard_method
+  start <- Sys.time()
+  outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
+                                                       summ_func,
+                                                       disc_func,
+                                                       sampler,
+                                                       trans_f,
+                                                       n_particles)
+  end <- Sys.time()
+
+  if (sum(outputs$part_s==0)>=n_ensemble){
+    idx <- which(outputs$part_s==0)[seq(n_ensemble)]
+    return(list(sims=sims,
+                part_s = part_s[idx],
+                part_vals = part_vals[idx,],
+                part_sim = part_sim[idx,],
+                prior_sample=outputs$prior_sample))
   } else {
-    cl <- parallel::makeCluster(1) #not to overload your computer
+    acceptance_rate <- sum(outputs$part_s==0)/n_particles
+    time.taken <- round(end - start,2)
+    units_time <- units(end - start)
+    estimated_iterations <- n_ensemble/(acceptance_rate*n_particles)
+
+    print(paste('Estimated acceptance rate:', acceptance_rate))
+    print(paste('Estimated time:', estimated_iterations*time.taken, units_time))
+
+    return(list(sims=sims,
+                part_vals=part_vals,
+                part_sim=part_sim,
+                part_s=part_s,
+                prior_sample=prior_sample))
   }
-  doParallel::registerDoParallel(cl)
-  part_sim <- foreach::foreach(i = 1:n_particles) %dopar% {
-    summ_func(part_vals[i,], sim_args)
-  }
-  #stop cluster
-  parallel::stopCluster(cl)
-  rm(cl)
-  part_sim <- matrix(unlist(part_sim), nrow=n_particles, byrow = TRUE)
-  #simulation
-  # evaluate the discrepancy metric
-  part_s <- sapply(seq(n_particles),
-                   function(x, part_sim) disc_func(part_sim[x,]),
-                   part_sim = part_sim) #summary
 
-  print(paste('Estimated acceptance rate <-',sum(part_s==0)/n_particles))
 
-  #save prior sample
-  prior_sample <- part_vals
-  #track the number of simulations
-  sims <- n_particles
-
-  # sort the particles
-  ix <- order(part_s)
-  part_s <- part_s[ix]
-  part_vals <- part_vals[ix,]
-  part_sim <- part_sim[ix,]
-
-  return(list(sims=sims,
-              part_vals=part_vals,
-              part_sim=part_sim,
-              part_s=part_s,
-              prior_sample=prior_sample))
 
 }
