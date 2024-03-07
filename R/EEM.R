@@ -61,7 +61,6 @@ EEM <- function(interaction_matrix,
     stopifnot(nrow(interaction_matrix[[1]])==nrow(interaction_matrix[[2]]))
   }
 
-  print("need to test values of interaction_matrix: positive and negative?")
   #n_ensemble tests
   stopifnot(is.numeric(n_ensemble),
             (n_ensemble)>0)
