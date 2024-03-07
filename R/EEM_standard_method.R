@@ -39,10 +39,10 @@ EEM_standard_method <- function(sim_args,
 
   if (sum(outputs$part_s==0)>=n_ensemble){
     idx <- which(outputs$part_s==0)[seq(n_ensemble)]
-    return(list(sims=sims,
-                part_s = part_s[idx],
-                part_vals = part_vals[idx,],
-                part_sim = part_sim[idx,],
+    return(list(sims=outputs$sims,
+                part_s = outputs$part_s[idx],
+                part_vals = outputs$part_vals[idx,],
+                part_sim = outputs$part_sim[idx,],
                 prior_sample=outputs$prior_sample))
   } else {
     acceptance_rate <- sum(outputs$part_s==0)/n_particles
@@ -52,10 +52,11 @@ EEM_standard_method <- function(sim_args,
 
     print(paste('Estimated acceptance rate:', acceptance_rate))
     print(paste('Estimated time to generate ', n_ensemble,
-                ' ensembles :', estimated_iterations*time.taken, units_time, sep=""))
+                ' ensembles: ', round(estimated_iterations*time.taken,2),
+                units_time, sep=""))
 
     idx <- which(outputs$part_s==0)
-    sims <- outputs$sim
+    sims <- outputs$sims
     part_s <- outputs$part_s[idx]
     part_vals <- outputs$part_vals[idx,]
     part_sim <- outputs$part_sim[idx,]
@@ -69,9 +70,8 @@ EEM_standard_method <- function(sim_args,
                                                            sampler,
                                                            trans_f,
                                                            n_particles)
-
       idx <- which(outputs$part_s==0)
-      sims <- sims+outputs$sim
+      sims <- sims+outputs$sims
       part_s <- c(part_s, outputs$part_s[idx])
       part_vals <- rbind(part_vals,outputs$part_vals[idx,])
       part_sim <- rbind(part_sim,outputs$part_sim[idx,])
