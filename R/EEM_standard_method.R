@@ -83,7 +83,4 @@ EEM_standard_method <- function(sim_args,
                 part_s=part_s,
                 prior_sample=prior_sample))
   }
-
-
-
 }

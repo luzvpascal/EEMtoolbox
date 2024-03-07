@@ -33,7 +33,7 @@ ode_solve <- function(initial_condition,
 
   out <- deSolve::ode(y=initial_condition,
                       times=time_steps,
-                      func=derivative_func,
+                      func=derivative,
                       parms=pars)
 
   return(out)
