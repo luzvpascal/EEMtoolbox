@@ -18,7 +18,7 @@ EEM_SMC_method(
   a,
   c,
   p_acc_min,
-  n_ensemble = 10
+  n_ensemble = 5000
 )
 }
 \arguments{
@@ -48,7 +48,7 @@ EEM_SMC_method(
 
 \item{p_acc_min}{minimum acceptable acceptance rate in the MCMC interations before exit.}
 
-\item{n_ensemble}{Number of desired ensemble members. Default to 10}
+\item{n_ensemble}{Number of desired ensemble members. Default to 5000}
 }
 \value{
 list: sims=number of simulations

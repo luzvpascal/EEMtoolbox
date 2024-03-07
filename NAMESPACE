@@ -3,6 +3,7 @@
 export(EEM)
 export(EEM_SMC_method)
 export(EEM_standard_method)
+export(EEM_standard_method_iteration)
 export(MCMC)
 export(args_function)
 export(derivative_func)
