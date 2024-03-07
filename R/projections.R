@@ -39,7 +39,8 @@ projections <- function(parameters,
   abundance <- lapply(outputs,ode_solve_it, model=model,
                                             initial_condition=initial_condition,
                                             t_window=t_window,
-                                            time_step_len=time_step_len)
+                                            time_step_len=time_step_len,
+                                            derivative)
 
   return(abundance)
 }
