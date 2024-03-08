@@ -1,25 +1,27 @@
-#' @title Solve ODE
+#' @title Solve ODE and plot solutions
 #' @description
-#' Solves ODEs
+#' Solves ODEs and plot solutions
 #' @param parameters list like object of ensemble of parameters (outputs of  \link[EEMtoolbox]{EEM})
 #' @param initial_condition vector of initial species abundances
 #' @param t_window time window to solve ODE
 #' @param time_step_len length of each time step, default = 0.01
 #' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".
 #' @param derivative derivative function. Default \link[EEMtoolbox]{derivative_func}
+#' @param species_names vector of strings for names of species. If NA plots only display species index number, . Default NA.
 #' @examples
 #' library(EEMtoolbox)
 #' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
-#' projections(output,  c(1,1), t_window=c(0,1))
-#' @return plot of abundances per species
+#' plots_projections(output,  c(1,1), t_window=c(0,1))
+#' @return ggplot of abundances per species
 #' @export
 
-projections <- function(parameters,
+plots_projections <- function(parameters,
                         initial_condition,
                         t_window,
                         time_step_len=0.01,
                         model = "GLV",
-                        derivative=EEMtoolbox::derivative_func){
+                        derivative=EEMtoolbox::derivative_func,
+                        species_names=NA){
 
   ode_solve_it <- function(pars,
                            initial_condition,
@@ -41,6 +43,29 @@ projections <- function(parameters,
                                             t_window=t_window,
                                             time_step_len=time_step_len,
                                             derivative)
+
+  abundance <- dplyr::bind_rows(abundance)
+  if (!is.na(species_names)){
+    names(abundance) <- c("time", species_names)
+  }
+
+  abundance <- abundance %>%
+    pivot_longer(!time, names_to = c("species"), values_to = "pop")
+
+  p <- ggplot(abundance, aes(x = time, y = pop, color = species, fill = species)) +
+    stat_summary(geom = "line", fun = mean,linewidth = 1.5) +
+    stat_summary(geom = "ribbon", fun.data = function(x) {
+      quantiles <- quantile(x, c(0.025, 0.975))
+      data.frame(ymin = quantiles[1], ymax = quantiles[2])
+    }, alpha = 0.2) +
+    guides(fill = guide_legend(title = "Species"),
+           color = guide_legend(title = "Species")) +
+    theme_bw() +
+    xlab("Years") +
+    ylab("Abundance") +
+    ylim(c(0, max(abundance$pop))) +
+    facet_wrap(~species)
+  p
 
   return(abundance)
 }
