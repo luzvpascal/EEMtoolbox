@@ -16,8 +16,22 @@ Our package generates ensemble members in two possible ways: standard EEM (Baker
 * [Three ecosystem interactions models](#three-ecosystem-interactions-models)
 
 # Installation and usage
-
 ## Installation
+
+Users need to make sure that their version of R is at least 4.3.1. We recommend running the following code in R to preinstall all the necessary packages:
+``` r
+packages_to_install <- c("deSolve", "doParallel", "doSNOW", "foreach", "ggplot2", "MASS", "nleqslv", "parallel", "stats")
+
+# Install packages if not already installed
+install_if_not_installed <- function(package) {
+  if (!requireNamespace(package, quietly = TRUE)) {
+    install.packages(package, dependencies = TRUE)
+  }
+}
+
+# Apply the function to install packages
+invisible(lapply(packages_to_install, install_if_not_installed))
+```
 
 To install EEMtoolbox, run the following line
 ``` r
