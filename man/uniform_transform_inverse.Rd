@@ -4,10 +4,10 @@
 \alias{uniform_transform_inverse}
 \title{inverse transformation function}
 \usage{
-uniform_transform_inverse(theta_trans, prior_args)
+uniform_transform_inverse(theta_trans, sim_args)
 }
 \arguments{
-\item{theta}{vector of parameters to transformed back}
+\item{theta_trans}{vector of parameters to transformed back}
 
 \item{sim_args}{a list of arguments as returned by \link[EEMtoolbox]{args_function}}
 }

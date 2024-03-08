@@ -35,8 +35,3 @@ prior_sample=prior distribution
 \description{
 Generation of model ensembles using standard EEM sampling method
 }
-\examples{
-library(EEMtoolbox)
-
-EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
-}

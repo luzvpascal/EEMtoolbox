@@ -7,10 +7,6 @@
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
-#' @examples
-#' library(EEMtoolbox)
-#'
-#' EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
