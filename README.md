@@ -12,10 +12,13 @@ EEMtoolbox supports three different models that represent species interactions: 
 Our package generates ensemble members in two possible ways: standard EEM (Baker et al., 2017) and EEM-SMC (Vollert et al. in preparation). Both methods can generate representative and equivalent ensembles.The standard EEM method samples the parameter space until the desired number of ensemble members is generated, which has proven to be efficient for small networks. The EEM-SMC method takes advantage of Approximate Bayesian Computation methods (Drovandi and Pettitt 2011), which can speed up the generation of ensemble members specially for large networks.
 
 ## Table of contents
-* [Installation](#installation)
+* [Installation and usage](#installation-and-usage)
 * [Three ecosystem interactions models](#three-ecosystem-interactions-models)
 
-# Installation
+# Installation and usage
+
+## Installation
+
 To install EEMtoolbox, run the following line
 ``` r
 devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com")
