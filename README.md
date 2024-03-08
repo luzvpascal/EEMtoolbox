@@ -11,6 +11,62 @@ EEMtoolbox supports three different models that represent species interactions: 
 
 Our package generates ensemble members in two possible ways: standard EEM (Baker et al., 2017) and EEM-SMC (Vollert et al. in preparation). Both methods can generate representative and equivalent ensembles.The standard EEM method samples the parameter space until the desired number of ensemble members is generated, which has proven to be efficient for small networks. The EEM-SMC method takes advantage of Approximate Bayesian Computation methods (Drovandi and Pettitt 2011), which can speed up the generation of ensemble members specially for large networks.
 
+# Installation
+To install EEMtoolbox, run the following line
+``` r
+devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com")
+```
+
+## Running EEM
+The main function of EEMtoolbox is `EEM`. This function inputs an `interaction_matrix` and outputs ensemble members (for the Generalized Lokta Voltera model by default).
+```r
+library(EEMtoolbox)
+outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
+```
+**Other arguments of `EEM` function**
+
+`interaction_matrix`: interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
+
+`bounds_growth_rate`: vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5).
+
+`n_ensemble`: Number of desired ensemble members. Default to 10.
+
+`model`: model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized".
+
+`algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM".
+
+## Predicting species abundances
+```r
+library(tidyverse)
+system <- outputs[[1]] #select first ensemble returned by EEM.
+output_pred <- EEMtoolbox::ode_solve(interaction_matrix=system$interaction_matrix,
+                                     growth_rate=test_values$growthrates,
+                                     t_window = c(0,10),
+                                     model = model_test,
+                                     initial_condition =initcond-runif(8,min=-0.5,max=0.5)*initcond
+                                    )
+```
+
+## Ploting predictions
+```r
+abundance <- as.data.frame(output_pred$y)
+names(abundance) <- species_list
+abundance$time <- seq(nrow(abundance))
+
+abundance <- abundance %>%
+  pivot_longer(!time, names_to = "species", values_to = "pop")
+
+p <- ggplot(abundance, aes(x=time, y=pop, color=species, fill = species)) +
+  stat_summary(geom = "line", fun = mean) +
+  guides(fill = guide_legend(title = "Species Group"), color = guide_legend(title="Species Group")) +
+  theme_bw() +
+  xlab("Years") +
+  ylab("Abundance") +
+  scale_x_continuous(breaks = seq(1,nrow(output_pred$y), length.out=11)-1,
+                     labels = (seq(1,nrow(output_pred$y), length.out=11)-1)/100)
+p
+```
+
 # Three ecosystem interactions models
 Ecosystem dynamics can be modelled using ordinary differential equations (ODE), which seek to predict species abundances over time. Here we present the three types of models represented as ODEs that are supported by our package. For each model, we provide the feasibility and stability requirements.
 
@@ -106,62 +162,3 @@ $$
 
 The system is considered stable if the real part of each eigenvalue ($\lambda_i$) is negative, i.e. $Re(\lambda_i) \leq 0 $.
 
-# Installation
-To install EEMtoolbox, run the following line
-``` r
-devtools::install_github("luzvpascal/EEMtoolbox", host = "https://api.github.com")
-```
-
-## Running EEM
-The main function of EEMtoolbox is `EEM`. This function inputs an `interaction_matrix` and outputs ensemble members (for the Generalized Lokta Voltera model by default).
-```r
-library(EEMtoolbox)
-outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
-```
-**Other arguments of `EEM` function**
-
-`interaction_matrix`: interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
-
-`bounds_growth_rate`: vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5).
-
-`n_ensemble`: Number of desired ensemble members. Default to 10.
-
-`model`: model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized".
-
-`algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM".
-
-## Predicting species abundances
-```r
-library(tidyverse)
-system <- outputs[[1]] #select first ensemble returned by EEM.
-output_pred <- EEMtoolbox::ode_solve(interaction_matrix=system$interaction_matrix,
-                                     growth_rate=test_values$growthrates,
-                                     t_window = c(0,10),
-                                     model = model_test,
-                                     initial_condition =initcond-runif(8,min=-0.5,max=0.5)*initcond
-                                    )
-```
-
-## Ploting predictions
-```r
-abundance <- as.data.frame(output_pred$y)
-names(abundance) <- species_list
-abundance$time <- seq(nrow(abundance))
-
-abundance <- abundance %>%
-  pivot_longer(!time, names_to = "species", values_to = "pop")
-
-p <- ggplot(abundance, aes(x=time, y=pop, color=species, fill = species)) +
-  stat_summary(geom = "line", fun = mean) +
-  guides(fill = guide_legend(title = "Species Group"), color = guide_legend(title="Species Group")) +
-  theme_bw() +
-  xlab("Years") +
-  ylab("Abundance") +
-  scale_x_continuous(breaks = seq(1,nrow(output_pred$y), length.out=11)-1,
-                     labels = (seq(1,nrow(output_pred$y), length.out=11)-1)/100)
-p
-```
-
-## Customizing input model
-
-## Customizing search algorithm
