@@ -25,7 +25,16 @@ EEM_standard_method_iteration <- function(sim_args,
   part_vals <- t(sapply(seq(n_particles),
                         function(x, sim_args) sampler(sim_args), sim_args=sim_args))
   # simulate model
-  cores <- parallel::detectCores()
+  #setup parallel backend to use many processors
+  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+  if (nzchar(chk) && chk == "TRUE") {
+    # use 2 cores in CRAN/Travis/AppVeyor
+    cores <- 2L
+  } else {
+    # use all cores in devtools::test()
+    cores <- parallel::detectCores()
+  }
   if (cores[1] >= 2){
     cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
   } else {

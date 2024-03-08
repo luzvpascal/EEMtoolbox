@@ -91,7 +91,15 @@ EEM_SMC_method <- function(sim_args,
     # move step#
     ############
     #setup parallel backend to use many processors
-    cores=parallel::detectCores()
+    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+    if (nzchar(chk) && chk == "TRUE") {
+      # use 2 cores in CRAN/Travis/AppVeyor
+      cores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      cores <- parallel::detectCores()
+    }
     if (cores[1] >= 2){
       cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
     } else {
@@ -99,6 +107,8 @@ EEM_SMC_method <- function(sim_args,
     }
     doParallel::registerDoParallel(cl)
     print("mcmc1")
+
+    #parallel for loop
     mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
                      .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
@@ -140,7 +150,15 @@ EEM_SMC_method <- function(sim_args,
     # move step#
     ############
     #setup parallel backend to use many processors
-    cores=parallel::detectCores()
+    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+    if (nzchar(chk) && chk == "TRUE") {
+      # use 2 cores in CRAN/Travis/AppVeyor
+      cores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      cores <- parallel::detectCores()
+    }
     if (cores[1] >= 2){
       cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
     } else {
@@ -148,6 +166,7 @@ EEM_SMC_method <- function(sim_args,
     }
     doParallel::registerDoParallel(cl)
     print("mcmc2")
+    #run for loop parallel
     mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
                   .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
