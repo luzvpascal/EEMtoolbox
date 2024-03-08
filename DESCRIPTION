@@ -12,6 +12,17 @@ RoxygenNote: 7.2.3
 Depends:
     R (>= 4.0.2)
 LazyData: true
-Imports: deSolve, doParallel, doSNOW, foreach, ggplot2, MASS, nleqslv, parallel, stats
+Imports: 
+    deSolve,
+    doParallel,
+    doSNOW,
+    dplyr,
+    foreach,
+    ggplot2,
+    MASS,
+    nleqslv,
+    parallel,
+    stats,
+    tidyr
 Suggests: covr, testthat (>= 3.0.0)
 Config/testthat/edition: 3

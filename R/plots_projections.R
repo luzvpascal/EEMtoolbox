@@ -50,22 +50,21 @@ plots_projections <- function(parameters,
   }
 
   abundance <- abundance %>%
-    pivot_longer(!time, names_to = c("species"), values_to = "pop")
+    tidyr::pivot_longer(!time, names_to = c("species"), values_to = "pop")
 
-  p <- ggplot(abundance, aes(x = time, y = pop, color = species, fill = species)) +
-    stat_summary(geom = "line", fun = mean,linewidth = 1.5) +
-    stat_summary(geom = "ribbon", fun.data = function(x) {
+  p <- ggplot2::ggplot(abundance, aes(x = time, y = pop, color = species, fill = species)) +
+    ggplot2::stat_summary(geom = "line", fun = mean,linewidth = 1.5) +
+    ggplot2::stat_summary(geom = "ribbon", fun.data = function(x) {
       quantiles <- quantile(x, c(0.025, 0.975))
       data.frame(ymin = quantiles[1], ymax = quantiles[2])
     }, alpha = 0.2) +
-    guides(fill = guide_legend(title = "Species"),
+    ggplot2::guides(fill = guide_legend(title = "Species"),
            color = guide_legend(title = "Species")) +
-    theme_bw() +
-    xlab("Years") +
-    ylab("Abundance") +
-    ylim(c(0, max(abundance$pop))) +
-    facet_wrap(~species)
-  p
+    ggplot2::theme_bw() +
+    ggplot2::xlab("Years") +
+    ggplot2::ylab("Abundance") +
+    ggplot2::ylim(c(0, max(abundance$pop))) +
+    ggplot2::facet_wrap(~species)
 
-  return(abundance)
+  return(p)
 }
