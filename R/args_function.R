@@ -22,7 +22,7 @@ args_function <- function(interaction_matrix,
                           upper_interaction_strength=1,
                           model="GLV"){
   #define global arguments
-  n_species <- n_species_function(interaction_matrix, model)#number of species
+  n_species <- EEMtoolbox::n_species_function(interaction_matrix, model)#number of species
   args <- EEMtoolbox::get_nonzero_parameters(interaction_matrix, n_species, model)
   args$model <- model#considered model
   args$n_species <- n_species#number of species
