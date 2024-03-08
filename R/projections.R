@@ -9,9 +9,9 @@
 #' @param derivative derivative function. Default \link[EEMtoolbox]{derivative_func}
 #' @examples
 #' library(EEMtoolbox)
-#' output <- EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
-#' projections(output, t_window=c(0,1))
-#' @return matrix: first column (time) vector of time steps of the simulation, the following columns correspond to the values of abundances at a given time step
+#' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
+#' projections(output,  c(1,1), t_window=c(0,1))
+#' @return plot of abundances per species
 #' @export
 
 projections <- function(parameters,
