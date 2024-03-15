@@ -51,9 +51,17 @@ EEM_standard_method <- function(sim_args,
     estimated_iterations <- n_ensemble/(acceptance_rate*n_particles)
 
     print(paste('Estimated acceptance rate:', acceptance_rate))
-    print(paste('Estimated time to generate ', n_ensemble,
-                ' ensembles: ', round(estimated_iterations*time.taken,2),
-                units_time, sep=""))
+    if (acceptance_rate == 0){
+      print(paste('Time to generate ', n_ensemble,
+                  ' ensembles might be very long with the standard search method'))
+      print(
+        "We recommend using the SMC-ABC algorithm to sample ensembles.
+        See documentation of the function EEM for the input 'algorithm'")
+    } else {
+      print(paste('Estimated time to generate ', n_ensemble,
+                  ' ensembles: ', round(estimated_iterations*time.taken,2),
+                  units_time, sep=""))
+    }
 
     idx <- which(outputs$part_s==0)
     sims <- outputs$sims

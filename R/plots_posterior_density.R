@@ -31,7 +31,7 @@ plots_posterior_density <- function(prior_sample,
                                step=character(),
                                param=character())
   for (i in seq(n_params)){
-    dens_prior <- stats::density(prior_sample[,i],bw = "nrd")
+    dens_prior <- stats::density(prior_sample[,i])
     dens_prior <- data.frame(xx=dens_prior$x, yy=dens_prior$y)
     dens_prior$step <- "prior"
 
