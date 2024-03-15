@@ -2,7 +2,8 @@
 #' @description
 #' Generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
 #' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
-#' @param bounds_growth_rate vector of 2 elements containing lower and upper bounds for growth rates. Default c(-5,5)
+#' @param upper_bounds_growth_rate upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5
+#' @param lower_bounds_growth_rate lower bound of growth rates. Input can be one number (same lower bound for all species) or a vector of growth rates lower bounds for each species. Default 0
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
 #' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker", "Gompertz" and "customized"
 #' @param algorithm algorithm used for sampling. Default "standard EEM" (Baker et al, 2017), options include "SMC-ABC" (Vollert et al., 2023)
@@ -28,7 +29,8 @@
 #' @return list: part_vals: ensemble of parameters, marginal distributions
 #' @export
 EEM <- function(interaction_matrix,
-                bounds_growth_rate=c(-5,5),
+                upper_bounds_growth_rate=5,
+                lower_bounds_growth_rate=0,
                 n_ensemble=5000,
                 model="GLV",
                 algorithm="standard EEM",
@@ -106,8 +108,9 @@ EEM <- function(interaction_matrix,
 
   # Defining special arguments ####
   sim_args <- EEMtoolbox::args_function(interaction_matrix,
-                        bounds_growth_rate,
-                        model=model)
+                                        upper_bounds_growth_rate,
+                                        lower_bounds_growth_rate,
+                                        model=model)
 
   ## RUNNING search algorithms####
   if (algorithm == "SMC-ABC"){

@@ -6,7 +6,8 @@
 \usage{
 args_function(
   interaction_matrix,
-  bounds_growth_rate,
+  upper_bounds_growth_rate = 5,
+  lower_bounds_growth_rate = 0,
   upper_interaction_strength = 1,
   model = "GLV"
 )
@@ -14,7 +15,9 @@ args_function(
 \arguments{
 \item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
 
-\item{bounds_growth_rate}{vector of 2 elements containing lower and upper bounds for growth rates}
+\item{upper_bounds_growth_rate}{upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5}
+
+\item{lower_bounds_growth_rate}{lower bound of growth rates. Input can be one number (same lower bound for all species) or a vector of growth rates lower bounds for each species. Default 0}
 
 \item{upper_interaction_strength}{coefficient representing interaction strength. Default:1}
 
@@ -36,5 +39,5 @@ Extract arguments necessary to run EEM from interaction matrix
 }
 \examples{
 library(EEMtoolbox)
-args_function(dingo_matrix, c(-5,5)) #automatically loads an example of interaction matrix as dingo_matrix
+args_function(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
 }
