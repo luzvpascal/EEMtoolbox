@@ -49,8 +49,8 @@ plots_projections <- function(parameters,
     names(abundance) <- c("time", species_names)
   }
 
-  abundance <- abundance %>%
-    tidyr::pivot_longer(!time, names_to = c("species"), values_to = "pop")
+  abundance <- tidyr::pivot_longer(abundance,
+                        !time, names_to = c("species"), values_to = "pop")
 
   p <- ggplot2::ggplot(abundance, ggplot2::aes(x = time,
                                                y = pop,
