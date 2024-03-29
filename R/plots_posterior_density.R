@@ -11,9 +11,8 @@
 #'               output_prior=TRUE,
 #'               output_discrepancy=TRUE,
 #'               output_matrix=FALSE)
-#' ix <- which(output$part_s==0) #indexes of interest
 #' prior_sample <- output$prior_sample
-#' posterior_sample <- output$part_vals[ix,]
+#' posterior_sample <- output$part_vals
 #' param_names <- seq(ncol(prior_sample))
 #' plots_posterior_density(prior_sample,posterior_sample,param_names)
 #' @return ggplot2 figure
@@ -44,9 +43,9 @@ plots_posterior_density <- function(prior_sample,
   }
 
   g <- ggplot2::ggplot(data_densities, ggplot2::aes(x=xx,
-                             y=yy,
-                             group = interaction(step),
-                             col = step))+
+                                                    y=yy,
+                                                    group = interaction(step),
+                                                    col = step))+
     ggplot2::geom_line()+
     ggplot2::facet_wrap(~param,scales = "free")+
     ggplot2::theme(text = ggplot2::element_text(size = 10))+
