@@ -45,7 +45,7 @@ plots_projections <- function(parameters,
                                             derivative)
 
   abundance <- dplyr::bind_rows(abundance)
-  if (!is.na(species_names)){
+  if (!is.na(species_names[1])){
     names(abundance) <- c("time", species_names)
   }
 
