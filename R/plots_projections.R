@@ -66,7 +66,7 @@ plots_projections <- function(parameters,
     ggplot2::theme_bw() +
     ggplot2::xlab("Years") +
     ggplot2::ylab("Abundance") +
-    ggplot2::ylim(c(0, max(abundance$pop))) +
+    ggplot2::ylim(c(0, quantile(abundance$pop, 0.975))) +
     ggplot2::facet_wrap(~species)
 
   return(p)
