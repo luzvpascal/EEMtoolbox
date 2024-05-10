@@ -1,4 +1,4 @@
-#' @title Arguments for EEM
+#' @title plot_posterior_density
 #' @description
 #' Extract arguments necessary to run EEM from interaction matrix
 #'
@@ -14,11 +14,11 @@
 #' prior_sample <- output$prior_sample
 #' posterior_sample <- output$part_vals
 #' param_names <- seq(ncol(prior_sample))
-#' plots_posterior_density(prior_sample,posterior_sample,param_names)
+#' plot_posterior_density(prior_sample,posterior_sample,param_names)
 #' @return ggplot2 figure
 #'
 #' @export
-plots_posterior_density <- function(prior_sample,
+plot_posterior_density <- function(prior_sample,
                                     posterior_sample,
                                     param_names){
   #figure layout settings
@@ -34,7 +34,7 @@ plots_posterior_density <- function(prior_sample,
     dens_prior <- data.frame(xx=dens_prior$x, yy=dens_prior$y)
     dens_prior$step <- "prior"
 
-    dens_posterior <- stats::density(posterior_sample[,i],bw = "nrd")
+    dens_posterior <- stats::density(posterior_sample[,i])
     dens_posterior <- data.frame(xx=dens_posterior$x, yy=dens_posterior$y)
     dens_posterior$step <- "posterior"
     data_dens_plot_i <- rbind(dens_prior,dens_posterior)

@@ -1,4 +1,4 @@
-test_that("plots_posterior_density works", {
+test_that("plot_posterior_density works", {
 
   dingo_matrix <- matrix(c(-1, -1, -1, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0,
                            1, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, -1, 0, -1, 0, 0,
@@ -13,7 +13,7 @@ test_that("plots_posterior_density works", {
   prior_sample <- output$prior_sample
   posterior_sample <- output$part_vals[ix,]
   param_names <- seq(ncol(prior_sample))
-  plot <- EEMtoolbox::plots_posterior_density(prior_sample,posterior_sample,param_names)
+  plot <- EEMtoolbox::plot_posterior_density(prior_sample,posterior_sample,param_names)
 
   expect_true(class(plot)[1]=="gg")
   expect_true(class(plot)[2]=="ggplot")

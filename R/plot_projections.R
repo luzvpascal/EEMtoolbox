@@ -11,11 +11,11 @@
 #' @examples
 #' library(EEMtoolbox)
 #' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
-#' plots_projections(output,  c(1,1), t_window=c(0,1))
+#' plot_projections(output,  c(1,1), t_window=c(0,1))
 #' @return ggplot of abundances per species
 #' @export
 
-plots_projections <- function(parameters,
+plot_projections <- function(parameters,
                         initial_condition,
                         t_window,
                         time_step_len=0.01,
