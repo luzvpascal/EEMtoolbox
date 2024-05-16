@@ -39,13 +39,14 @@ test_that("summarise ecosystem features works", {
 
   ## Baker
   model_test = "Baker"
-  interaction_matrix_list_alphas <- list(matrix(pmin(interaction_matrix,0), ncol=2),
+  interaction_matrix_list_alphas <- list(matrix(0, ncol=2,nrow=2),
                                          matrix(pmax(interaction_matrix,0), ncol=2))
-  interaction_matrix_list_betas <- interaction_matrix_list_alphas
-
+  interaction_matrix_list_betas <-list(matrix(pmin(interaction_matrix,0), ncol=2),
+                                       matrix(0, ncol=2,nrow=2))
   outputs <- EEMtoolbox::EEM(interaction_matrix = list(interaction_matrix_list_alphas,
                                                        interaction_matrix_list_betas),
                              model = model_test,
+                             algorithm = "SMC-ABC",
                              n_ensemble=10,
                              output_matrix = FALSE,
                              output_args = TRUE,
