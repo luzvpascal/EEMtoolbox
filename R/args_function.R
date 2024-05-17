@@ -33,20 +33,20 @@ args_function <- function(interaction_matrix,
   #lower lim
   if (length(lower_bounds_growth_rate)==1){
     args$lower <- c(lower_bounds_growth_rate*rep(1,n_species),
-                    args$lower_interaction_bound*upper_interaction_strength)
+                    args$lower_interaction_bound)
   } else {
     args$lower <- c(lower_bounds_growth_rate,
-                    args$lower_interaction_bound*upper_interaction_strength)
+                    args$lower_interaction_bound)
   }
 
 
   #upper lim
   if (length(upper_bounds_growth_rate)==1){
     args$upper <- c(upper_bounds_growth_rate*rep(1,n_species),
-                    args$lower_interaction_bound*upper_interaction_strength)
+                    args$upper_interaction_bound)
   } else {
     args$upper <- c(upper_bounds_growth_rate,
-                    args$upper_interaction_bound*upper_interaction_strength)
+                    args$upper_interaction_bound)
   }
 
 
