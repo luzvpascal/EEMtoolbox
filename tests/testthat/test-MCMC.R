@@ -9,10 +9,10 @@ test_that("MCMC works", {
                                   1, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, -1, 0, -1, 0, 0,
                                   0, 0, 1, 1, -1, 1, 1, 0, 0, 0, 0, 1, 1, -1, 0, 1, 0,
                                   0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 1, 0, -1), nrow=8)
-  bounds_growth_rate <- c(-5,5)
 
   sim_args <- EEMtoolbox::args_function(interaction_matrix,
-                                        bounds_growth_rate,
+                                        upper_bounds_growth_rate = 5,
+                                        lower_bounds_growth_rate = 0,
                                         model=model)
 
   part_vals <- t(sapply(seq(n_particles),
