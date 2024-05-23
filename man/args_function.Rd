@@ -29,7 +29,7 @@ A list of arguments defining the problem.
 list:
 model: considered model
 n_species: number of species
-skip_parameters: vector of 0-1 indicating which parameters to skip
+keep_parameters: vector of 0-1 indicating which parameters to keep
 num_params: number of non-zero parameters
 lower: vector of length num_params representing lower bound of each parameter
 upper: vector of length num_params representing upper bound of each parameter

@@ -29,13 +29,26 @@ plot_projections <- function(parameters,
                            time_step_len,
                            model,
                            derivative){
-    return(as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value = pars$interaction_matrix,
+    if (model != "Baker"){
+      return(as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value = pars$interaction_matrix,
                                  growth_rate=pars$growthrates,
                                  initial_condition,
                                  t_window,
                                  time_step_len,
                                  model,
                                  derivative)))
+    } else {
+      return(as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value =
+                                                   list(pars$interaction_matrix_alphas,
+                                                        pars$interaction_matrix_betas),
+                                                 growth_rate=pars$growthrates,
+                                                 initial_condition,
+                                                 t_window,
+                                                 time_step_len,
+                                                 model,
+                                                 derivative)))
+    }
+
   }
 
   abundance <- lapply(parameters,ode_solve_it, model=model,
