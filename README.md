@@ -54,7 +54,7 @@ outputs <- EEM(dingo_matrix) #dingo_matrix is included in the package
 
 `model`: model representing species interactions. Default "GLV" (Generalized Lokta Voltera). Options include "Baker", "Gompertz" and "customized".
 
-`algorithm`: algorithm used for sampling. Default "SMC-ABC" (Vollert et al., 2023) options include "standard EEM".
+`algorithm`: algorithm used for sampling. Default "standard EEM".
 
 ## Predicting species abundances
 ```r
