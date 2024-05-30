@@ -22,9 +22,16 @@ n_species_function <- function(interaction_matrix,model="GLV"){
     }
   }
   else if (model == "Baker"){
-    #if model is Baker, the interaction_matrix has to be a list of two lists
+    #if model is Baker, the interaction_matrix can be:
+    # a list of two matrices (alphas and betas), the default lower bound is 0 for alphas,
+    # and the default upper bound is 0 for betas
+    # OR a list of two lists
     # the first list contains matrices defining lower and upper bounds of alphas
     # the second list contains matrices defining lower and upper bounds of betas
-    return(ncol(interaction_matrix[[1]][[1]]))
+    if (class(interaction_matrix[[1]])[1]=="matrix"){
+      return(ncol(interaction_matrix[[1]])) #number of species in ecosystem network
+    } else {#
+      return(ncol(interaction_matrix[[1]][[1]]))
+    }
   }
 }
