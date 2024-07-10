@@ -11,7 +11,8 @@ plot_projections(
   time_step_len = 0.01,
   model = "GLV",
   derivative = EEMtoolbox::derivative_func,
-  species_names = NA
+  species_names = NA,
+  average = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_projections(
 \item{derivative}{derivative function. Default \link[EEMtoolbox]{derivative_func}}
 
 \item{species_names}{vector of strings for names of species. If NA plots only display species index number, . Default NA.}
+
+\item{average}{Boolean indicating if projections should be averaged, or indivially ploted}
 }
 \value{
 ggplot of abundances per species
