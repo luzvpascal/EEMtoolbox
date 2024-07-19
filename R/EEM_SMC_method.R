@@ -41,8 +41,6 @@ EEM_SMC_method <- function(sim_args,
                            n_ensemble=5000,
                            n_cores=1L){
 
-  cli::cli_progress_bar("Number of parameter sets obtained",
-                        total = n_ensemble, type="iterator")
   # initial prior rejection algorithm: EEM_standard_method
   outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
                                                        summ_func,
@@ -53,10 +51,7 @@ EEM_SMC_method <- function(sim_args,
                                                        n_cores)
 
   n_sets_correct <- sum(outputs$part_s==0)
-  cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
-
   if (n_sets_correct>=n_ensemble){
-    cli::cli_progress_done()
     print("Exiting SMC ABC search as number of desired ensemble members attained")
     print("modify n_ensemble if necessary")
     return(outputs)
@@ -81,7 +76,11 @@ EEM_SMC_method <- function(sim_args,
   # transform the parameters
   part_vals <- trans_f(part_vals,sim_args) #part vals is transformed
 
+  cli::cli_progress_bar("Number of parameter sets obtained",
+                        total = n_ensemble, type="iterator")
   while (dist_max > dist_final){
+    n_sets_correct <- sum(part_s==0)
+    cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
     # compute the covariance matrix (of particles that remain) required
     # for the Independent MH move step
     cov_matrix <- (2.38^2)*cov(part_vals[seq(num_keep),])/(dim(part_vals)[2])
@@ -102,7 +101,7 @@ EEM_SMC_method <- function(sim_args,
     available_cores <- n_cores_function(n_cores)
     cl <- parallel::makeCluster(available_cores[1])
     doParallel::registerDoParallel(cl)
-    print("mcmc1")
+    # print("mcmc1")
 
     #parallel for loop
     mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
@@ -147,7 +146,7 @@ EEM_SMC_method <- function(sim_args,
     available_cores <- n_cores_function(n_cores)
     cl <- parallel::makeCluster(available_cores[1])
     doParallel::registerDoParallel(cl)
-    print("mcmc2")
+    # print("mcmc2")
     #run for loop parallel
     mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
                   .packages =c('EEMtoolbox')) %dopar% {
@@ -191,8 +190,6 @@ EEM_SMC_method <- function(sim_args,
     part_vals <- part_vals[ix,]
     part_sim <- part_sim[ix,]
 
-    n_sets_correct <- sum(part_s==0)
-    cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
     # if most of the particles are under the final target then don't
     # drop them
     if (sum((part_s > dist_final)) < num_drop){
@@ -204,18 +201,16 @@ EEM_SMC_method <- function(sim_args,
     dist_max <- part_s[n_particles]
     dist_next <- part_s[num_keep]
 
-
-
     # check to see if we reach desired tolerance at next iteration
     if (dist_next < dist_final){
       dist_next <- dist_final
     }
 
-    print(paste('The next distance is', dist_next, ' and the maximum distance is ', dist_max, ' and the number to drop is ', num_drop))
+    # print(paste('The next distance is', dist_next, ' and the maximum distance is ', dist_max, ' and the number to drop is ', num_drop))
 
 
     #if we are not accepting enough particles - give up!
-    print(paste("p_acc", p_acc))
+    # print(paste("p_acc", p_acc))
     if (p_acc < p_acc_min){
         print('Getting out as MCMC acceptance rate is below acceptable threshold')
         break
