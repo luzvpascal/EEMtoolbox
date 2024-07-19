@@ -19,6 +19,7 @@
 #' @param a tuning parameter for adaptive selection of discrepancy threshold sequence. Defalut 0.6
 #' @param c tuning parameter for choosing the number of MCMC iterations in move step. Default 0.01
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit. Default 0.0001
+#' @param ncores Number of cores available for sampling. Default set to 1 core (sequential sampling).
 #' @param output_prior logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE
 #' @param output_args logical. If set to TRUE, algorithm returns output from EEMtoolbox::args_function for this problem
 #' @param output_discrepancy logical. If set to TRUE, algorithm returns discrepancy values
@@ -46,6 +47,7 @@ EEM <- function(interaction_matrix,
                 a=0.6,
                 c=0.01,
                 p_acc_min=0.0001,
+                ncores = 1L,
                 output_prior=FALSE,
                 output_args=FALSE,
                 output_discrepancy=FALSE,
@@ -128,7 +130,8 @@ EEM <- function(interaction_matrix,
                                           a,
                                           c,
                                           p_acc_min,
-                                          n_ensemble)
+                                          n_ensemble,
+                                          ncores)
   } else if ((algorithm=="standard EEM")){
     print('Begin standard search method')
     outputs <- EEMtoolbox::EEM_standard_method(sim_args,

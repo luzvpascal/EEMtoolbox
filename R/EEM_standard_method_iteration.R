@@ -7,6 +7,7 @@
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
+#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
@@ -20,7 +21,8 @@ EEM_standard_method_iteration <- function(sim_args,
                                 disc_func,
                                 sampler,
                                 trans_f,
-                                n_particles){
+                                n_particles,
+                                n_cores=1L){
   # sample prior
   part_vals <- t(sapply(seq(n_particles),
                         function(x, sim_args) sampler(sim_args), sim_args=sim_args))
@@ -30,10 +32,10 @@ EEM_standard_method_iteration <- function(sim_args,
 
   if (nzchar(chk) && chk == "TRUE") {
     # use 2 cores in CRAN/Travis/AppVeyor
-    cores <- 2L
+    cores <- 1L
   } else {
     # use all cores in devtools::test()
-    cores <- parallel::detectCores()
+    max_cores <- parallelly::availableCores(omit = 1)
   }
   if (cores[1] >= 2){
     cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer

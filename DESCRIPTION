@@ -22,6 +22,7 @@ Imports:
     MASS,
     nleqslv,
     parallel,
+    parallelly,
     stats,
     tidyr
 Suggests: covr, testthat (>= 3.0.0)

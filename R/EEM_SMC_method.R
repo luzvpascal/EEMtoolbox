@@ -15,6 +15,7 @@
 #' @param c tuning parameter for choosing the number of MCMC iterations in move step.
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit.
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
+#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
@@ -37,7 +38,8 @@ EEM_SMC_method <- function(sim_args,
                            a,
                            c,
                            p_acc_min,
-                           n_ensemble=5000){
+                           n_ensemble=5000,
+                           n_cores=1L){
 
   # initial prior rejection algorithm: EEM_standard_method
   outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
@@ -45,7 +47,8 @@ EEM_SMC_method <- function(sim_args,
                                                        disc_func,
                                                        sampler,
                                                        trans_f,
-                                                       n_particles)
+                                                       n_particles,
+                                                       n_cores)
 
   if (sum(outputs$part_s==0)>=n_ensemble){
     print("Exiting SMC ABC search as number of desired ensemble members attained")

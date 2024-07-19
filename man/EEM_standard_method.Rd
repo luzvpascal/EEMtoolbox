@@ -11,7 +11,8 @@ EEM_standard_method(
   sampler,
   trans_f,
   n_particles,
-  n_ensemble = 5000
+  n_ensemble = 5000,
+  n_cores = 1L
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ EEM_standard_method(
 \item{n_particles}{number of particles in the sample.}
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 5000}
+
+\item{n_cores}{Number of cores available for sampling. Default set to 1 core (sequential sampling).}
 }
 \value{
 list: sims=number of simulations

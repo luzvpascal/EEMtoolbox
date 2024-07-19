@@ -8,6 +8,7 @@
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
+#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
 #' @examples
 #' library(EEMtoolbox)
 #'
@@ -26,7 +27,8 @@ EEM_standard_method <- function(sim_args,
                                 sampler,
                                 trans_f,
                                 n_particles,
-                                n_ensemble=5000){
+                                n_ensemble=5000,
+                                n_cores=1L){
   # initial prior rejection algorithm: EEM_standard_method
   start <- Sys.time()
   outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
@@ -34,7 +36,8 @@ EEM_standard_method <- function(sim_args,
                                                        disc_func,
                                                        sampler,
                                                        trans_f,
-                                                       n_particles)
+                                                       n_particles,
+                                                       n_cores)
   end <- Sys.time()
 
   if (sum(outputs$part_s==0)>=n_ensemble){
@@ -54,9 +57,8 @@ EEM_standard_method <- function(sim_args,
     if (acceptance_rate == 0){
       print(paste('Time to generate ', n_ensemble,
                   ' ensembles might be very long with the standard search method'))
-      print(
-        "We recommend using the SMC-ABC algorithm to sample ensembles.
-        See documentation of the function EEM for the input 'algorithm'")
+      print("We recommend using the SMC-ABC algorithm to sample ensembles.")
+      print("See documentation of the function EEM for the input 'algorithm'")
     } else {
       print(paste('Estimated time to generate ', n_ensemble,
                   ' ensembles: ', round(estimated_iterations*time.taken,2),
