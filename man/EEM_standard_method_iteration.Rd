@@ -27,7 +27,7 @@ EEM_standard_method_iteration(
 
 \item{n_particles}{number of particles in the sample.}
 
-\item{n_cores}{Number of cores available for sampling. Default set to 1 core (sequential sampling).}
+\item{n_cores}{Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).}
 }
 \value{
 list: sims=number of simulations

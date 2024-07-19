@@ -8,7 +8,7 @@
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
-#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
+#' @param n_cores Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).
 #' @examples
 #' library(EEMtoolbox)
 #'
@@ -79,7 +79,8 @@ EEM_standard_method <- function(sim_args,
                                                            disc_func,
                                                            sampler,
                                                            trans_f,
-                                                           n_particles)
+                                                           n_particles,
+                                                           n_cores)
       idx <- which(outputs$part_s==0)
       sims <- sims+outputs$sims
       part_s <- c(part_s, outputs$part_s[idx])

@@ -23,7 +23,7 @@ EEM(
   a = 0.6,
   c = 0.01,
   p_acc_min = 1e-04,
-  ncores = 1L,
+  n_cores = 1L,
   output_prior = FALSE,
   output_args = FALSE,
   output_discrepancy = FALSE,
@@ -67,7 +67,7 @@ EEM(
 
 \item{p_acc_min}{minimum acceptable acceptance rate in the MCMC interations before exit. Default 0.0001}
 
-\item{ncores}{Number of cores available for sampling. Default set to 1 core (sequential sampling).}
+\item{n_cores}{Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).}
 
 \item{output_prior}{logical. If set to TRUE, algorithm returns prior distributions of parameters ensemble of parameters. Default FALSE}
 

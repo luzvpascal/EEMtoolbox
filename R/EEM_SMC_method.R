@@ -15,7 +15,7 @@
 #' @param c tuning parameter for choosing the number of MCMC iterations in move step.
 #' @param p_acc_min minimum acceptable acceptance rate in the MCMC interations before exit.
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
-#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
+#' @param n_cores Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
@@ -93,21 +93,8 @@ EEM_SMC_method <- function(sim_args,
     ############
     # move step#
     ############
-    #setup parallel backend to use many processors
-    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-
-    if (nzchar(chk) && chk == "TRUE") {
-      # use 2 cores in CRAN/Travis/AppVeyor
-      cores <- 2L
-    } else {
-      # use all cores in devtools::test()
-      cores <- parallel::detectCores()
-    }
-    if (cores[1] >= 2){
-      cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
-    } else {
-      cl <- parallel::makeCluster(1) #not to overload your computer
-    }
+    available_cores <- n_cores_function(n_cores)
+    cl <- parallel::makeCluster(available_cores[1])
     doParallel::registerDoParallel(cl)
     print("mcmc1")
 
@@ -127,8 +114,7 @@ EEM_SMC_method <- function(sim_args,
                        trans_finv,
                        pdf)
     }
-    #stop cluster
-    parallel::stopCluster(cl)
+    parallel::stopCluster(cl)#stop cluster
     rm(cl)
 
     part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
@@ -152,21 +138,8 @@ EEM_SMC_method <- function(sim_args,
     ############
     # move step#
     ############
-    #setup parallel backend to use many processors
-    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-
-    if (nzchar(chk) && chk == "TRUE") {
-      # use 2 cores in CRAN/Travis/AppVeyor
-      cores <- 2L
-    } else {
-      # use all cores in devtools::test()
-      cores <- parallel::detectCores()
-    }
-    if (cores[1] >= 2){
-      cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
-    } else {
-      cl <- parallel::makeCluster(1) #not to overload your computer
-    }
+    available_cores <- n_cores_function(n_cores)
+    cl <- parallel::makeCluster(available_cores[1])
     doParallel::registerDoParallel(cl)
     print("mcmc2")
     #run for loop parallel
@@ -185,8 +158,7 @@ EEM_SMC_method <- function(sim_args,
                        trans_finv,
                        pdf)
     }
-    #stop cluster
-    parallel::stopCluster(cl)
+    parallel::stopCluster(cl) #stop cluster
     rm(cl)
 
     part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
@@ -237,7 +209,6 @@ EEM_SMC_method <- function(sim_args,
         print('Getting out as MCMC acceptance rate is below acceptable threshold')
         break
     }
-
   }
 
   #transform back

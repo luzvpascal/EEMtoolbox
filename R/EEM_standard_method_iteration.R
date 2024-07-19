@@ -7,7 +7,7 @@
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param n_particles number of particles in the sample.
-#' @param n_cores Number of cores available for sampling. Default set to 1 core (sequential sampling).
+#' @param n_cores Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
 #' part_s=discrepancy value
@@ -24,32 +24,27 @@ EEM_standard_method_iteration <- function(sim_args,
                                 n_particles,
                                 n_cores=1L){
   # sample prior
-  part_vals <- t(sapply(seq(n_particles),
-                        function(x, sim_args) sampler(sim_args), sim_args=sim_args))
-  # simulate model
-  #setup parallel backend to use many processors
-  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-
-  if (nzchar(chk) && chk == "TRUE") {
-    # use 2 cores in CRAN/Travis/AppVeyor
-    cores <- 1L
-  } else {
-    # use all cores in devtools::test()
-    max_cores <- parallelly::availableCores(omit = 1)
-  }
-  if (cores[1] >= 2){
-    cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
-  } else {
-    cl <- parallel::makeCluster(1) #not to overload your computer
-  }
+  available_cores <- n_cores_function(n_cores)
+  cl <- parallel::makeCluster(available_cores[1])
   doParallel::registerDoParallel(cl)
-  part_sim <- foreach::foreach(i = 1:n_particles) %dopar% {
+  part_vals <- foreach::foreach(i = 1:n_particles, .combine="rbind") %dopar% {
+    sampler(sim_args)
+  }
+  parallel::stopCluster(cl)#stop cluster
+  rm(cl)
+  part_vals <- unname(part_vals)
+
+  # simulate model
+  cl <- parallel::makeCluster(available_cores[1])
+  doParallel::registerDoParallel(cl)
+  part_sim <- foreach::foreach(i = 1:n_particles, .combine = "c") %dopar% {
     summ_func(part_vals[i,], sim_args)
   }
-  #stop cluster
-  parallel::stopCluster(cl)
+
+  parallel::stopCluster(cl) #stop cluster
   rm(cl)
-  part_sim <- matrix(unlist(part_sim), nrow=n_particles, byrow = TRUE)
+  part_sim <- matrix(unname(part_sim), nrow=n_particles, byrow = TRUE)
+
   #simulation
   # evaluate the discrepancy metric
   part_s <- sapply(seq(n_particles),
