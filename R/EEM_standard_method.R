@@ -57,8 +57,8 @@ EEM_standard_method <- function(sim_args,
     print(paste('Estimated acceptance rate:', acceptance_rate))
     if (acceptance_rate == 0){
       print(paste('Time to generate ', n_ensemble,
-                  ' ensembles might be very long with the standard search method'))
-      print("We recommend using the SMC-ABC algorithm to sample ensembles.")
+                  ' parameter sets might be very long with the standard search method'))
+      print("We recommend using the SMC-ABC algorithm to sample parameter sets.")
       print("See documentation of the function EEM for the input 'algorithm'")
     } else {
       print(paste('Estimated time to generate ', n_ensemble,
@@ -90,6 +90,7 @@ EEM_standard_method <- function(sim_args,
       prior_sample <- rbind(prior_sample,outputs$prior_sample)
 
       n_sets_correct <- sum(part_s==0)
+      print(paste("Number of sets:", n_sets_correct, "/", n_ensemble))
     }
     return(list(sims=sims,
                 part_vals=part_vals,
