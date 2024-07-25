@@ -76,11 +76,7 @@ EEM_SMC_method <- function(sim_args,
   # transform the parameters
   part_vals <- trans_f(part_vals,sim_args) #part vals is transformed
 
-  cli::cli_progress_bar("Number of parameter sets obtained",
-                        total = n_ensemble, type="iterator")
   while (dist_max > dist_final){
-    n_sets_correct <- sum(part_s==0)
-    cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
     # compute the covariance matrix (of particles that remain) required
     # for the Independent MH move step
     cov_matrix <- (2.38^2)*cov(part_vals[seq(num_keep),])/(dim(part_vals)[2])
@@ -206,7 +202,9 @@ EEM_SMC_method <- function(sim_args,
       dist_next <- dist_final
     }
 
-    # print(paste('The next distance is', dist_next, ' and the maximum distance is ', dist_max, ' and the number to drop is ', num_drop))
+    n_sets_correct <- sum(part_s==0)
+    print(paste("Number of sets:", n_sets_correct, "/", n_ensemble))
+    print(paste('The next distance is', dist_next, ' and the maximum distance is ', dist_max, ' and the number to drop is ', num_drop))
 
 
     #if we are not accepting enough particles - give up!
@@ -217,7 +215,6 @@ EEM_SMC_method <- function(sim_args,
     }
   }
 
-  cli::cli_progress_done()
   #transform back
   for (i in seq(n_particles)){
       part_vals[i,] <- trans_finv(matrix(part_vals[i,], nrow=1),sim_args)

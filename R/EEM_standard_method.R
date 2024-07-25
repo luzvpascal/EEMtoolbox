@@ -30,8 +30,6 @@ EEM_standard_method <- function(sim_args,
                                 n_ensemble=5000,
                                 n_cores=1L){
   # initial prior rejection algorithm: EEM_standard_method
-  cli::cli_progress_bar("Number of parameter sets obtained",
-                        total = n_ensemble, type="iterator")
   start <- Sys.time()
   outputs <- EEMtoolbox::EEM_standard_method_iteration(sim_args,
                                                        summ_func,
@@ -42,10 +40,8 @@ EEM_standard_method <- function(sim_args,
                                                        n_cores)
   end <- Sys.time()
   n_sets_correct <- sum(outputs$part_s==0)
-  cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
 
   if (sum(outputs$part_s==0)>=n_ensemble){
-    cli::cli_progress_done()
     idx <- which(outputs$part_s==0)[seq(n_ensemble)]
     return(list(sims=outputs$sims,
                 part_s = outputs$part_s[idx],
@@ -94,9 +90,7 @@ EEM_standard_method <- function(sim_args,
       prior_sample <- rbind(prior_sample,outputs$prior_sample)
 
       n_sets_correct <- sum(part_s==0)
-      cli::cli_progress_update(set=min(n_sets_correct, n_ensemble))
     }
-    cli::cli_progress_done()
     return(list(sims=sims,
                 part_vals=part_vals,
                 part_sim=part_sim,
