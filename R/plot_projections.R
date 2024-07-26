@@ -72,7 +72,7 @@ plot_projections <- function(parameters,
     ggplot2::theme_bw() +
     ggplot2::guides(fill = ggplot2::guide_legend(title = "Species"),
                     color = ggplot2::guide_legend(title = "Species")) +
-    ggplot2::xlab("Years") +
+    ggplot2::xlab("Time") +
     ggplot2::ylab("Abundance") +
     ggplot2::facet_wrap(~ species)
 
