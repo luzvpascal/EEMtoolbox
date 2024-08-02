@@ -4,7 +4,6 @@ test_that("multiplication works", {
   for (model_test in c("GLV", "Gompertz")){
     outputs <- EEMtoolbox::EEM(interaction_matrix,
                                model = model_test,
-                               n_ensemble=10,
                                output_matrix = FALSE,
                                output_args = TRUE,
                                output_discrepancy = TRUE,
@@ -28,7 +27,6 @@ test_that("multiplication works", {
                                                        interaction_matrix_list_betas),
                              model = model_test,
                              algorithm = "SMC-ABC",
-                             n_ensemble=10,
                              output_matrix = FALSE,
                              output_args = TRUE,
                              output_discrepancy = TRUE,

@@ -10,7 +10,6 @@ EEM_standard_method(
   disc_func,
   sampler,
   trans_f,
-  n_particles,
   n_ensemble = 5000,
   n_cores = 1L
 )
@@ -25,8 +24,6 @@ EEM_standard_method(
 \item{sampler}{sampling function that generates random vectors from the joint prior distribution.}
 
 \item{trans_f}{transform of prior parameter space to ensure unbounded support for MCMC sampling.}
-
-\item{n_particles}{number of particles in the sample.}
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 5000}
 

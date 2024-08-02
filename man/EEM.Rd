@@ -17,7 +17,6 @@ EEM(
   trans_f = EEMtoolbox::uniform_transform,
   trans_finv = EEMtoolbox::uniform_transform_inverse,
   pdf = EEMtoolbox::uniform_pdf_transformed,
-  n_particles = 10000,
   mcmc_trials = 10,
   dist_final = 0,
   a = 0.6,
@@ -54,8 +53,6 @@ EEM(
 \item{trans_finv}{inverse of trans_f function. Default EEMtoolbox::uniform_transform_inverse}
 
 \item{pdf}{joint probability density function. Default EEMtoolbox::uniform_pdf_transformed}
-
-\item{n_particles}{number of particles in the sample. Default 10000}
 
 \item{mcmc_trials}{number of MCMC steps to try before selecting appropriate number. Default 10}
 

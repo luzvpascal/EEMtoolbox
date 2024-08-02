@@ -6,7 +6,7 @@
 #' @param disc_func summary statistic (discrepancy measure).
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
-#' @param n_particles number of particles in the sample.
+#' @param n_ensemble Number of desired ensemble members. Default to 5000
 #' @param n_cores Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).
 #' @return list: sims=number of simulations
 #' part_vals=parameter values
@@ -21,13 +21,13 @@ EEM_standard_method_iteration <- function(sim_args,
                                 disc_func,
                                 sampler,
                                 trans_f,
-                                n_particles,
+                                n_ensemble=5000,
                                 n_cores=1L){
   # sample prior
   available_cores <- n_cores_function(n_cores)
   cl <- parallel::makeCluster(available_cores[1])
   doParallel::registerDoParallel(cl)
-  part_vals <- foreach::foreach(i = 1:n_particles, .combine="rbind") %dopar% {
+  part_vals <- foreach::foreach(i = 1:n_ensemble, .combine="rbind") %dopar% {
     sampler(sim_args)
   }
   parallel::stopCluster(cl)#stop cluster
@@ -37,24 +37,24 @@ EEM_standard_method_iteration <- function(sim_args,
   # simulate model
   cl <- parallel::makeCluster(available_cores[1])
   doParallel::registerDoParallel(cl)
-  part_sim <- foreach::foreach(i = 1:n_particles, .combine = "c") %dopar% {
+  part_sim <- foreach::foreach(i = 1:n_ensemble, .combine = "c") %dopar% {
     summ_func(part_vals[i,], sim_args)
   }
 
   parallel::stopCluster(cl) #stop cluster
   rm(cl)
-  part_sim <- matrix(unname(part_sim), nrow=n_particles, byrow = TRUE)
+  part_sim <- matrix(unname(part_sim), nrow=n_ensemble, byrow = TRUE)
 
   #simulation
   # evaluate the discrepancy metric
-  part_s <- sapply(seq(n_particles),
+  part_s <- sapply(seq(n_ensemble),
                    function(x, part_sim) disc_func(part_sim[x,]),
                    part_sim = part_sim) #summary
 
   #save prior sample
   prior_sample <- part_vals
   #track the number of simulations
-  sims <- n_particles
+  sims <- n_ensemble
 
   # sort the particles
   ix <- order(part_s)

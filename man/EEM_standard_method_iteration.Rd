@@ -10,7 +10,7 @@ EEM_standard_method_iteration(
   disc_func,
   sampler,
   trans_f,
-  n_particles,
+  n_ensemble = 5000,
   n_cores = 1L
 )
 }
@@ -25,7 +25,7 @@ EEM_standard_method_iteration(
 
 \item{trans_f}{transform of prior parameter space to ensure unbounded support for MCMC sampling.}
 
-\item{n_particles}{number of particles in the sample.}
+\item{n_ensemble}{Number of desired ensemble members. Default to 5000}
 
 \item{n_cores}{Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).}
 }

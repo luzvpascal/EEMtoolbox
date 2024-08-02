@@ -6,7 +6,6 @@
 #' @param disc_func summary statistic (discrepancy measure).
 #' @param sampler sampling function that generates random vectors from the joint prior distribution.
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
-#' @param n_particles number of particles in the sample.
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
 #' @param n_cores Number of cores desired to be used for sampling. Default set to 1 core (sequential sampling).
 #' @examples
@@ -26,7 +25,6 @@ EEM_standard_method <- function(sim_args,
                                 disc_func,
                                 sampler,
                                 trans_f,
-                                n_particles,
                                 n_ensemble=5000,
                                 n_cores=1L){
   # initial prior rejection algorithm: EEM_standard_method
@@ -36,12 +34,12 @@ EEM_standard_method <- function(sim_args,
                                                        disc_func,
                                                        sampler,
                                                        trans_f,
-                                                       n_particles,
+                                                       n_ensemble,
                                                        n_cores)
   end <- Sys.time()
   n_sets_correct <- sum(outputs$part_s==0)
 
-  if (sum(outputs$part_s==0)>=n_ensemble){
+  if (n_sets_correct>=n_ensemble){
     idx <- which(outputs$part_s==0)[seq(n_ensemble)]
     return(list(sims=outputs$sims,
                 part_s = outputs$part_s[idx],
@@ -49,10 +47,10 @@ EEM_standard_method <- function(sim_args,
                 part_sim = outputs$part_sim[idx,],
                 prior_sample=outputs$prior_sample))
   } else {
-    acceptance_rate <- sum(outputs$part_s==0)/n_particles
+    acceptance_rate <- sum(outputs$part_s==0)/n_ensemble
     time.taken <- round(end - start,2)
     units_time <- units(end - start)
-    estimated_iterations <- n_ensemble/(acceptance_rate*n_particles)
+    estimated_iterations <- n_ensemble/(acceptance_rate*n_ensemble)
 
     print(paste('Estimated acceptance rate:', acceptance_rate))
     if (acceptance_rate == 0){
@@ -72,6 +70,8 @@ EEM_standard_method <- function(sim_args,
     part_vals <- outputs$part_vals[idx,]
     part_sim <- outputs$part_sim[idx,]
     prior_sample <- outputs$prior_sample
+    print(paste("Number of parameter sets found so far:",
+                sum(outputs$part_s==0), "/", n_ensemble))
 
     while(nrow(part_vals)<=n_ensemble){
       #run standard iteration until generating at least n_ensemble ensembles
@@ -80,7 +80,7 @@ EEM_standard_method <- function(sim_args,
                                                            disc_func,
                                                            sampler,
                                                            trans_f,
-                                                           n_particles,
+                                                           n_ensemble,
                                                            n_cores)
       idx <- which(outputs$part_s==0)
       sims <- sims+outputs$sims
@@ -90,7 +90,8 @@ EEM_standard_method <- function(sim_args,
       prior_sample <- rbind(prior_sample,outputs$prior_sample)
 
       n_sets_correct <- sum(part_s==0)
-      print(paste("Number of sets:", n_sets_correct, "/", n_ensemble))
+      print(paste("Number of parameter sets found so far:",
+                  n_sets_correct, "/", n_ensemble))
     }
     return(list(sims=sims,
                 part_vals=part_vals,

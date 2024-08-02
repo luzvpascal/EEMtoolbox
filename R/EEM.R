@@ -13,7 +13,6 @@
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling. Default EEMtoolbox::uniform_transform
 #' @param trans_finv inverse of trans_f function. Default EEMtoolbox::uniform_transform_inverse
 #' @param pdf joint probability density function. Default EEMtoolbox::uniform_pdf_transformed
-#' @param n_particles number of particles in the sample. Default 10000
 #' @param mcmc_trials number of MCMC steps to try before selecting appropriate number. Default 10
 #' @param dist_final target discrepancy threshold. Default 0. If zero, p_acc_min is used to determine stopping criteria.
 #' @param a tuning parameter for adaptive selection of discrepancy threshold sequence. Defalut 0.6
@@ -41,7 +40,6 @@ EEM <- function(interaction_matrix,
                 trans_f=EEMtoolbox::uniform_transform,
                 trans_finv=EEMtoolbox::uniform_transform_inverse,
                 pdf=EEMtoolbox::uniform_pdf_transformed,
-                n_particles=10000,
                 mcmc_trials=10,
                 dist_final=0,
                 a=0.6,
@@ -84,12 +82,6 @@ EEM <- function(interaction_matrix,
   stopifnot(class(trans_finv)=="function")
   #pdf
   stopifnot(class(pdf)=="function")
-  #n_particles
-  stopifnot(is.numeric(n_particles),
-            (n_particles)>n_ensemble)
-  #mcmc_trials
-  stopifnot(is.numeric(mcmc_trials),
-            (n_particles)>mcmc_trials)
   #dist_final
   stopifnot(is.numeric(dist_final),
             (dist_final)>=0)
@@ -124,7 +116,6 @@ EEM <- function(interaction_matrix,
                                           trans_f,
                                           trans_finv,
                                           pdf,
-                                          n_particles,
                                           mcmc_trials,
                                           dist_final,
                                           a,
@@ -139,7 +130,6 @@ EEM <- function(interaction_matrix,
                                                disc_func,
                                                sampler,
                                                trans_f,
-                                               n_particles,
                                                n_ensemble,
                                                n_cores)
   }

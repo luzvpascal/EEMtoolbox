@@ -1,6 +1,6 @@
 test_that("MCMC works", {
   # sample prior
-  n_particles <- 10
+  n_ensemble <- 10
   num_keep <- 5
   mcmc_trials <- 100
 
@@ -15,18 +15,18 @@ test_that("MCMC works", {
                                         lower_bounds_growth_rate = 0,
                                         model=model)
 
-  part_vals <- t(sapply(seq(n_particles),
+  part_vals <- t(sapply(seq(n_ensemble),
                         function(x, sim_args) EEMtoolbox::uniform_sampler(sim_args), sim_args=sim_args))
   # simulate model
   part_sim <- list()
-  for (i in seq(n_particles)){
+  for (i in seq(n_ensemble)){
     part_sim[[i]] <- EEMtoolbox::summarise_ecosystem_features(part_vals[i,], sim_args)
   }
-  part_sim <- matrix(unlist(part_sim), nrow=n_particles, byrow = TRUE)
+  part_sim <- matrix(unlist(part_sim), nrow=n_ensemble, byrow = TRUE)
 
   #simulation
   # evaluate the discrepancy metric
-  part_s <- sapply(seq(n_particles),
+  part_s <- sapply(seq(n_ensemble),
                    function(x, part_sim) EEMtoolbox::discrepancy_continuous_sum(part_sim[x,]),
                    part_sim = part_sim) #summary
 

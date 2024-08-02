@@ -12,7 +12,6 @@ EEM_SMC_method(
   trans_f,
   trans_finv,
   pdf,
-  n_particles,
   mcmc_trials,
   dist_final,
   a,
@@ -36,8 +35,6 @@ EEM_SMC_method(
 \item{trans_finv}{inverse of trans_f function.}
 
 \item{pdf}{joint probability density function.}
-
-\item{n_particles}{number of particles in the sample.}
 
 \item{mcmc_trials}{number of MCMC steps to try before selecting appropriate number.}
 

@@ -41,7 +41,6 @@ test_that("EEM tests", {
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
                              algorithm = "standard EEM",
-                             n_ensemble=10,
                              output_matrix = FALSE,
                              output_args = TRUE,
                              output_discrepancy = TRUE,
@@ -57,7 +56,6 @@ test_that("EEM tests", {
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
                              algorithm = "SMC-ABC",
-                             n_ensemble=5000,
                              output_matrix = TRUE)
 
   expect_true(class(outputs)[1]=="list")
@@ -69,7 +67,6 @@ test_that("EEM tests", {
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
                              algorithm = "standard EEM",
-                             n_ensemble=10,
                              output_matrix = TRUE)
 
   expect_true(class(outputs)[1]=="list")

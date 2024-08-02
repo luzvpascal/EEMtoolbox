@@ -8,7 +8,6 @@
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling.
 #' @param trans_finv inverse of trans_f function.
 #' @param pdf joint probability density function.
-#' @param n_particles number of particles in the sample.
 #' @param mcmc_trials number of MCMC steps to try before selecting appropriate number.
 #' @param dist_final target discrepancy threshold. Default 0. If zero, p_acc_min is used to determine stopping criteria.
 #' @param a tuning parameter for adaptive selection of discrepancy threshold sequence.
@@ -32,7 +31,6 @@ EEM_SMC_method <- function(sim_args,
                            trans_f,
                            trans_finv,
                            pdf,
-                           n_particles,
                            mcmc_trials,
                            dist_final,
                            a,
@@ -47,7 +45,7 @@ EEM_SMC_method <- function(sim_args,
                                                        disc_func,
                                                        sampler,
                                                        trans_f,
-                                                       n_particles,
+                                                       n_ensemble,
                                                        n_cores)
 
   n_sets_correct <- sum(outputs$part_s==0)
@@ -56,23 +54,26 @@ EEM_SMC_method <- function(sim_args,
     print("modify n_ensemble if necessary")
     return(outputs)
   }
+  print(paste("Number of parameter sets found so far:", n_sets_correct, "/", n_ensemble))
+
   part_vals <- outputs$part_vals # sample prior
   part_sim <- outputs$part_sim # simulate model
   part_s <- outputs$part_s # evaluate the discrepancy metric
   prior_sample <- outputs$prior_sample #prior
 
   # values for adaptive steps
-  num_drop <- floor(n_particles*a) #Number of particles dropped each iteration
-  num_keep <- n_particles-num_drop #Number of particles kept each iteration
+  num_drop <- floor(n_ensemble*a) #Number of particles dropped each iteration
+  num_keep <- n_ensemble-num_drop #Number of particles kept each iteration
 
   # determine next disprepacy threshold
-  dist_max <- part_s[n_particles]
+  dist_max <- part_s[n_ensemble]
   dist_next <- part_s[num_keep]
-  print(paste('Current maximum discrepancy',dist_max,'now trying for ', dist_next, 'want to get to ',dist_final))
+  print(paste('Current maximum discrepancy', round(dist_max, digits = 2),'now trying for ',
+              round(dist_next, digits = 2), 'want to get to ',dist_final))
 
   # iterate toward target discrepancy
   #track the number of simulations
-  sims <- n_particles
+  sims <- n_ensemble
   # transform the parameters
   part_vals <- trans_f(part_vals,sim_args) #part vals is transformed
 
@@ -85,10 +86,10 @@ EEM_SMC_method <- function(sim_args,
     # resample#
     ###########
 
-    resample <- sample(seq(num_keep), n_particles-num_keep, TRUE) #duplicate good ones
-    part_vals[seq(num_keep+1,n_particles),] <- part_vals[resample,]
-    part_s[seq(num_keep+1,n_particles)] <- part_s[resample]
-    part_sim[seq(num_keep+1,n_particles),] <- part_sim[resample,]
+    resample <- sample(seq(num_keep), n_ensemble-num_keep, TRUE) #duplicate good ones
+    part_vals[seq(num_keep+1,n_ensemble),] <- part_vals[resample,]
+    part_s[seq(num_keep+1,n_ensemble)] <- part_s[resample]
+    part_sim[seq(num_keep+1,n_ensemble),] <- part_sim[resample,]
 
 
     ############
@@ -100,7 +101,7 @@ EEM_SMC_method <- function(sim_args,
     # print("mcmc1")
 
     #parallel for loop
-    mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_particles,
+    mcmc_outcome <- foreach::foreach(i=(num_keep+1):n_ensemble,
                      .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
                        sim_args,
@@ -118,10 +119,10 @@ EEM_SMC_method <- function(sim_args,
     parallel::stopCluster(cl)#stop cluster
     rm(cl)
 
-    part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
+    part_vals[seq(num_keep+1,n_ensemble),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
                              nrow=length(mcmc_outcome), byrow = TRUE)
-    part_s[seq(num_keep+1,n_particles)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))
-    part_sim[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 3)),
+    part_s[seq(num_keep+1,n_ensemble)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))
+    part_sim[seq(num_keep+1,n_ensemble),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 3)),
                             nrow=length(mcmc_outcome), byrow = TRUE)
     i_acc <- (unlist(lapply(mcmc_outcome, `[[`, 4)))
     sims_mcmc <- (unlist(lapply(mcmc_outcome, `[[`, 5)))
@@ -133,7 +134,7 @@ EEM_SMC_method <- function(sim_args,
     #################################################
     # determine number of MCMC iterations to perfrom#
     #################################################
-    acc_rate <- sum(i_acc)/(mcmc_trials*(n_particles-num_keep))
+    acc_rate <- sum(i_acc)/(mcmc_trials*(n_ensemble-num_keep))
     mcmc_iters <-   floor(log(c)/log(1-acc_rate)+1)
 
     ############
@@ -144,7 +145,7 @@ EEM_SMC_method <- function(sim_args,
     doParallel::registerDoParallel(cl)
     # print("mcmc2")
     #run for loop parallel
-    mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_particles,
+    mcmc_outcome2 <- foreach::foreach(i=(num_keep+1):n_ensemble,
                   .packages =c('EEMtoolbox')) %dopar% {
       EEMtoolbox::MCMC(i,
                        sim_args,
@@ -162,10 +163,10 @@ EEM_SMC_method <- function(sim_args,
     parallel::stopCluster(cl) #stop cluster
     rm(cl)
 
-    part_vals[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
+    part_vals[seq(num_keep+1,n_ensemble),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 1)),
                                                       nrow=length(mcmc_outcome), byrow = TRUE)
-    part_s[seq(num_keep+1,n_particles)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))
-    part_sim[seq(num_keep+1,n_particles),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 3)),
+    part_s[seq(num_keep+1,n_ensemble)] <- (unlist(lapply(mcmc_outcome, `[[`, 2)))
+    part_sim[seq(num_keep+1,n_ensemble),] <- matrix(unlist(lapply(mcmc_outcome, `[[`, 3)),
                                                      nrow=length(mcmc_outcome), byrow = TRUE)
     i_acc <- (unlist(lapply(mcmc_outcome, `[[`, 4)))
     sims_mcmc <- (unlist(lapply(mcmc_outcome, `[[`, 5)))
@@ -174,7 +175,7 @@ EEM_SMC_method <- function(sim_args,
     ################
 
     num_mcmc_iters <- max(0, mcmc_iters - mcmc_trials) + mcmc_trials
-    p_acc <- sum(i_acc)/(num_mcmc_iters*(n_particles-num_keep))
+    p_acc <- sum(i_acc)/(num_mcmc_iters*(n_ensemble-num_keep))
 
     sims <- sims + sum(sims_mcmc)
     mcmc_trials <- ceiling(mcmc_iters/2)
@@ -190,11 +191,11 @@ EEM_SMC_method <- function(sim_args,
     # drop them
     if (sum((part_s > dist_final)) < num_drop){
       num_drop <- sum((part_s > dist_final))
-      num_keep <- n_particles-num_drop
+      num_keep <- n_ensemble-num_drop
     }
 
     #calculate distances
-    dist_max <- part_s[n_particles]
+    dist_max <- part_s[n_ensemble]
     dist_next <- part_s[num_keep]
 
     # check to see if we reach desired tolerance at next iteration
@@ -203,9 +204,9 @@ EEM_SMC_method <- function(sim_args,
     }
 
     n_sets_correct <- sum(part_s==0)
-    print(paste("Number of sets:", n_sets_correct, "/", n_ensemble))
-    print(paste('The next distance is', dist_next, ' and the maximum distance is ', dist_max, ' and the number to drop is ', num_drop))
-
+    print(paste("Number of parameter sets found so far:", n_sets_correct, "/", n_ensemble))
+    print(paste('The next distance is', round(dist_next, digits = 2),
+                ' and the maximum distance is ', round(dist_max, digits = 2), ' and the number to drop is ', num_drop))
 
     #if we are not accepting enough particles - give up!
     # print(paste("p_acc", p_acc))
@@ -216,7 +217,7 @@ EEM_SMC_method <- function(sim_args,
   }
 
   #transform back
-  for (i in seq(n_particles)){
+  for (i in seq(n_ensemble)){
       part_vals[i,] <- trans_finv(matrix(part_vals[i,], nrow=1),sim_args)
   }
 

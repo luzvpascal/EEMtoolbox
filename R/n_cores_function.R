@@ -5,14 +5,15 @@
 #' @export
 n_cores_function <- function(n_cores=1L){
   #setup parallel backend to use many processors
-  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-
-  if (nzchar(chk) && chk == "TRUE") {
-    # use 2 cores in CRAN/Travis/AppVeyor
-    max_cores <- 2L
-  } else {
-    # use all cores in devtools::test()
-    max_cores <- parallelly::availableCores(omit = 1) #do not overload your computer
-  }
-  return(min(max_cores, n_cores))
+  # chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  #
+  # if (nzchar(chk) && chk == "TRUE") {
+  #   # use 2 cores in CRAN/Travis/AppVeyor
+  #   max_cores <- 2L
+  # } else {
+  #   # use all cores in devtools::test()
+  #   max_cores <- parallelly::availableCores() #do not overload your computer
+  # }
+  return(n_cores)
+  # return(min(max_cores, n_cores))
 }
