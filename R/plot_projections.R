@@ -16,7 +16,6 @@
 #' @return ggplot of abundances per species
 #' @export
 #' @import dplyr
-#' @import tidyverse
 #' @import magrittr
 plot_projections <- function(parameters,
                         initial_condition,
