@@ -87,7 +87,7 @@ plot_projections <- function(parameters,
   if (average) {
     abundance <- dplyr::group_by(abundance, time, species)
     abundance <- dplyr::summarise(abundance,
-                                  mean_pop = mean(pop),
+                                  median_pop = median(pop),
                                   upper = quantile(pop, 0.975),
                                   lower = quantile(pop, 0.025)
                                   )
@@ -106,7 +106,7 @@ plot_projections <- function(parameters,
                                         fill = species),
                            alpha = 0.2) +
       ggplot2::geom_line(ggplot2::aes(x = time,
-                                      y = mean_pop,
+                                      y = median_pop,
                                       color = species)
                          ,linewidth = 1.5)
   } else {
