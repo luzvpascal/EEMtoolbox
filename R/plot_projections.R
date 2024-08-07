@@ -75,7 +75,8 @@ plot_projections <- function(parameters,
     print("These parameter sets will be removed from the abundance predictions")
 
     #remove parameter sets#
-    abundance <- filter(abundance, !(sim %in% remove_indexes))
+    # abundance <- dplyr::filter(abundance, !(sim %in% remove_indexes))
+    abundance <- abundance[which(!(abundance$sim %in% remove_indexes)),]
   }
 
   #pivot for plotting
