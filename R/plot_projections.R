@@ -74,11 +74,11 @@ plot_projections <- function(parameters,
     print("The ODE could not be solved for parameter sets (index):")
     print(remove_indexes)
     print("These parameter sets will be removed from the abundance predictions")
-  }
 
-  #remove parameter sets#
-  abundance <- abundance %>%
+    #remove parameter sets#
+    abundance <- abundance %>%
     filter(!(sim %in% remove_indexes))
+  }
 
   #pivot for plotting
   abundance <- tidyr::pivot_longer(abundance,
