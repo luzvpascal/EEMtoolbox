@@ -66,9 +66,9 @@ plot_projections <- function(parameters,
 
   ## remove projections that could not be solved ####
   remove_indexes <- abundance %>%
-    group_by(sim)%>%
-    summarise(max_time=max(time))%>%
-    filter(max_time < t_window[2])
+    dplyr::group_by(sim)%>%
+    dplyr::summarise(max_time=max(time))%>%
+    dplyr::filter(max_time < t_window[2])
   remove_indexes <- remove_indexes$sim
   if (length(remove_indexes)>0){
     print("The ODE could not be solved for parameter sets (index):")
