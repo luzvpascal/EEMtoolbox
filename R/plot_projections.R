@@ -64,32 +64,64 @@ plot_projections <- function(parameters,
     names(abundance) <- c("sim", "time", species_names)
   }
 
+  ## remove projections that could not be solved ####
+  remove_indexes <- abundance %>%
+    group_by(sim)%>%
+    summarise(max_time=max(time))%>%
+    filter(max_time < t_window[2])
+  remove_indexes <- remove_indexes$sim
+  if (length(remove_indexes)>0){
+    print("The ODE could not be solved for parameter sets (index):")
+    print(remove_indexes)
+    print("These parameter sets will be removed from the abundance predictions")
+  }
+
+  #remove parameter sets#
+  abundance <- abundance %>%
+    filter(!(sim %in% remove_indexes))
+
+  #pivot for plotting
   abundance <- tidyr::pivot_longer(abundance,
                                    !c(time,sim), names_to = c("species"), values_to = "pop")
 
-  p <- ggplot2::ggplot(abundance,
-                       ggplot2::aes(x = time, y = pop, color = species, fill = species)) +
-    ggplot2::theme_bw() +
-    ggplot2::guides(fill = ggplot2::guide_legend(title = "Species"),
-                    color = ggplot2::guide_legend(title = "Species")) +
-    ggplot2::xlab("Time") +
-    ggplot2::ylab("Abundance") +
-    ggplot2::facet_wrap(~ species)
 
   # Add either the ribbon or individual trajectories based on the average variable
   if (average) {
-    p <- p +
-      ggplot2::stat_summary(geom = "line", fun = mean,linewidth = 1.5) +
-      ggplot2::stat_summary(geom = "ribbon", fun.data = function(x) {
-        quantiles <- quantile(x, c(0.025, 0.975))
-        data.frame(ymin = quantiles[1], ymax = quantiles[2])
-      }, alpha = 0.2) +
-      ggplot2::ylim(c(0, quantile(abundance$pop, 0.975)))
+    abundance <- abundance %>%
+      group_by(time, species) %>%
+      summarise(mean_pop = mean(pop),
+                upper = quantile(pop, 0.975),
+                lower = quantile(pop, 0.025)
+                )
+
+    p <- ggplot2::ggplot(abundance) +
+      ggplot2::theme_bw() +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = "Species"),
+                      color = ggplot2::guide_legend(title = "Species")) +
+      ggplot2::xlab("Time") +
+      ggplot2::ylab("Abundance") +
+      ggplot2::facet_wrap(~ species) +
+      ggplot2::geom_ribbon(ggplot2::aes(x = time,
+                                        ymin = lower,
+                                        ymax = upper,
+                                        color = species,
+                                        fill = species),
+                           alpha = 0.2) +
+      ggplot2::geom_line(ggplot2::aes(x = time,
+                                      y = mean_pop,
+                                      color = species,
+                                      fill = species),
+                         fun = mean,linewidth = 1.5)
   } else {
-    p <- p +
+    p <- ggplot2::ggplot(abundance) +
+      ggplot2::theme_bw() +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = "Species"),
+                      color = ggplot2::guide_legend(title = "Species")) +
+      ggplot2::xlab("Time") +
+      ggplot2::ylab("Abundance") +
+      ggplot2::facet_wrap(~ species) +
       ggplot2::geom_line(ggplot2::aes(group=sim), alpha = 0.4)+
       ggplot2::stat_summary(geom = "line", fun = mean, col="black", linewidth = 1)
   }
-
   return(p)
 }
