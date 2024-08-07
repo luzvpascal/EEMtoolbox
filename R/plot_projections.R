@@ -15,7 +15,7 @@
 #' plot_projections(output,  c(1,1), t_window=c(0,1))
 #' @return ggplot of abundances per species
 #' @export
-
+#' @import dplyr
 plot_projections <- function(parameters,
                         initial_condition,
                         t_window,
@@ -66,7 +66,7 @@ plot_projections <- function(parameters,
 
   ## remove projections that could not be solved ####
   remove_indexes <- abundance %>%
-    dplyr::group_by(sim)%>%
+    dplyr::group_by(sim) %>%
     dplyr::summarise(max_time=max(time))%>%
     dplyr::filter(max_time < t_window[2])
   remove_indexes <- remove_indexes$sim
