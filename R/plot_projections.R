@@ -15,8 +15,6 @@
 #' plot_projections(output,  c(1,1), t_window=c(0,1))
 #' @return ggplot of abundances per species
 #' @export
-#' @import dplyr
-#' @import magrittr
 plot_projections <- function(parameters,
                         initial_condition,
                         t_window,
@@ -66,34 +64,32 @@ plot_projections <- function(parameters,
   }
 
   ## remove projections that could not be solved ####
-  remove_indexes <- abundance %>%
-    dplyr::group_by(sim) %>%
-    dplyr::summarise(max_time=max(time))%>%
-    dplyr::filter(max_time < t_window[2])
+  remove_indexes <-  dplyr::group_by(abundance, sim)
+  remove_indexes <-  dplyr::summarise(remove_indexes, max_time=max(time))
+  remove_indexes <-  dplyr::filter(remove_indexes, max_time < t_window[2])
   remove_indexes <- remove_indexes$sim
+
   if (length(remove_indexes)>0){
     print("The ODE could not be solved for parameter sets (index):")
     print(remove_indexes)
     print("These parameter sets will be removed from the abundance predictions")
 
     #remove parameter sets#
-    abundance <- abundance %>%
-    filter(!(sim %in% remove_indexes))
+    abundance <- filter(abundance, !(sim %in% remove_indexes))
   }
 
   #pivot for plotting
   abundance <- tidyr::pivot_longer(abundance,
                                    !c(time,sim), names_to = c("species"), values_to = "pop")
 
-
   # Add either the ribbon or individual trajectories based on the average variable
   if (average) {
-    abundance <- abundance %>%
-      dplyr::group_by(time, species) %>%
-      dplyr::summarise(mean_pop = mean(pop),
-                upper = quantile(pop, 0.975),
-                lower = quantile(pop, 0.025)
-                )
+    abundance <- dplyr::group_by(abundance, time, species)
+    abundance <- dplyr::summarise(abundance,
+                                  mean_pop = mean(pop),
+                                  upper = quantile(pop, 0.975),
+                                  lower = quantile(pop, 0.025)
+                                  )
 
     p <- ggplot2::ggplot(abundance) +
       ggplot2::theme_bw() +
