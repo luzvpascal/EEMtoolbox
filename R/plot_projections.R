@@ -88,8 +88,8 @@ plot_projections <- function(parameters,
   # Add either the ribbon or individual trajectories based on the average variable
   if (average) {
     abundance <- abundance %>%
-      group_by(time, species) %>%
-      summarise(mean_pop = mean(pop),
+      dplyr::group_by(time, species) %>%
+      dplyr::summarise(mean_pop = mean(pop),
                 upper = quantile(pop, 0.975),
                 lower = quantile(pop, 0.025)
                 )
