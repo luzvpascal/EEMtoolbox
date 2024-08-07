@@ -16,6 +16,8 @@
 #' @return ggplot of abundances per species
 #' @export
 #' @import dplyr
+#' @import tidyverse
+#' @import magrittr
 plot_projections <- function(parameters,
                         initial_condition,
                         t_window,
@@ -109,8 +111,7 @@ plot_projections <- function(parameters,
                            alpha = 0.2) +
       ggplot2::geom_line(ggplot2::aes(x = time,
                                       y = mean_pop,
-                                      color = species,
-                                      fill = species),
+                                      color = species),
                          fun = mean,linewidth = 1.5)
   } else {
     p <- ggplot2::ggplot(abundance) +
