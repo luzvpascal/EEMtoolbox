@@ -209,6 +209,7 @@ EEM_SMC_method <- function(sim_args,
     print(paste('The next distance is', round(dist_next, digits = 2),
                 ' and the maximum distance is ', round(dist_max, digits = 2), ' and the number to drop is ', num_drop))
 
+    print(paste("Number of MCMC runs so far:", sims))
     #if we are not accepting enough particles - give up!
     # print(paste("p_acc", p_acc))
     if (p_acc < p_acc_min){
