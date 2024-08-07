@@ -100,6 +100,10 @@ EEM <- function(interaction_matrix,
   stopifnot(class(output_args)=="logical")
 
 
+  if (n_cores == 1L){
+    print("The code will run on 1 cluster only (sequential).")
+    print("Change the parameter 'n_cores' to parallelise code")
+  }
   # Defining special arguments ####
   sim_args <- EEMtoolbox::args_function(interaction_matrix,
                                         upper_bounds_growth_rate,

@@ -71,7 +71,7 @@ EEM_standard_method <- function(sim_args,
     part_sim <- outputs$part_sim[idx,]
     prior_sample <- outputs$prior_sample
     print(paste("Number of parameter sets found so far:",
-                sum(outputs$part_s==0), "/", n_ensemble))
+                min(sum(outputs$part_s==0),n_ensemble), "/", n_ensemble))
 
     while(nrow(part_vals)<=n_ensemble){
       #run standard iteration until generating at least n_ensemble ensembles
@@ -91,7 +91,7 @@ EEM_standard_method <- function(sim_args,
 
       n_sets_correct <- sum(part_s==0)
       print(paste("Number of parameter sets found so far:",
-                  n_sets_correct, "/", n_ensemble))
+                  min(n_sets_correct,n_ensemble), "/", n_ensemble))
     }
     return(list(sims=sims,
                 part_vals=part_vals,

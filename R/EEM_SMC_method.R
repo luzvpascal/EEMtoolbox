@@ -204,7 +204,8 @@ EEM_SMC_method <- function(sim_args,
     }
 
     n_sets_correct <- sum(part_s==0)
-    print(paste("Number of parameter sets found so far:", n_sets_correct, "/", n_ensemble))
+    print(paste("Number of parameter sets found so far:", min(n_sets_correct,n_ensemble)
+                "/", n_ensemble))
     print(paste('The next distance is', round(dist_next, digits = 2),
                 ' and the maximum distance is ', round(dist_max, digits = 2), ' and the number to drop is ', num_drop))
 
