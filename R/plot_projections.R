@@ -107,8 +107,8 @@ plot_projections <- function(parameters,
                            alpha = 0.2) +
       ggplot2::geom_line(ggplot2::aes(x = time,
                                       y = mean_pop,
-                                      color = species),
-                         fun = mean,linewidth = 1.5)
+                                      color = species)
+                         ,linewidth = 1.5)
   } else {
     p <- ggplot2::ggplot(abundance) +
       ggplot2::theme_bw() +
