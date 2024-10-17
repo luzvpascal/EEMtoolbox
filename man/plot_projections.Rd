@@ -9,8 +9,10 @@ plot_projections(
   initial_condition,
   t_window,
   time_step_len = 0.01,
+  sim_args,
   model = "GLV",
   derivative = EEMtoolbox::derivative_func,
+  scaled = FALSE,
   species_names = NA,
   average = TRUE
 )
@@ -18,7 +20,7 @@ plot_projections(
 \arguments{
 \item{parameters}{list like object of ensemble of parameters (outputs of  \link[EEMtoolbox]{EEM})}
 
-\item{initial_condition}{vector of initial species abundances}
+\item{initial_condition}{vector of initial species abundances. If parameter scaled is TRUE, the parameter initial_condition should be scaled to steady state}
 
 \item{t_window}{time window to solve ODE}
 
@@ -27,6 +29,8 @@ plot_projections(
 \item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".}
 
 \item{derivative}{derivative function. Default \link[EEMtoolbox]{derivative_func}}
+
+\item{scaled}{Boolean indicating if projections should be scaled to steady state. If true, the parameter initial_condition should be scaled too. Default FALSE}
 
 \item{species_names}{vector of strings for names of species. If NA plots only display species index number, . Default NA.}
 
