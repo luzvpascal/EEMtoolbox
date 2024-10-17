@@ -54,7 +54,7 @@ plot_projections <- function(parameters,
           output <- R*(1-exp(-M%*%N-P))+B%*%N #change to positive
           return(output)
         }
-        sol <- nleqslv::nleqslv(rep(100,n_species), fn) #we give a large positive warmstart
+        sol <- nleqslv::nleqslv(rep(100,length(r)), fn) #we give a large positive warmstart
         steady_state <- sol$x
       }
       initial <- initial_condition*steady_state #initial condition is scaled to steady state
