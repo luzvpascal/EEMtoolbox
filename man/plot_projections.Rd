@@ -9,7 +9,6 @@ plot_projections(
   initial_condition,
   t_window,
   time_step_len = 0.01,
-  sim_args,
   model = "GLV",
   derivative = EEMtoolbox::derivative_func,
   scaled = FALSE,
