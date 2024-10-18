@@ -30,7 +30,7 @@ test_that("get_nonzero_parameters works", {
   expect_equal(non_zero$lower_interaction_bound, non_zero_list$lower_interaction_bound)
   expect_equal(non_zero$upper_interaction_bound, non_zero_list$upper_interaction_bound)
 
-  ## Baker ##
+  ## Bimler-Baker ##
   interaction_matrix_list_alphas <- list(matrix(pmin(interaction_matrix,0), ncol=2),
                                   matrix(pmax(interaction_matrix,0), ncol=2))
   interaction_matrix_list_betas <- interaction_matrix_list_alphas
@@ -38,7 +38,7 @@ test_that("get_nonzero_parameters works", {
   non_zero_list <- EEMtoolbox::get_nonzero_parameters(
     list(interaction_matrix_list_alphas, interaction_matrix_list_betas),
     n_species = ncol(interaction_matrix),
-    model="Baker")
+    model="Bimler-Baker")
 
   expect_equal(non_zero_list$keep_parameters_alphas,
                non_zero_list$keep_parameters_betas)

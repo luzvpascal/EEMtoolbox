@@ -36,7 +36,7 @@ MCMC(
 
 \item{cov_matrix}{covariance matrix}
 
-\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.}
+\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
 
 \item{disc_func}{summary statistic (discrepancy measure).}
 

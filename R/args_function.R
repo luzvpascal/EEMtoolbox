@@ -1,11 +1,11 @@
 #' @title Arguments for EEM
 #' @description
 #' Extract arguments necessary to run EEM from interaction matrix
-#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
+#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
 #' @param upper_bounds_growth_rate upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5
 #' @param lower_bounds_growth_rate lower bound of growth rates. Input can be one number (same lower bound for all species) or a vector of growth rates lower bounds for each species. Default 0
 #' @param upper_interaction_strength coefficient representing interaction strength. Default:1
-#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"
+#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"
 #' @return A list of arguments defining the problem.
 #' @examples
 #' library(EEMtoolbox)

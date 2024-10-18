@@ -10,7 +10,7 @@ EEM(
   lower_bounds_growth_rate = 0,
   n_ensemble = 5000,
   model = "GLV",
-  algorithm = "standard EEM",
+  algorithm = "standard-EEM",
   summ_func = EEMtoolbox::summarise_ecosystem_features,
   disc_func = EEMtoolbox::discrepancy_continuous_sum,
   sampler = EEMtoolbox::uniform_sampler,
@@ -30,7 +30,7 @@ EEM(
 )
 }
 \arguments{
-\item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
+\item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
 
 \item{upper_bounds_growth_rate}{upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5}
 
@@ -38,11 +38,11 @@ EEM(
 
 \item{n_ensemble}{Number of desired ensemble members. Default to 5000}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker", "Gompertz" and "customized"}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"}
 
-\item{algorithm}{algorithm used for sampling. Default "standard EEM" (Baker et al, 2017), options include "SMC-ABC" (Vollert et al., 2023)}
+\item{algorithm}{algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "EEM-SMC" (Vollert et al., 2023)}
 
-\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
+\item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
 
 \item{disc_func}{summary statistic (discrepancy measure). Default discrepancy_continuous_sum}
 

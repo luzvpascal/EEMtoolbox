@@ -2,7 +2,7 @@
 #' @description
 #' Extract number of species from interaction matrix
 #' @param interaction_matrix interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second
-#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"
+#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"
 #' @return A list of arguments defining the problem.
 #' @examples
 #' n_species_function(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
@@ -21,8 +21,8 @@ n_species_function <- function(interaction_matrix,model="GLV"){
       return(ncol(interaction_matrix[[1]])) #number of species in ecosystem network
     }
   }
-  else if (model == "Baker"){
-    #if model is Baker, the interaction_matrix can be:
+  else if (model == "Bimler-Baker"){
+    #if model is Bimler-Baker, the interaction_matrix can be:
     # a list of two matrices (alphas and betas), the default lower bound is 0 for alphas,
     # and the default upper bound is 0 for betas
     # OR a list of two lists

@@ -35,7 +35,7 @@ test_that("ode_solve works", {
 
 
   #Baker
-  model_test = "Baker"
+  model_test = "Bimler-Baker"
   initcond <- c(17.06103, 12.35617)
 
   interaction_matrix_alphas <- matrix(c(-0.8185450, 0.1201095,0.9095789, -0.1474479), ncol = 2, byrow = TRUE)

@@ -9,7 +9,7 @@
 #' @param part_s vector of discrepancy measures of each particle (each particle represented by a row)
 #' @param part_sim matrix of current simulation values: equilibriums and eigenvalues of jacobian (each particle represented by a row)
 #' @param cov_matrix covariance matrix
-#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Adams, (automatically chosen if model="Adams"). Needs to be defined if model="customized" chosen.
+#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure).
 #' @param trans_finv inverse of trans_f function.
 #' @param pdf joint probability density function.

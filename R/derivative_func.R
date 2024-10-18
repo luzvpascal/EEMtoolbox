@@ -3,7 +3,7 @@
 #' Derivatives functions to solve ODE systems
 #' @param Time a float of current studied time
 #' @param State vector of current species abundance
-#' @param Pars a list like object containing: model: string of model representing species interactions. Options include "GLV" (Generalized Lotka Volterra), "Baker", "Gompertz". interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas. growth_rate: vector of growth rates
+#' @param Pars a list like object containing: model: string of model representing species interactions. Options include "GLV" (Generalized Lotka Volterra), "Bimler-Baker", "Gompertz". interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Bimler-Baker, input a list of 2 matrices: the first element is the alphas and the second the betas. growth_rate: vector of growth rates
 #' @examples
 #' library(EEMtoolbox)
 #' output <- EEM(dingo_matrix) #automatically loads an example of interaction matrix as dingo_matrix
@@ -23,7 +23,7 @@ derivative_func <- function(Time,
       dState <- State*growth_rate + (interaction_matrix_value%*%State)*State
       return(list(dState))
     }
-    if (model=="Baker"){
+    if (model=="Bimler-Baker"){
         A <- interaction_matrix_value[[1]]
         B <- interaction_matrix_value[[2]]
 

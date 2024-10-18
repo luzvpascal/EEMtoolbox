@@ -11,7 +11,7 @@ derivative_func(Time, State, Pars)
 
 \item{State}{vector of current species abundance}
 
-\item{Pars}{a list like object containing: model: string of model representing species interactions. Options include "GLV" (Generalized Lotka Volterra), "Baker", "Gompertz". interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Baker, input a list of 2 matrices: the first element is the alphas and the second the betas. growth_rate: vector of growth rates}
+\item{Pars}{a list like object containing: model: string of model representing species interactions. Options include "GLV" (Generalized Lotka Volterra), "Bimler-Baker", "Gompertz". interaction_matrix_value interaction matrix parametrized. If model is GLV or Gompertz, input a single matrix. If model is Bimler-Baker, input a list of 2 matrices: the first element is the alphas and the second the betas. growth_rate: vector of growth rates}
 }
 \value{
 list: part_vals: ensemble of parameters, marginal distributions

@@ -27,7 +27,7 @@ test_that("derivative_func works", {
   Pars <- list(interaction_matrix_value=list(interaction_matrix,
                                              interaction_matrix),
                growth_rate=growth_rate,
-               model="Baker")
+               model="Bimler-Baker")
   baker_deriv <- EEMtoolbox::derivative_func(Time=0,
                                              State=current_abundance,
                                              Pars=Pars)

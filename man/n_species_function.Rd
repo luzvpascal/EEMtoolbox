@@ -9,7 +9,7 @@ n_species_function(interaction_matrix, model = "GLV")
 \arguments{
 \item{interaction_matrix}{interaction signs matrix, can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second}
 
-\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"}
 }
 \value{
 A list of arguments defining the problem.

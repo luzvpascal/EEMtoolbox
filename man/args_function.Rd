@@ -13,7 +13,7 @@ args_function(
 )
 }
 \arguments{
-\item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
+\item{interaction_matrix}{interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas}
 
 \item{upper_bounds_growth_rate}{upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5}
 
@@ -21,7 +21,7 @@ args_function(
 
 \item{upper_interaction_strength}{coefficient representing interaction strength. Default:1}
 
-\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"}
+\item{model}{model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"}
 }
 \value{
 A list of arguments defining the problem.

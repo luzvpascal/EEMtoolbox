@@ -5,7 +5,7 @@
 #' @param initial_condition vector of initial species abundances. If parameter scaled is TRUE, the parameter initial_condition should be scaled to steady state
 #' @param t_window time window to solve ODE
 #' @param time_step_len length of each time step, default = 0.01
-#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".
+#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker" and "Gompertz".
 #' @param derivative derivative function. Default \link[EEMtoolbox]{derivative_func}
 #' @param scaled Boolean indicating if projections should be scaled to steady state. If true, the parameter initial_condition should be scaled too. Default FALSE
 #' @param species_names vector of strings for names of species. If NA plots only display species index number, . Default NA.
@@ -40,7 +40,7 @@ plot_projections <- function(parameters,
         if (model=="Gompertz"){
           steady_state <- exp(steady_state)
         }
-      } else if (model =="Baker"){
+      } else if (model =="Bimler-Baker"){
         r <- pars$growthrates
         A <- pars$interaction_matrix_alphas
         B <- pars$interaction_matrix_betas
@@ -69,7 +69,7 @@ plot_projections <- function(parameters,
                                                          time_step_len,
                                                          model,
                                                          derivative))
-    } else if (model =="Baker") {
+    } else if (model =="Bimler-Baker") {
       projections <-as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value =
                                             list(pars$interaction_matrix_alphas,
                                                  pars$interaction_matrix_betas),

@@ -5,7 +5,7 @@
 #' @return A list of 2 elements
 #' growthrates: a vector of arguments defining the problem,
 #' interaction_matrix: reconstructed interaction matrix.
-#' If model is Baker,
+#' If model is Bimler-Baker,
 #' interaction_matrix_alphas: reconstructed interaction matrix of alphas
 #' interaction_matrix_betas: reconstructed interaction matrix of betas
 #' @export
@@ -25,7 +25,7 @@ reconstruct_matrix_growthrates <-function(parameters,sim_args){
 
     return(list(growthrates=r, interaction_matrix=A))
 
-  } else if (sim_args$model=="Baker"){
+  } else if (sim_args$model=="Bimler-Baker"){
 
     A_nonzero_values <- parameters[n_species+seq(1, sim_args$num_params_alphas)]
     A_values <- rep(0, n_species^2)

@@ -1,6 +1,6 @@
-#' @title Summary of ecosystem features for Baker model
+#' @title Summary of ecosystem features for the Bimler-Baker model
 #' @description
-#' Tests the feasibility and stability of a vector of sampled parameters for the Baker model
+#' Tests the feasibility and stability of a vector of sampled parameters for the Bimler-Baker model
 #'
 #' @param parameters a vector of sampled parameters
 #' @param sim_args a list of arguments as returned by \link[EEMtoolbox]{args_function}

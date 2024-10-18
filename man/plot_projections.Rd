@@ -25,7 +25,7 @@ plot_projections(
 
 \item{time_step_len}{length of each time step, default = 0.01}
 
-\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker" and "Gompertz".}
+\item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker" and "Gompertz".}
 
 \item{derivative}{derivative function. Default \link[EEMtoolbox]{derivative_func}}
 

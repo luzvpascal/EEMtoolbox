@@ -15,7 +15,7 @@ reconstruct_matrix_growthrates(parameters, sim_args)
 A list of 2 elements
 growthrates: a vector of arguments defining the problem,
 interaction_matrix: reconstructed interaction matrix.
-If model is Baker,
+If model is Bimler-Baker,
 interaction_matrix_alphas: reconstructed interaction matrix of alphas
 interaction_matrix_betas: reconstructed interaction matrix of betas
 }

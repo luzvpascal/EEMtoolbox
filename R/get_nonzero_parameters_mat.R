@@ -1,7 +1,7 @@
 #' @title List of non-zero parameters
 #' @description
 #' Array of indicating if a parameter in the interaction matrix is skipped (yes=1) or not (no=0), as well as the interaction sign (upper and lower bounds)
-#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
+#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
 #' @return A list
 #' keep_parameters : parameter skipped (yes=1) or not (no=0)
 #' lower_interaction_bound: lower bounds of each parameter sign

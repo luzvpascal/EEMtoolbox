@@ -1,13 +1,13 @@
 #' @title Generation of model ensembles
 #' @description
 #' Generation of model ensembles based on generalized Lotka Volterra, and the other two model structures, generating algorithms include Approximate Bayesian Computation methods and standard ensemble ecosystem modelling (Baker et al., 2017)
-#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
+#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
 #' @param upper_bounds_growth_rate upper bound of growth rates. Input can be one number (same upper bound for all species) or a vector of growth rates upper bounds for each species. Default 5
 #' @param lower_bounds_growth_rate lower bound of growth rates. Input can be one number (same lower bound for all species) or a vector of growth rates lower bounds for each species. Default 0
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
-#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Baker", "Gompertz" and "customized"
-#' @param algorithm algorithm used for sampling. Default "standard EEM" (Baker et al, 2017), options include "SMC-ABC" (Vollert et al., 2023)
-#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
+#' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"
+#' @param algorithm algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "EEM-SMC" (Vollert et al., 2023)
+#' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure). Default discrepancy_continuous_sum
 #' @param sampler sampling function that generates random vectors from the joint prior distribution. Default EEMtoolbox::sampler function (uniform)
 #' @param trans_f transform of prior parameter space to ensure unbounded support for MCMC sampling. Default EEMtoolbox::uniform_transform
@@ -33,7 +33,7 @@ EEM <- function(interaction_matrix,
                 lower_bounds_growth_rate=0,
                 n_ensemble=5000,
                 model="GLV",
-                algorithm="standard EEM",
+                algorithm="standard-EEM",
                 summ_func=EEMtoolbox::summarise_ecosystem_features,
                 disc_func=EEMtoolbox::discrepancy_continuous_sum,
                 sampler=EEMtoolbox::uniform_sampler,
@@ -67,9 +67,9 @@ EEM <- function(interaction_matrix,
   stopifnot(is.numeric(n_ensemble),
             (n_ensemble)>0)
   #model tests
-  stopifnot(((model=="GLV")|(model=="Baker")|(model=="Gompertz")|(model=="customized")))
+  stopifnot(((model=="GLV")|(model=="Bimler-Baker")|(model=="Gompertz")|(model=="customized")))
   #algorithm
-  stopifnot(((algorithm=="SMC-ABC")|(algorithm=="standard EEM")))
+  stopifnot(((algorithm=="EEM-SMC")|(algorithm=="standard-EEM")))
   #summ_func
   stopifnot(class(summ_func)=="function")
   #disc_func
@@ -111,8 +111,8 @@ EEM <- function(interaction_matrix,
                                         model=model)
 
   ## RUNNING search algorithms####
-  if (algorithm == "SMC-ABC"){
-    print('Begin SMC-ABC search method')
+  if (algorithm == "EEM-SMC"){
+    print('Begin EEM-SMC search method')
     outputs <- EEMtoolbox::EEM_SMC_method(sim_args,
                                           summ_func,
                                           disc_func,
@@ -127,7 +127,7 @@ EEM <- function(interaction_matrix,
                                           p_acc_min,
                                           n_ensemble,
                                           n_cores)
-  } else if ((algorithm=="standard EEM")){
+  } else if ((algorithm=="standard-EEM")){
     print('Begin standard search method')
     outputs <- EEMtoolbox::EEM_standard_method(sim_args,
                                                summ_func,

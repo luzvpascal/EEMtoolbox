@@ -1,26 +1,26 @@
 #' @title List of non-zero parameters
 #' @description
 #' Array of indicating if a parameter in the interaction matrix is skipped (yes=1) or not (no=0), as well as the interaction sign (upper and lower bounds)
-#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
+#' @param interaction_matrix interaction signs matrix. If model is GLV or Gompertz it can be input as a single matrix of interactions or as a list of matrices defining lower and upper bounds for interaction terms lower first and upper second.     #if model is Bimler-Baker, the interaction_matrix has to be a list of two lists, the first list contains matrices defining lower and upper bounds of alphas, the second list contains matrices defining lower and upper bounds of betas
 #' @param n_species number of species in the network
-#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Baker", "Adams" and "customized"
+#' @param model model representing species interactions, default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"
 #' @return A list
 #' keep_parameters : parameter kept (yes=1) or not (no=0)
 #' lower_interaction_bound: lower bounds of each parameter sign
 #' upper_interaction_bound: upper bounds of each parameter sign
 #' num_params: total number of unknown parameters
 #'
-#' Baker model only: keep_parameters_alphas : parameter kept (yes=1) or not (no=0)
-#' Baker model only: keep_parameters_betas : parameter kept (yes=1) or not (no=0)
+#' Bimler-Baker model only: keep_parameters_alphas : parameter kept (yes=1) or not (no=0)
+#' Bimler-Baker model only: keep_parameters_betas : parameter kept (yes=1) or not (no=0)
 
-#' Baker model only: num_params_alphas: total number of unknown alpha parameters
-#' Baker model only: num_params_betas: total number of unknown beta parameters
+#' Bimler-Baker model only: num_params_alphas: total number of unknown alpha parameters
+#' Bimler-Baker model only: num_params_betas: total number of unknown beta parameters
 
-#' Baker model only: lower_interaction_bound_alphas: lower bounds of each alpha parameter sign
-#' Baker model only: upper_interaction_bound_alphas: upper bounds of each alpha parameter sign
+#' Bimler-Baker model only: lower_interaction_bound_alphas: lower bounds of each alpha parameter sign
+#' Bimler-Baker model only: upper_interaction_bound_alphas: upper bounds of each alpha parameter sign
 
-#' Baker model only: lower_interaction_bound_betas: lower bounds of each beta parameter sign
-#' Baker model only: upper_interaction_bound_betas: upper bounds of each beta parameter sign
+#' Bimler-Baker model only: lower_interaction_bound_betas: lower bounds of each beta parameter sign
+#' Bimler-Baker model only: upper_interaction_bound_betas: upper bounds of each beta parameter sign
 
 #' @export
 get_nonzero_parameters <- function(interaction_matrix,n_species,model="GLV"){
@@ -37,7 +37,7 @@ get_nonzero_parameters <- function(interaction_matrix,n_species,model="GLV"){
                 num_params= n_species+ sum(as.numeric(list_nonzero_parameters$keep_parameters))
                 )
            )
-  } else if (model=="Baker"){
+  } else if (model=="Bimler-Baker"){
     list_nonzero_alphas <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix[[1]])
     list_nonzero_betas <- EEMtoolbox::get_nonzero_parameters_mat(interaction_matrix[[2]])
 
