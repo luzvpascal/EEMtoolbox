@@ -55,7 +55,7 @@ test_that("EEM tests", {
   ## return matrix SMC ABC
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
-                             algorithm = "SMC-ABC",
+                             algorithm = "EEM-SMC",
                              output_matrix = TRUE)
 
   expect_true(class(outputs)[1]=="list")
@@ -66,7 +66,7 @@ test_that("EEM tests", {
   ## return matrix standard EEM
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
-                             algorithm = "standard EEM",
+                             algorithm = "standard-EEM",
                              output_matrix = TRUE)
 
   expect_true(class(outputs)[1]=="list")
