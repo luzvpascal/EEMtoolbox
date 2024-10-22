@@ -6,7 +6,7 @@
 #' @param lower_bounds_growth_rate lower bound of growth rates. Input can be one number (same lower bound for all species) or a vector of growth rates lower bounds for each species. Default 0
 #' @param n_ensemble Number of desired ensemble members. Default to 5000
 #' @param model model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"
-#' @param algorithm algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "EEM-SMC" (Vollert et al., 2023)
+#' @param algorithm algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "SMC-EEM" (Vollert et al., 2023)
 #' @param summ_func function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.
 #' @param disc_func summary statistic (discrepancy measure). Default discrepancy_continuous_sum
 #' @param sampler sampling function that generates random vectors from the joint prior distribution. Default EEMtoolbox::sampler function (uniform)
@@ -69,7 +69,7 @@ EEM <- function(interaction_matrix,
   #model tests
   stopifnot(((model=="GLV")|(model=="Bimler-Baker")|(model=="Gompertz")|(model=="customized")))
   #algorithm
-  stopifnot(((algorithm=="EEM-SMC")|(algorithm=="standard-EEM")))
+  stopifnot(((algorithm=="SMC-EEM")|(algorithm=="standard-EEM")))
   #summ_func
   stopifnot(class(summ_func)=="function")
   #disc_func
@@ -111,8 +111,8 @@ EEM <- function(interaction_matrix,
                                         model=model)
 
   ## RUNNING search algorithms####
-  if (algorithm == "EEM-SMC"){
-    print('Begin EEM-SMC search method')
+  if (algorithm == "SMC-EEM"){
+    print('Begin SMC-EEM search method')
     outputs <- EEMtoolbox::EEM_SMC_method(sim_args,
                                           summ_func,
                                           disc_func,

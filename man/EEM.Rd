@@ -40,7 +40,7 @@ EEM(
 
 \item{model}{model representing species interactions. Default "GLV" (Generalized Lotka Volterra). options include "Bimler-Baker", "Gompertz" and "customized"}
 
-\item{algorithm}{algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "EEM-SMC" (Vollert et al., 2023)}
+\item{algorithm}{algorithm used for sampling. Default "standard-EEM" (Baker et al, 2017), options include "SMC-EEM" (Vollert et al., 2023)}
 
 \item{summ_func}{function calculating equilibrium points and real parts of the Jacobians eigenvalues to summarise ecosystem features. Default =summarise_ecosystem_features_GLV. Options include summarise_ecosystem_features_Baker (automatically chosen if model="Bimler-Baker") and summarise_ecosystem_features_Gompertz, (automatically chosen if model="Gompertz"). Needs to be defined if model="customized" chosen.}
 

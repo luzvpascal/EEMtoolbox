@@ -6,7 +6,7 @@ test_that("EEM tests", {
   #return parameter values SMC ABC
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
-                             algorithm = "EEM-SMC",
+                             algorithm = "SMC-EEM",
                              n_ensemble=5000,
                              output_matrix = FALSE,
                              output_args = TRUE,
@@ -25,7 +25,7 @@ test_that("EEM tests", {
   #return parameter values SMC ABC
   outputs <- EEMtoolbox::EEM(EEMtoolbox::dingo_matrix,
                              model = model_test,
-                             algorithm = "EEM-SMC",
+                             algorithm = "SMC-EEM",
                              n_ensemble=5000,
                              output_matrix = FALSE,
                              output_args = TRUE,
@@ -55,7 +55,7 @@ test_that("EEM tests", {
   ## return matrix SMC ABC
   outputs <- EEMtoolbox::EEM(interaction_matrix,
                              model = model_test,
-                             algorithm = "EEM-SMC",
+                             algorithm = "SMC-EEM",
                              output_matrix = TRUE)
 
   expect_true(class(outputs)[1]=="list")
