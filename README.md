@@ -29,7 +29,7 @@ invisible(lapply(packages_to_install, install_if_not_installed))
 ```
 
 To install EEMtoolbox, download the repository as a zip file.
-Rename the repository as EEMtoolbox.zip, then run the following code
+Rename the file as EEMtoolbox.zip, then run the following code
 ``` r
 devtools::install_local("path_to_file/EEMtoolbox.zip", repos = NULL, type = "win.binary")
 ```
