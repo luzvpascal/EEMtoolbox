@@ -14,8 +14,8 @@ test_that("plot_projections works", {
   expect_true(class(plot)[2]=="ggplot")
 
   #non-scaled average
-  output <- EEMtoolbox::EEM(matrix(c(-1,-1,1,-1),ncol=2),average=FALSE)
-  plot <- EEMtoolbox::plot_projections(output,  c(1,1), t_window=c(0,1))
+  output <- EEMtoolbox::EEM(matrix(c(-1,-1,1,-1),ncol=2))
+  plot <- EEMtoolbox::plot_projections(output,  c(1,1), t_window=c(0,1),average=FALSE)
 
 
   expect_true(class(plot)[1]=="gg")
