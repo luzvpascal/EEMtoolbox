@@ -44,7 +44,7 @@ test_that("summarise ecosystem features works", {
   outputs <- EEMtoolbox::EEM(interaction_matrix = list(interaction_matrix_list_alphas,
                                                        interaction_matrix_list_betas),
                              model = model_test,
-                             algorithm = "EEM-SMC",
+                             algorithm = "SMC-EEM",
                              output_matrix = FALSE,
                              output_args = TRUE,
                              output_discrepancy = TRUE,
