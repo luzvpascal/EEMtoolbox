@@ -67,8 +67,8 @@ EEM_standard_method <- function(sim_args,
     idx <- which(outputs$part_s==0)
     sims <- outputs$sims
     part_s <- outputs$part_s[idx]
-    part_vals <- outputs$part_vals[idx,]
-    part_sim <- outputs$part_sim[idx,]
+    part_vals <- matrix(outputs$part_vals[idx,], ncol=ncol(outputs$part_vals))
+    part_sim <- matrix(outputs$part_sim[idx,], ncol=ncol(outputs$part_sim))
     prior_sample <- outputs$prior_sample
     print(paste("Number of parameter sets found so far:",
                 min(sum(outputs$part_s==0),n_ensemble), "/", n_ensemble))
