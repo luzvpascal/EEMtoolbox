@@ -26,102 +26,14 @@ plot_projections <- function(parameters,
                         species_names=NA,
                         average=TRUE){
 
-  ode_solve_it <- function(pars,
-                           initial_condition,
-                           t_window,
-                           time_step_len,
-                           model,
-                           derivative,
-                           scaled){
-    #if scaled: find steady state, initial condition is scaled to steady state
-    if (scaled) {
-      if (model %in% c("GLV", "Gompertz")){
-        steady_state <- solve(pars$interaction_matrix,-pars$growthrates)
-        if (model=="Gompertz"){
-          steady_state <- exp(steady_state)
-        }
-      } else if (model =="Bimler-Baker"){
-        r <- pars$growthrates
-        A <- pars$interaction_matrix_alphas
-        B <- pars$interaction_matrix_betas
-
-        R <- r
-        P <- diag(A)
-        M <- A-diag(P)
-
-        fn <- function(N) {
-          output <- R*(1-exp(-M%*%N-P))+B%*%N #change to positive
-          return(output)
-        }
-        sol <- nleqslv::nleqslv(rep(100,length(r)), fn) #we give a large positive warmstart
-        steady_state <- sol$x
-      }
-      initial <- initial_condition*steady_state #initial condition is scaled to steady state
-    } else {
-      initial <- initial_condition #non-scaled to steady state
-    }
-    ## solve ODE
-    if (model %in% c("GLV", "Gompertz")){
-      projections <- as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value = pars$interaction_matrix,
-                                                         growth_rate=pars$growthrates,
-                                                         initial,
-                                                         t_window,
-                                                         time_step_len,
-                                                         model,
-                                                         derivative))
-    } else if (model =="Bimler-Baker") {
-      projections <-as.data.frame(EEMtoolbox::ode_solve(interaction_matrix_value =
-                                            list(pars$interaction_matrix_alphas,
-                                                 pars$interaction_matrix_betas),
-                                          growth_rate=pars$growthrates,
-                                          initial,
-                                          t_window,
-                                          time_step_len,
-                                          model,
-                                          derivative))
-    }
-
-    if (scaled){#if scaled to steady state, scale abundances
-      projections[,-1] <- projections[,-1]/matrix(steady_state,
-                                                  ncol=length(steady_state),
-                                                  nrow=nrow(projections),
-                                                  byrow=TRUE)
-    }
-    return(projections)
-  }
-
-  abundance <- lapply(parameters,ode_solve_it, model=model,
-                                            initial_condition=initial_condition,
-                                            t_window=t_window,
-                                            time_step_len=time_step_len,
-                                            derivative,
-                                            scaled)
-
-  abundance <- dplyr::bind_rows(abundance, .id="sim")
-  if (!is.na(species_names[1])){
-    names(abundance) <- c("sim", "time", species_names)
-  }
-
-  ## remove projections that could not be solved ####
-  remove_indexes <-  dplyr::group_by(abundance, sim)
-  remove_indexes <-  dplyr::summarise(remove_indexes, max_time=max(time))
-  remove_indexes <-  dplyr::filter(remove_indexes, max_time < t_window[2])
-  remove_indexes <- remove_indexes$sim
-
-  if (length(remove_indexes)>0){
-    print("The ODE could not be solved for parameter sets (index):")
-    print(remove_indexes)
-    print("These parameter sets will be removed from the abundance predictions")
-
-    #remove parameter sets#
-    # abundance <- dplyr::filter(abundance, !(sim %in% remove_indexes))
-    abundance <- abundance[which(!(abundance$sim %in% remove_indexes)),]
-  }
-
-  #pivot for plotting
-  abundance <- tidyr::pivot_longer(abundance,
-                                   !c(time,sim), names_to = c("species"), values_to = "pop")
-
+  abundance <- calculate_projections(parameters,
+                                      initial_condition,
+                                      t_window,
+                                      time_step_len,
+                                      model,
+                                      derivative,
+                                      scaled,
+                                      species_names)
   # Add either the ribbon or individual trajectories based on the average variable
   if (average) {
     abundance <- dplyr::group_by(abundance, time, species)
