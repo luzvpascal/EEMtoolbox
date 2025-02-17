@@ -12,7 +12,7 @@
 #' @examples
 #' library(EEMtoolbox)
 #' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
-#' plot_projections(output,  c(1,1), t_window=c(0,1))
+#' calculate_projections(output,  c(1,1), t_window=c(0,1))
 #' @return ggplot of abundances per species
 #' @export
 calculate_projections <- function(parameters,
