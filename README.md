@@ -36,4 +36,4 @@ devtools::install_local("path_to_file/EEMtoolbox.zip", repos = NULL, type = "win
 ```
 
 # Getting help
-To seek support, report bugs or give suggestions, contact Luz V. Pascal at: luz.pascal96@gmail.com
+To seek support, report bugs or give suggestions, contact [name of the corresponding author] at: [email of the corresponding author]
