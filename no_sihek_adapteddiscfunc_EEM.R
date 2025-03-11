@@ -22,7 +22,7 @@ parameters_GLV_nosihek_adapteddiscfunc_200 <- EEM(
                                                         1000/20000000, #4
                                                         10000/20000000, #5
                                                         1000000/20000000, #6
-                                                        10000000/20000000, #7
+                                                        1000000/20000000, #7
                                                         100000/20000000), #8
                                        target_upper = c(5000/20000000, #1
                                                         90000/20000000, #2
@@ -30,7 +30,7 @@ parameters_GLV_nosihek_adapteddiscfunc_200 <- EEM(
                                                         10000/20000000, #4
                                                         90000/20000000, #5
                                                         90000000/20000000, #6
-                                                        900000000/20000000, #7
+                                                        90000000/20000000, #7
                                                         900000/20000000)) #8
   },
   n_cores = 3)
@@ -38,7 +38,7 @@ parameters_GLV_nosihek_adapteddiscfunc_200 <- EEM(
  source("add_species_names.R")
 
 parameters_GLV_nosihek_adapteddiscfunc_200 <-
-  add_species_names(parameters_GLV_nosihek_adapteddiscfunc,
+  add_species_names(parameters_GLV_nosihek_adapteddiscfunc_200,
                     c("seabirds",
                       "terrestrial crabs",
                       "carnivorous crabs",
@@ -76,7 +76,7 @@ select_EEM_outputs(ensemble = parameters_GLV_nosihek_adapteddiscfunc_200,
                                     1000/20000000, #4
                                     10000/20000000, #5
                                     1000000/20000000, #6
-                                    10000000/20000000, #7
+                                    1000000/20000000, #7
                                     100000/20000000), #8
                    target_upper = c(5000/20000000, #1
                                     90000/20000000, #2
@@ -84,7 +84,7 @@ select_EEM_outputs(ensemble = parameters_GLV_nosihek_adapteddiscfunc_200,
                                     10000/20000000, #4
                                     90000/20000000, #5
                                     90000000/20000000, #6
-                                    900000000/20000000, #7
+                                    90000000/20000000, #7
                                     900000/20000000),
                    sim_args = arg)
-# it works?
+# it works¨
