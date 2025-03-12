@@ -5,7 +5,18 @@ Authors@R: c(
     person("Luz Valerie", "Pascal", , "luz.pascal96@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5389-4461")),
     person("Sarah A.", "Vollert", role = "ctb",
-           comment = c(ORCID = "0000-0002-0892-0974"))
+           comment = c(ORCID = "0000-0002-0892-0974")),
+    person("Malyon D.", "Bimler", role = "ctb",
+           comment = c(ORCID = "0000-0003-0059-2360")),
+    person("Christopher M.", "Baker", role = "ctb"),
+    person("Maude", "Vernet", role = "ctb",
+           comment = c(ORCID = "0009-0003-0907-5279")),
+    person("Stefano", "Canessa", role = "ctb",
+           comment = c(ORCID = "0000-0002-0932-826X")),
+    person("Christopher", "Drovandi", role = "ctb",
+           comment = c(ORCID = "0000-0001-9222-8763")),
+    person("Matthew P.", "Adams", role = "ctb",
+           comment = c(ORCID = "0000-0003-4875-0225"))
   )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
