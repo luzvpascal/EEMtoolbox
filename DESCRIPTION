@@ -1,9 +1,12 @@
 Package: EEMtoolbox
 Title: Ensemble ecosystem modelling toolbox
 Version: 0.0.1.0000
-Authors@R:
-    person("XXX", "XXX", , "XXX@hXXX", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: c(
+    person("Luz Valerie", "Pascal", , "luz.pascal96@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5389-4461")),
+    person("Sarah A.", "Vollert", role = "ctb",
+           comment = c(ORCID = "0000-0002-0892-0974"))
+  )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
