@@ -1,4 +1,5 @@
 load("parameters_GLV_plussishek_adapteddiscfunc_200.RData")
+load("parameters_GLV_nosihek_adapteddiscfunc_200.RData")
 
 ##### implement artificial recruitement #####
 
@@ -10,7 +11,7 @@ source("adapted_ode_solve.R")
 
 projections_200_nonscaled_upperbounds_recruitment <-
   adapted_calculate_projections(parameters_GLV_plussishek_adapteddiscfunc_200,
-                                initial_condition = c(6/20000000,
+                                initial_condition = c(9/20000000,
                                                       5000/20000000, #1
                                                       90000/20000000, #2
                                                       1500/20000000, #3
@@ -22,7 +23,14 @@ projections_200_nonscaled_upperbounds_recruitment <-
                                 t_window = c(0, 10),
                                 derivative = EEMtoolbox::derivative_func,
                                 scaled = FALSE,
-                                species_names = species_names)
+                                species_names = species_names,
+                                init_release_amount = 9,
+                                init_release_timepoints = 1,
+                                sustain_release_amount = 5,
+                                sustain_release_timepoints = c(3, 5, 7, 9),
+                                sustain_release_threshold = 20,
+                                introduced_species_index = 1,
+                                time_step_len = 0.01)
 
 save(projections_200_nonscaled_upperbounds_recruitment,
      file = "projections_200_nonscaled_upperbounds_recruitment.RData")
@@ -40,7 +48,7 @@ abundance <- summarise(abundance,
                        lower = quantile(pop, 0.025))
 
 #basic plot
-ggplot(abundance) +
+ggplot(abundance[1:1000,]) +
   guides(fill = guide_legend(title = "Species"),
          color = guide_legend(title = "Species")) +
   xlab("Time") +
