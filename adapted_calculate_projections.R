@@ -36,7 +36,8 @@ adapted_calculate_projections <-
            sustain_release_amount = 0,
            sustain_release_timepoints = NA,
            sustain_release_threshold = NA,
-           introduced_species_index = 1) {
+           introduced_species_index = 1,
+           multiplier = 1) {
 
   # We'll pass the recruitment schedule via the parameters list.
   # Define the release times over the time window:
@@ -197,6 +198,8 @@ adapted_calculate_projections <-
                                    !c(time,sim), #select all columns except time and sim
                                    names_to = c("species"),
                                    values_to = "pop")
+
+  abundance$pop <- abundance$pop*multiplier #multiply by the multiplier
 
   return(abundance)
 }
