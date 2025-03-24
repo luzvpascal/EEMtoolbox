@@ -11,10 +11,10 @@ adapted_ode_solve <- function(initial_condition,
 
   time_steps <- seq(from = t_window[1],to = t_window[2],by = time_step_len) #vector of time steps
 
-  pars  <- list(interaction_matrix_value = interaction_matrix_value,
-                growth_rate  = growth_rate,
-                model = model,
-                recruitment_pars = recruitment_pars) #added, parameters related to recruitement
+  pars  <- c(list(interaction_matrix_value = interaction_matrix_value,
+                  growth_rate  = growth_rate,
+                  model = model),
+             recruitment_pars) #added, parameters related to recruitment
 
   out <- deSolve::ode(y = initial_condition,
                       times = time_steps,
@@ -22,6 +22,6 @@ adapted_ode_solve <- function(initial_condition,
                       parms = pars,
                       events = list(func = recruitment_event,
                                     time = recruitment_times))
-
+  print(pars) #temporary
   return(out)
 }

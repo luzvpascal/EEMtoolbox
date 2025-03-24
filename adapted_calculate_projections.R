@@ -44,24 +44,26 @@ adapted_calculate_projections <-
   recruitment_times <-
     sort(unique(c(init_release_timepoints, sustain_release_timepoints)))
 
-  recruitment_event <- function(time, state, pars) {
+  recruitment_event <- function(time, y, pars) {
     # Check if current time is an initial release time:
     # If so, add the initial release amount to the introduced species:
     if (time %in% pars$init_release_timepoints) {
-      state[pars$introduced_species_index] <-
-        #in this case, state is the current vector of species abundance at a given time
-        state[pars$introduced_species_index] + pars$init_release_amount
+      cat("Initial recruitment triggered at time:", time, "\n")
+      y[pars$introduced_species_index] <-
+        #in this case, y is the current vector of species abundance at a given time
+        y[pars$introduced_species_index] + pars$init_release_amount
     }
 
     # Check if current time is a sustaining release time AND abundance is below threshold:
     # If so, add the sustaining release amount to the introduced species:
     if (time %in% pars$sustain_release_timepoints &&
-        state[pars$introduced_species_index] < pars$sustain_release_threshold) {
-      state[pars$introduced_species_index] <-
-        state[pars$introduced_species_index] + pars$sustain_release_amount
+        y[pars$introduced_species_index] < pars$sustain_release_threshold) {
+      cat("Sustaining recruitment triggered at time:", time, "\n")
+      y[pars$introduced_species_index] <-
+        y[pars$introduced_species_index] + pars$sustain_release_amount
     }
 
-    return(state)
+    return(y)
   }
 
   #parameters we will need for the ode_solve_it function
