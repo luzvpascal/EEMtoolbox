@@ -198,8 +198,9 @@ adapted_calculate_projections <-
                                    !c(time,sim), #select all columns except time and sim
                                    names_to = c("species"),
                                    values_to = "pop")
-
-  abundance$pop <- abundance$pop*multiplier #multiply by the multiplier
+  if(scaled) {
+    abundance$pop <- abundance$pop*multiplier #multiply by the multiplier
+  }
 
   return(abundance)
 }
