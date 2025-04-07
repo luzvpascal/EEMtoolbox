@@ -200,12 +200,12 @@ test_intro_projections_artrec <-
                                 t_window = c(0, 20),
                                 scaled = FALSE,
                                 species_names = species_names_intro,
-                                init_release_amount = 9/n.hec,
-                                init_release_timepoints = 1,
-                                sustain_release_amount = 5/n.hec,
-                                sustain_release_timepoints = c(3, 5, 7, 9, 11,
+                                init_intervention_amount = 9/n.hec,
+                                init_intervention_timepoints = 1,
+                                sustain_intervention_amount = 5/n.hec,
+                                sustain_intervention_timepoints = c(3, 5, 7, 9, 11,
                                                                13, 15, 17, 19),
-                                sustain_release_threshold = 20/n.hec,
+                                sustain_intervention_threshold = 20/n.hec,
                                 introduced_species_index = 1,
                                 time_step_len = 0.01,
                                 multiplier = n.hec)
@@ -261,7 +261,7 @@ grid.arrange(test_plot_eq, test_plot_intro, test_plot_intro_artrec, ncol = 3)
 source("add_introduced_species.R")
 
 test_EEM_palm <-
-  add_introduced_species(native_parameters = test_EEM_eq_short,
+  add_introduced_species(native_parameters = test_EEM_eq,
                          introduced_lower_bound_growth_rate = 0,
                          introduced_upper_bound_growth_rate = 3,
                          introduced_self_sign = -1,
@@ -270,13 +270,15 @@ test_EEM_palm <-
                          introduced_k = 2130000/n.hec)
 
 ## =============================================================================
-## 9. plot projections with palm trees and with artificial controle
+## 9. plot projections with palm trees and with artificial control
 ## =============================================================================
 
-initial_palm <- c(2130000/n.hec, mean_eq)
+initial_palm <- c(0/n.hec, mean_eq)
 
 species_names_palm <- c("palm trees",
                          colnames(test_EEM_eq_short[[1]]$interaction_matrix))
+
+source("adapted_calculate_projections.R")
 
 test_palm_projections <-
   adapted_calculate_projections(test_EEM_palm,
@@ -284,38 +286,35 @@ test_palm_projections <-
                                 t_window = c(0, 20),
                                 scaled = FALSE,
                                 species_names = species_names_palm,
-                                init_release_amount = -100000/n.hec,
-                                init_release_timepoints = 1:20,
+                                mode = "removal",
+                                init_intervention_amount = 100000/n.hec,
+                                init_intervention_timepoints = 1,
+                                sustain_intervention_amount = -3350000/n.hec,
+                                sustain_intervention_timepoints = 14:20,
+                                sustain_intervention_threshold = 0/n.hec,
                                 introduced_species_index = 1,
                                 time_step_len = 0.01,
                                 multiplier = n.hec)
 
+save(test_palm_projections, file = "test_palm_projections.RData")
+
 a <- test_palm_projections
 
-for (i in 1:length(a$time)) {
-  if (a$time[i] %in% seq(0,20,0.01)) {
-    a$time[i] <- a$time[i]
-  } else {
-    a$time[i] <- round(a$time[i],2)
-  }
-}
+library(dplyr)
 
-for (i in unique(a$sim)) {
-  for (j in unique(a$species)) {
-    for (k in seq(0,20,0.01)) {
-      if (nrow(a[a$sim == i & a$species == j & a$time == k,]) == 1) {
-        next
-      } else {
-        a$pop[a$sim == i & a$species == j & a$time == k] <- mean(a$pop[a$sim == i & a$species == j & a$time == k])
-      }
-    }
-  }
-  }
-
-a <- unique(a)
+# a <- a %>%
+#   mutate(time = round(time, nchar(strsplit(
+#     as.character(0.01), "\\.")[[1]][2]))) %>%
+#   dplyr::group_by(sim, species, time) %>%
+#   dplyr::summarise(pop = mean(pop), .groups = "drop") %>%
+#   tidyr::complete(sim,
+#                   species,
+#                   time =
+#                     round(seq(0, 20, 0.01),
+#                           nchar(strsplit(as.character(0.01), "\\.")[[1]][2])),
+#                   fill = list(pop = 0))
 
 library(ggplot2)
-library(dplyr)
 
 test_abundance_palm <- group_by(test_palm_projections,
                                  time,

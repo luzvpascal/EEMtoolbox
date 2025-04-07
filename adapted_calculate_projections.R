@@ -9,11 +9,12 @@
 #' @param derivative derivative function. Default \link[EEMtoolbox]{derivative_func}
 #' @param scaled Boolean indicating if projections should be scaled to steady state. If true, the parameter initial_condition should be scaled too. Default FALSE
 #' @param species_names vector of strings for names of species. If NA plots only display species index number, . Default NA.
-#' @param init_release_amount number of individuals in initial releases, default = 0
-#' @param init_release_interval initial release interval, default = 0
-#' @param sustain_release_amount number of individuals in subsequent releases, default = 0
-#' @param sustain_release_interval subsequent release interval, default = NA
-#' @param sustain_release_threshold abundance threshold where subsequent releases stop, default = NA
+#' @param mode "recruitment" or "removal". Default "recruitment"
+#' @param init_intervention_amount number of individuals in initial interventions, default = 0
+#' @param init_intervention_interval initial intervention interval, default = 0
+#' @param sustain_intervention_amount number of individuals in subsequent interventions, default = 0
+#' @param sustain_intervention_interval subsequent intervention interval, default = NA
+#' @param sustain_intervention_threshold abundance threshold where subsequent interventions stop, default = NA
 #' @param introduced_species_index indicates which species in the index is the introduced one, default = 1
 #' @examples
 #' library(EEMtoolbox)
@@ -31,55 +32,63 @@ adapted_calculate_projections <-
            scaled=FALSE,
            species_names=NA,
            # Recruitment parameters:
-           init_release_amount = 0,
-           init_release_timepoints = NA,
-           sustain_release_amount = 0,
-           sustain_release_timepoints = NA,
-           sustain_release_threshold = NA,
+           mode = "recruitment", # "recruitment" or "removal"
+           init_intervention_amount = 0,
+           init_intervention_timepoints = NA,
+           sustain_intervention_amount = 0,
+           sustain_intervention_timepoints = NA,
+           sustain_intervention_threshold = NA,
            introduced_species_index = 1,
            multiplier = 1) {
 
   # We'll pass the recruitment schedule via the parameters list.
-  # Define the release times over the time window:
+  # Define the intervention times over the time window:
 
   recruitment_times <-
-    sort(unique(c(init_release_timepoints, sustain_release_timepoints)))
+    sort(unique(c(init_intervention_timepoints, sustain_intervention_timepoints)))
 
   recruitment_event <- function(time, y, pars) {
-    # Check if current time is an initial release time:
-    # If so, add the initial release amount to the introduced species:
-    if (time %in% pars$init_release_timepoints) {
+    # Check if current time is an initial intervention time:
+    # If so, add the initial intervention amount to the introduced species:
+    if (time %in% pars$init_intervention_timepoints) {
       cat("Initial recruitment triggered at time:", time, "\n")
       y[pars$introduced_species_index] <-
         #in this case, y is the current vector of species abundance at a given time
-        y[pars$introduced_species_index] + pars$init_release_amount
+        y[pars$introduced_species_index] + pars$init_intervention_amount
     }
-
-    # Check if current time is a sustaining release time AND abundance is below threshold:
-    # If so, add the sustaining release amount to the introduced species:
-    if (time %in% pars$sustain_release_timepoints &&
-        y[pars$introduced_species_index] < pars$sustain_release_threshold) {
-      cat("Sustaining recruitment triggered at time:", time, "\n")
-      y[pars$introduced_species_index] <-
-        y[pars$introduced_species_index] + pars$sustain_release_amount
-    }
-
+if (mode == "removal") {
+  if (time %in% pars$sustain_intervention_timepoints &&
+      y[pars$introduced_species_index] > pars$sustain_intervention_threshold) {
+    cat("Sustaining recruitment triggered at time:", time, "\n")
+    y[pars$introduced_species_index] <-
+      y[pars$introduced_species_index] + pars$sustain_intervention_amount
+  }
+} else if (mode == "recruitment") {
+  # Check if current time is a sustaining intervention time AND abundance is below threshold:
+  # If so, add the sustaining intervention amount to the introduced species:
+  if (time %in% pars$sustain_intervention_timepoints &&
+      y[pars$introduced_species_index] < pars$sustain_intervention_threshold) {
+    cat("Sustaining recruitment triggered at time:", time, "\n")
+    y[pars$introduced_species_index] <-
+      y[pars$introduced_species_index] + pars$sustain_intervention_amount
+  }
+}
     return(y)
   }
 
   #parameters we will need for the ode_solve_it function
-  recruitment_times <- sort(unique(c(init_release_timepoints,
-                                     sustain_release_timepoints))) # not sure if we need this!
+  recruitment_times <- sort(unique(c(init_intervention_timepoints,
+                                     sustain_intervention_timepoints))) # not sure if we need this!
 
   # Create a recruitment parameter list to pass to the ODE solver. This way, we
   # don't need to write them one after the other but rather keep them all
   # together.
   recruitment_pars <-
-    list(init_release_timepoints = init_release_timepoints,
-         sustain_release_timepoints = sustain_release_timepoints,
-         init_release_amount = init_release_amount,
-         sustain_release_amount = sustain_release_amount,
-         sustain_release_threshold = sustain_release_threshold,
+    list(init_intervention_timepoints = init_intervention_timepoints,
+         sustain_intervention_timepoints = sustain_intervention_timepoints,
+         init_intervention_amount = init_intervention_amount,
+         sustain_intervention_amount = sustain_intervention_amount,
+         sustain_intervention_threshold = sustain_intervention_threshold,
          introduced_species_index = introduced_species_index)
 
   ode_solve_it <- function(pars,
@@ -184,12 +193,11 @@ adapted_calculate_projections <-
   remove_indexes <- remove_indexes$sim
 
   if (length(remove_indexes) > 0) {
-    print("The ODE could not be solved for parameter sets (index):")
+    print("Following parameter sets could not be solved and were removed:")
     print(remove_indexes)
-    print("These parameter sets will be removed from the abundance predictions")
 
     #remove parameter sets#
-    # abundance <- dplyr::filter(abundance, !(sim %in% remove_indexes))
+    # abundance <- dplyr::filter(abundance, !(sim %in% remove_indexes)) #this line was already in green
     abundance <- abundance[which(!(abundance$sim %in% remove_indexes)),]
   }
 
@@ -200,7 +208,13 @@ adapted_calculate_projections <-
                                    values_to = "pop")
   if (scaled == FALSE) {
     abundance$pop <- abundance$pop*multiplier #multiply by the multiplier
-  }
+    for (i in 1:nrow(abundance)) {
+      if (abundance$pop[i] < 0) {
+        abundance$pop[i] <- 0
+        #here add something that since this point on the abundance has to stay 0 for this sim unless individuals are added OR do this earlier so that the GLV directly calculates from 0
+      }
+      }
+    }
 
   return(abundance)
 }

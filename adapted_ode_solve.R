@@ -9,7 +9,11 @@ adapted_ode_solve <- function(initial_condition,
                               recruitment_event,
                               recruitment_times){
 
-  time_steps <- seq(from = t_window[1],to = t_window[2],by = time_step_len) #vector of time steps
+  time_steps <- round(seq(from = t_window[1],
+                          to = t_window[2],
+                          by = time_step_len),
+                      nchar(strsplit(
+                        as.character(time_step_len), "\\.")[[1]][2])) #vector of time steps -> to make sure it is actually the correct sequence, there is a bug with the seq() of r
 
   pars  <- c(list(interaction_matrix_value = interaction_matrix_value,
                   growth_rate  = growth_rate,
