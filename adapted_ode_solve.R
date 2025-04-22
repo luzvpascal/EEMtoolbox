@@ -26,6 +26,5 @@ adapted_ode_solve <- function(initial_condition,
                       parms = pars,
                       events = list(func = recruitment_event,
                                     time = recruitment_times))
-  print(pars) #temporary
   return(out)
 }

@@ -20,7 +20,7 @@
 #' library(EEMtoolbox)
 #' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
 #' calculate_projections(output,  c(1,1), t_window=c(0,1))
-#' @return ggplot of abundances per species
+#' @return dataset of species abundances over time
 #' @export
 adapted_calculate_projections <-
   function(parameters,
@@ -41,9 +41,13 @@ adapted_calculate_projections <-
            introduced_species_index = 1,
            multiplier = 1) {
 
+    #Create a loading bar object to see where you're at
+  pb <- txtProgressBar(min = 0,
+                       max = length(parameters),
+                       style = 3)
+
   # We'll pass the recruitment schedule via the parameters list.
   # Define the intervention times over the time window:
-
   recruitment_times <-
     sort(unique(c(init_intervention_timepoints, sustain_intervention_timepoints)))
 
@@ -51,7 +55,6 @@ adapted_calculate_projections <-
     # Check if current time is an initial intervention time:
     # If so, add the initial intervention amount to the introduced species:
     if (time %in% pars$init_intervention_timepoints) {
-      cat("Initial recruitment triggered at time:", time, "\n")
       y[pars$introduced_species_index] <-
         #in this case, y is the current vector of species abundance at a given time
         y[pars$introduced_species_index] + pars$init_intervention_amount
@@ -59,7 +62,6 @@ adapted_calculate_projections <-
 if (mode == "removal") {
   if (time %in% pars$sustain_intervention_timepoints &&
       y[pars$introduced_species_index] > pars$sustain_intervention_threshold) {
-    cat("Sustaining recruitment triggered at time:", time, "\n")
     y[pars$introduced_species_index] <-
       y[pars$introduced_species_index] + pars$sustain_intervention_amount
   }
@@ -68,7 +70,6 @@ if (mode == "removal") {
   # If so, add the sustaining intervention amount to the introduced species:
   if (time %in% pars$sustain_intervention_timepoints &&
       y[pars$introduced_species_index] < pars$sustain_intervention_threshold) {
-    cat("Sustaining recruitment triggered at time:", time, "\n")
     y[pars$introduced_species_index] <-
       y[pars$introduced_species_index] + pars$sustain_intervention_amount
   }
@@ -168,17 +169,20 @@ if (mode == "removal") {
     return(projections)
   }
 
-  abundance <- lapply(parameters,
-                      ode_solve_it,
-                      model = model,
-                      initial_condition = initial_condition,
-                      t_window = t_window,
-                      time_step_len = time_step_len,
-                      derivative,
-                      scaled,
-                      recruitment_event = recruitment_event, # added
-                      recruitment_times = recruitment_times, # added
-                      recruitment_pars = recruitment_pars) # added
+  abundance <- lapply(seq_len(length(parameters)),
+                      function(i) {
+                        setTxtProgressBar(pb, i)
+                        ode_solve_it(parameters[[i]],
+                                     model = model,
+                                     initial_condition = initial_condition,
+                                     t_window = t_window,
+                                     time_step_len = time_step_len,
+                                     derivative,
+                                     scaled,
+                                     recruitment_event = recruitment_event, # added
+                                     recruitment_times = recruitment_times, # added
+                                     recruitment_pars = recruitment_pars) # added
+                      })
 
   abundance <- dplyr::bind_rows(abundance, .id = "sim")
 
