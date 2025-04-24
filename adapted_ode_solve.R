@@ -2,12 +2,13 @@ adapted_ode_solve <- function(initial_condition,
                               interaction_matrix_value,
                               growth_rate,
                               t_window,
-                              time_step_len = 0.01,
+                              time_step_len,
                               model = "GLV",
                               derivative = EEMtoolbox::derivative_func,
                               recruitment_pars,
                               recruitment_event,
-                              recruitment_times){
+                              recruitment_times,
+                              extinction_thresholds){
 
   time_steps <- round(seq(from = t_window[1],
                           to = t_window[2],
@@ -18,13 +19,15 @@ adapted_ode_solve <- function(initial_condition,
   pars  <- c(list(interaction_matrix_value = interaction_matrix_value,
                   growth_rate  = growth_rate,
                   model = model),
-             recruitment_pars) #added, parameters related to recruitment
+             recruitment_pars, #added, parameters related to recruitment
+             list(extinction_thresholds = extinction_thresholds))
 
   out <- deSolve::ode(y = initial_condition,
                       times = time_steps,
                       func = derivative,
                       parms = pars,
                       events = list(func = recruitment_event,
-                                    time = recruitment_times))
+                                    time = recruitment_times)) # added
+
   return(out)
 }
