@@ -192,6 +192,17 @@ EEM_sihek <-
                            c(-1, -1, -1, -1, -1, -1, -1, 0),
                          introduced_k = 0.002/divider) #40/200ha = 0.002/100m^2
 
+EEM_sihek <- add_species_names(EEM_sihek,
+                               species_names = c("sihek",
+                                                 "seabirds",
+                                                 "terrestrial crabs",
+                                                 "carnivorous crabs",
+                                                 "cane spiders",
+                                                 "geckos",
+                                                 "cockroaches",
+                                                 "terrestrial arthropods",
+                                                 "native trees"))
+
 ## = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 ## 6. check if equilibrium values are between upper and lower bounds ####
 ## = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -284,6 +295,17 @@ EEM_palm <-
                          introduced_row_signs = c(1, -1, -1, 1, 1, 1, 1, -1),
                          introduced_col_signs = rep(-1,8),
                          introduced_k = 106.5/divider) #2130000/200ha = 106.5/100m^2
+
+EEM_palm <- add_species_names(EEM_palm,
+                              species_names = c("palm trees",
+                                                "seabirds",
+                                                "terrestrial crabs",
+                                                "carnivorous crabs",
+                                                "cane spiders",
+                                                "geckos",
+                                                "cockroaches",
+                                                "terrestrial arthropods",
+                                                "native trees"))
 
 ## = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 ## 11. check if equilibrium values are between upper and lower bounds  ####
