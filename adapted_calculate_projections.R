@@ -10,12 +10,12 @@
 #' @param scaled Boolean indicating if projections should be scaled to steady state. If true, the parameter initial_condition should be scaled too. Default FALSE
 #' @param species_names vector of strings for names of species. If NA plots only display species index number, . Default NA.
 #' @param mode "recruitment" or "removal". Default "recruitment"
-#' @param init_intervention_amount number of individuals in initial interventions, default = 0
-#' @param init_intervention_interval initial intervention interval, default = 0
-#' @param sustain_intervention_amount number of individuals in subsequent interventions, default = 0
-#' @param sustain_intervention_interval subsequent intervention interval, default = NA
-#' @param sustain_intervention_threshold abundance threshold where subsequent interventions stop, default = NA
-#' @param introduced_species_index indicates which species in the index is the introduced one, default = 1
+#' @param init_intervention_amount vector or list (if multiple introduced species) with the number of individuals in initial interventions for each introduced species, default = 0
+#' @param init_intervention_interval vector or list (if multiple introduced species) with the initial intervention interval for each introduced species, default = 0
+#' @param sustain_intervention_amount vector or list (if multiple introduced species) with the number of individuals in subsequent interventions for each introduced species, default = 0
+#' @param sustain_intervention_interval vector or list (if multiple introduced species) with the subsequent intervention interval, for each introduced species, default = NA
+#' @param sustain_intervention_threshold vector or list (if multiple introduced species) with the abundance threshold where subsequent interventions stop for each introduced species, default = NA
+#' @param intro_species_index vector indicating which species in the index is/are the introduced one(s), default = 1
 #' @examples
 #' library(EEMtoolbox)
 #' output <- EEM(matrix(c(-1,-1,1,-1),ncol=2)) #automatically loads an example of interaction matrix as dingo_matrix
@@ -38,13 +38,15 @@ adapted_calculate_projections <-
            sustain_intervention_amount = 0,
            sustain_intervention_timepoints = NA,
            sustain_intervention_threshold = NA,
-           introduced_species_index = 1,
+           intro_species_index = 1,
            multiplier = 1,
-           extinction_thresholds = 0) {
+           extinction_threshold = 0) {
 
-    if (!length(extinction_thresholds) %in% c(1,length(initial_condition))) {
-      stop("Length of extinction thresholds must be 1 or equal to the number of species.")
+    if (length(intro_species_index) == 1) {
+      init_intervention_timepoints <- list(init_intervention_timepoints)
+      sustain_intervention_timepoints <- list(sustain_intervention_timepoints)
     }
+
     #Create a loading bar object to see where you're at
     pb <- txtProgressBar(min = 0,
                          max = length(parameters),
@@ -62,28 +64,30 @@ adapted_calculate_projections <-
     recruitment_event <- function(time, y, pars) {
       # Check if current time is an initial intervention time:
       # If so, add the initial intervention amount to the introduced species:
-      if (time %in% pars$init_intervention_timepoints) {
-        y[pars$introduced_species_index] <-
-          #in this case, y is the current vector of species abundance at a given time
-          y[pars$introduced_species_index] + pars$init_intervention_amount
-      }
-      if (mode == "removal") {
-        if (time %in% pars$sustain_intervention_timepoints &&
-            y[pars$introduced_species_index] > pars$sustain_intervention_threshold) {
-          y[pars$introduced_species_index] <-
-            y[pars$introduced_species_index] + pars$sustain_intervention_amount
+      for (i in seq_along(pars$intro_species_index)) {
+        if (time %in% pars$init_intervention_timepoints[[i]]) {
+          y[pars$intro_species_index[i]] <-
+            #in this case, y is the current vector of species abundance at a given time
+            y[pars$intro_species_index[i]] + pars$init_intervention_amount[i]
         }
-      } else if (mode == "recruitment") {
-        # Check if current time is a sustaining intervention time AND abundance is below threshold:
-        # If so, add the sustaining intervention amount to the introduced species:
-        if (time %in% pars$sustain_intervention_timepoints &&
-            y[pars$introduced_species_index] < pars$sustain_intervention_threshold) {
-          y[pars$introduced_species_index] <-
-            y[pars$introduced_species_index] + pars$sustain_intervention_amount
+        if (mode[i] == "removal") {
+          if (time %in% pars$sustain_intervention_timepoints[[i]] &&
+            y[pars$intro_species_index[i]] > pars$sustain_intervention_threshold[i]) {
+            y[pars$intro_species_index[i]] <-
+              y[pars$intro_species_index[i]] + pars$sustain_intervention_amount[i]
+          }
+        } else if (mode[i] == "recruitment") {
+          # Check if current time is a sustaining intervention time AND abundance is below threshold:
+          # If so, add the sustaining intervention amount to the introduced species:
+          if (time %in% pars$sustain_intervention_timepoints[[i]] &&
+            y[pars$intro_species_index[i]] < pars$sustain_intervention_threshold[i]) {
+            y[pars$intro_species_index[i]] <-
+              y[pars$intro_species_index[i]] + pars$sustain_intervention_amount[i]
+          }
         }
       }
       # extinction
-      y[y <= pars$extinction_thresholds] <- 0
+      y[y <= pars$extinction_threshold] <- 0
       return(y)
     }
 
@@ -96,7 +100,7 @@ adapted_calculate_projections <-
            init_intervention_amount = init_intervention_amount,
            sustain_intervention_amount = sustain_intervention_amount,
            sustain_intervention_threshold = sustain_intervention_threshold,
-           introduced_species_index = introduced_species_index)
+           intro_species_index = intro_species_index)
 
     ode_solve_it <- function(pars,
                              initial_condition,
@@ -108,7 +112,7 @@ adapted_calculate_projections <-
                              recruitment_event, #added -> function defined earlier
                              recruitment_times, #added -> we defined earlier. Do we need this?
                              recruitment_pars, #added -> all the parameters related to recruitement, packed together.
-                             extinction_thresholds) {
+                             extinction_threshold) {
       #if scaled: find steady state, initial condition is scaled to steady state
       if (scaled) { #if scaled == TRUE
         if (model %in% c("GLV", "Gompertz")) {
@@ -151,7 +155,7 @@ adapted_calculate_projections <-
             recruitment_pars = recruitment_pars,
             recruitment_event = recruitment_event,
             recruitment_times = recruitment_times,
-            extinction_thresholds = extinction_thresholds)) #added
+            extinction_threshold = extinction_threshold)) #added
       } else if (model == "Bimler-Baker") {
         projections <-
           as.data.frame(adapted_ode_solve( #use adapted ode_solve function
@@ -166,7 +170,7 @@ adapted_calculate_projections <-
             recruitment_pars = recruitment_pars,
             recruitment_event = recruitment_event,
             recruitment_times = recruitment_times,
-            extinction_thresholds = extinction_thresholds)) #added
+            extinction_threshold = extinction_threshold)) #added
       }
 
       if (scaled) { #if scaled to steady state, scale abundances
@@ -193,7 +197,7 @@ adapted_calculate_projections <-
                                        recruitment_event = recruitment_event, # added
                                        recruitment_times = recruitment_times, # added
                                        recruitment_pars = recruitment_pars,
-                                       extinction_thresholds = extinction_thresholds) # added
+                                       extinction_threshold = extinction_threshold) # added
                         })
 
     abundance <- dplyr::bind_rows(abundance, .id = "sim")

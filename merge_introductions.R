@@ -1,16 +1,18 @@
 #' @title Merge multiple single-species introductions into one system
 #' @param EEM_intros a pairlist of objects obtained with add_introduced_species()
-#' @param introduced_k a vector of integers indicating the equilibrium k of the introduced species
+#' @param sign_interaction_intros one number or a matrix of signs for the interactions between introduced species and native species
+#' @param mode "updated" or "recycled". If "updated", the interaction signs are updated for each projection. If "recycled", the interaction signs are recycled in all projections
 #' @return a list of EEM objects
 
 
 
 
 merge_introductions <- function(EEM_intros,
-                                sign_interaction_intros = 0) {
+                                sign_interaction_intros = 0,
+                                mode = "updated") {
 
   if (is.vector(EEM_intros)) {
-    print("parameter EEM_intros should be a pairlist of EEM objects obtained with pairlist(EEM_object1, EEM_object2, ...)")
+    stop("parameter EEM_intros should be a pairlist of EEM objects obtained with pairlist(EEM_object1, EEM_object2, ...)")
   }
 
   #number of native species
@@ -22,6 +24,11 @@ merge_introductions <- function(EEM_intros,
   tot_species <- n_native + n_intro
 
   n_proj <- length(EEM_intros[[1]])
+  for (i in seq_len(n_intro)) {
+    if (length(EEM_intros[[i]]) != n_proj) {
+      stop("All objects in EEM_intros should have the same number of projections")
+    }
+  }
 
   A_full <- vector(mode = "pairlist", length = n_proj)
 
@@ -67,24 +74,29 @@ merge_introductions <- function(EEM_intros,
       A_full[[i]]$growthrates[j] <- EEM_intros[[j]][[i]]$growthrates[1]
     }
     }
+  if (mode == "recycled") {
+    interaction_term <-
+      runif(sign_interaction_intros)*sign_interaction_intros
+  }
+
   if (length(sign_interaction_intros) != 1) {
     for (i in seq_len(n_proj)) {
       for (j in seq_len(n_intro)) {
-        interaction_term <-
-          runif(sign_interaction_intros)*sign_interaction_intros
+        if (mode == "updated") {
+          interaction_term <-
+            runif(sign_interaction_intros)*sign_interaction_intros
+        }
         A_full[[i]]$interaction_matrix[
           j, which(is.na(A_full[[i]]$interaction_matrix[j,]))] <-
-          interaction_term[i,which(!is.na(interaction_term[j,]))]
+          interaction_term[j,which(!is.na(interaction_term[j,]))]
       }
-    } else if (length(sign_interaction_intros) == 1 &&
-               sign_interaction_intros != 0) {
+    }
+  } else if (length(sign_interaction_intros) == 1 &&
+             sign_interaction_intros != 0) {
+    for (i in seq_len(n_proj)) {
       A_full[[i]]$interaction_matrix[is.na(A_full[[i]]$interaction_matrix)] <-
         sign_interaction_intros
-    } else if (length(sign_interaction_intros) == 1 &&
-               sign_interaction_intros == 0) {
-  for (i in seq_len(n_proj)) {
-    A_full[[i]]$interaction_matrix[is.na(A_full[[i]]$interaction_matrix)] <- 0
-  }
+    }
   }
 
   return(A_full)

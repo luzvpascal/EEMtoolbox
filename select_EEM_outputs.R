@@ -1,7 +1,8 @@
 select_EEM_outputs <- function(ensemble,
                                target_lower,
                                target_upper,
-                               mode = "native") {
+                               mode = "native",
+                               n_intro = 1) {
   # ensemble: a list of parameter sets from EEM.
   # target_equilibrium: the vector of desired species abundances (e.g., c(10000, 100, ...)).
   # tolerance: a threshold on the difference (relative error) between the normalized computed equilibrium and target.
@@ -80,18 +81,18 @@ select_EEM_outputs <- function(ensemble,
                                  selected[[i]][[2]]$species))
   }
   }
-  uf <- data.frame(upper = target_upper, species = unique(df$species))
-  lf <- data.frame(lower = target_lower, species = unique(df$species))
 
   if (mode == "disturbed") {
     for (i in 1:length(df$species)) {
-      if (df$species[i] == 1) {
-        df$species[i] <- "introduced"
+      if (df$species[i] %in% seq_len(n_intro)) {
+        df$species[i] <- paste("intro",
+                               df$species[i], sep = "_")
       }
     }
-    uf$species[1] <- "introduced"
-    lf$species[1] <- "introduced"
   }
+
+  uf <- data.frame(upper = target_upper, species = unique(df$species))
+  lf <- data.frame(lower = target_lower, species = unique(df$species))
 
   a <- ggplot2::ggplot() +
     ggplot2::geom_point(data = df, ggplot2::aes(x = species, y = equilibrium,
@@ -100,7 +101,10 @@ select_EEM_outputs <- function(ensemble,
                                                 color = "upper")) +
     ggplot2::geom_point(data = lf, ggplot2::aes(x = species, y = lower,
                                                 color = "lower")) +
-    ggplot2::labs(x = "Species", y = "Computed equilibrium", colors = "Legends")
+    ggplot2::theme(axis.text.x = ggplot2::element_text(
+      angle = 45, vjust = 0.7)) +
+    ggplot2::labs(x = "Species", y = "Computed equilibrium",
+                  colors = "Legends")
 
   print(a)
   return(outputs)

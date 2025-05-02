@@ -8,7 +8,7 @@ adapted_ode_solve <- function(initial_condition,
                               recruitment_pars,
                               recruitment_event,
                               recruitment_times,
-                              extinction_thresholds){
+                              extinction_threshold){
 
   time_steps <- round(seq(from = t_window[1],
                           to = t_window[2],
@@ -20,7 +20,7 @@ adapted_ode_solve <- function(initial_condition,
                   growth_rate  = growth_rate,
                   model = model),
              recruitment_pars, #added, parameters related to recruitment
-             list(extinction_thresholds = extinction_thresholds))
+             list(extinction_threshold = extinction_threshold))
 
   out <- deSolve::ode(y = initial_condition,
                       times = time_steps,
