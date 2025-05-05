@@ -85,8 +85,12 @@ select_EEM_outputs <- function(ensemble,
   if (mode == "disturbed") {
     for (i in 1:length(df$species)) {
       if (df$species[i] %in% seq_len(n_intro)) {
-        df$species[i] <- paste("intro",
-                               df$species[i], sep = "_")
+        df$species[i] <- paste("introduced sp",
+                               df$species[i], sep = " ")
+      } else {
+        df$species[i] <- paste("native sp",
+                               as.numeric(df$species[i]) - n_intro, sep = " ")
+
       }
     }
   }
@@ -95,16 +99,21 @@ select_EEM_outputs <- function(ensemble,
   lf <- data.frame(lower = target_lower, species = unique(df$species))
 
   a <- ggplot2::ggplot() +
+    ggplot2::labs(y = "Computed equilibrium") +
+    ggplot2::facet_wrap( ~ species, scales = "free") +
     ggplot2::geom_point(data = df, ggplot2::aes(x = species, y = equilibrium,
-                                                color = "equilibrium")) +
+                                                color = "equilibrium abundance")) +
     ggplot2::geom_point(data = uf, ggplot2::aes(x = species, y = upper,
-                                                color = "upper")) +
+                                                color = "target upper")) +
     ggplot2::geom_point(data = lf, ggplot2::aes(x = species, y = lower,
-                                                color = "lower")) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(
-      angle = 45, vjust = 0.7)) +
-    ggplot2::labs(x = "Species", y = "Computed equilibrium",
-                  colors = "Legends")
+                                                color = "target lower")) +
+    ggplot2::scale_color_manual(values = c("equilibrium abundance" = "forestgreen",
+                                            "target upper" = "red3",
+                                            "target lower" = "skyblue2")) +
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(),
+                   axis.ticks.x = ggplot2::element_blank())
+
 
   print(a)
   return(outputs)

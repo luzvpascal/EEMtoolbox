@@ -358,7 +358,7 @@ signs_sihek_palm <- matrix(c(NA, -1,
 
 EEM_merged <- merge_introductions(EEM_intros = pairlist(EEM_sihek,
                                                          EEM_palm),
-                                   sign_interaction_intros = signs_sihek_palm,
+                                   sign_interaction_intros = -1,
                                    mode = "recycled")
 
 species_names_merged <- c("sihek", species_names_palm)
@@ -376,23 +376,15 @@ merged_projections <-
                                   0.00045/divider, #9/200ha = 0.00045/100m^2
                                   -75/divider), #-1500000/200ha = -75/100m^2
                                 init_intervention_timepoints = list(
-                                  c(2,3),
-                                  c(20,21)),
+                                  c(15,16),
+                                  c(10,11)),
                                 sustain_intervention_amount = c(
-                                  0.00025/divider,
-                                  -10/divider), #-100000/200ha = -5/100m^2
+                                  0.00025/divider, #5/200ha = 0.00025/100m^2
+                                  -10/divider), #-200000/200ha = -5/100m^2
                                 sustain_intervention_timepoints = list(
-                                  c(3, 5, 7,
-                                    9, 11, 13,
-                                    15, 17, 19),
-                                  c(21.5, 22,
-                                    22.5, 23,
-                                    23.5, 24,
-                                    24.5, 25,
-                                    25.5, 26,
-                                    26.5, 27,
-                                    27.5, 28,
-                                    28.5, 29)),
+                                  c(18, 20, 22,
+                                    24, 26, 28),
+                                  round(seq(11.5,30,0.5),1)),
                                 sustain_intervention_threshold = c(
                                   0.001/divider, #20/200ha = 0.001/100m^2
                                   0),

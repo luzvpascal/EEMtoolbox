@@ -1,9 +1,8 @@
 #' @title Merge multiple single-species introductions into one system
 #' @param EEM_intros a pairlist of objects obtained with add_introduced_species()
-#' @param sign_interaction_intros one number or a matrix of signs for the interactions between introduced species and native species
+#' @param sign_interaction_intros one number or a matrix of signs for the interactions between introduced species and native species (intraspecies interactions to be marked as NA).
 #' @param mode "updated" or "recycled". If "updated", the interaction signs are updated for each projection. If "recycled", the interaction signs are recycled in all projections
 #' @return a list of EEM objects
-
 
 
 
@@ -74,12 +73,12 @@ merge_introductions <- function(EEM_intros,
       A_full[[i]]$growthrates[j] <- EEM_intros[[j]][[i]]$growthrates[1]
     }
     }
-  if (mode == "recycled") {
-    interaction_term <-
-      runif(sign_interaction_intros)*sign_interaction_intros
-  }
 
   if (length(sign_interaction_intros) != 1) {
+    if (mode == "recycled") {
+      interaction_term <-
+        runif(sign_interaction_intros)*sign_interaction_intros
+    }
     for (i in seq_len(n_proj)) {
       for (j in seq_len(n_intro)) {
         if (mode == "updated") {
@@ -91,11 +90,24 @@ merge_introductions <- function(EEM_intros,
           interaction_term[j,which(!is.na(interaction_term[j,]))]
       }
     }
-  } else if (length(sign_interaction_intros) == 1 &&
-             sign_interaction_intros != 0) {
+  } else if (length(sign_interaction_intros) == 1) {
     for (i in seq_len(n_proj)) {
+    if (sign_interaction_intros != 0) {
+    if (mode == "recycled") {
+      interaction_term <- runif(n_intro)*sign_interaction_intros
+    }
+      for (j in seq_len(n_intro)) {
+      if (mode == "updated") {
+        interaction_term <- runif(n_intro)*sign_interaction_intros
+      }
+      A_full[[i]]$interaction_matrix[
+        j, which(is.na(A_full[[i]]$interaction_matrix[j,]))] <-
+        interaction_term[j]
+      }
+    } else {
       A_full[[i]]$interaction_matrix[is.na(A_full[[i]]$interaction_matrix)] <-
-        sign_interaction_intros
+        0
+  }
     }
   }
 
